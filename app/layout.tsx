@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/auth/context/authProvider";
+import { FooterTimer } from "./components/footerTimer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,30 +24,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const dateStr = new Intl.DateTimeFormat("tr-TR", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    /*hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",*/
-  }).format(new Date());
-
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-background min-h-dvh antialiased`}
       >
-        <div className="flex min-h-dvh flex-col p-0.5 font-mono text-2xl sm:text-sm">
-          <div className="flex grow">{children}</div>
-          <div className="flex flex-row border-t">
-            <p className="grow justify-start">
-              Muhasip Modüler Bilgi işlem sistemi
-            </p>
-            <p className="justify-end">{dateStr}</p>
+        <AuthProvider>
+          <div className="flex min-h-dvh flex-col p-0.5 text-2xl sm:text-sm">
+            <div className="grow">{children}</div>
+            <FooterTimer />
           </div>
-        </div>
+        </AuthProvider>
       </body>
     </html>
   );

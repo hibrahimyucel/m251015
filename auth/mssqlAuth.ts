@@ -1,0 +1,114 @@
+import sql from "mssql";
+import { sendEmail } from "@/lib/email";
+import { hashSync } from "bcrypt-ts";
+
+const mmbisConn = await sql.connect(`${process.env.MMBISDATABASE}`);
+
+type signUpData = {
+  username: string;
+  email: string;
+  password: string;
+};
+
+export async function isUserExists(value: string) {
+  const sqlSelectUser: string = `select * from auth_user where email = @email`;
+
+  if (!mmbisConn.connected) await mmbisConn.connect();
+  const request = mmbisConn.request();
+
+  request.input("email", sql.VarChar(100), value.trim());
+  const result = await request.query(sqlSelectUser);
+
+  return result.recordset.length > 0;
+}
+export async function sendVerificationCode(value: string) {
+  const sqlDeleteVerify = `DELETE auth_verify WHERE expiresAt<=GETDATE() or email = @email`;
+  const sqlInsertVerify = `INSERT auth_verify SELECT @email AS email,
+       cast(round(rand() * 1000000, 6) AS varchar(6)) AS value,
+       DATEADD(MINUTE, 5, GETDATE()) AS expiresAt`;
+  const sqlSelectVerify = `SELECT value FROM auth_verify WHERE expiresAt>=GETDATE() AND email = @email`;
+
+  if (!mmbisConn.connected) await mmbisConn.connect();
+  const request = mmbisConn.request();
+
+  request.input("email", sql.VarChar(100), value.trim());
+  await request.query(sqlDeleteVerify);
+  await request.query(sqlInsertVerify);
+  const result = await request.query(sqlSelectVerify);
+
+  const success = await sendEmail({
+    name: "",
+    email: value,
+    subject: "e-posta onay kodu",
+    description: `e-Posta onay kodunuz : <b> ${result.recordset[0].value}<b>`,
+  });
+
+  return success;
+}
+
+export async function checkVerificationCode(email: string, value: string) {
+  const sqlSelectVerify = `SELECT * FROM auth_verify
+ WHERE expiresAt>=GETDATE()
+  AND email = @email
+  AND value = @value`;
+
+  if (!mmbisConn.connected) await mmbisConn.connect();
+  const request = mmbisConn.request();
+
+  request.input("email", sql.VarChar(100), email.trim());
+  request.input("value", sql.VarChar(100), value.trim());
+
+  const result = await request.query(sqlSelectVerify);
+
+  return result.rowsAffected[0] > 0;
+}
+
+export async function saveSignUpData(value: signUpData) {
+  const sqlInsertUser: string = `INSERT INTO auth_user (name,email,password) VALUES (@name,@email,@password)`;
+
+  if (!mmbisConn.connected) await mmbisConn.connect();
+  const request = mmbisConn.request();
+
+  request.input("name", sql.VarChar(100), value.username.trim());
+  request.input("email", sql.VarChar(100), value.email.trim());
+  request.input("password", sql.VarChar(100), value.password);
+  const result = await request.query(sqlInsertUser);
+
+  return result;
+}
+
+export async function sendPassword(email: string) {
+  const sqlGetPassword = `select cast (round(rand()*1000000,6) as varchar(6)) as value`;
+  const sqlUpdatePassword = `update auth_user set password = @password WHERE email = @email`;
+  if (!mmbisConn.connected) await mmbisConn.connect();
+  const request = mmbisConn.request();
+
+  const resPwd = await request.query(sqlGetPassword);
+  const password = hashSync(resPwd.recordset[0].value);
+
+  request.input("email", sql.VarChar(100), email.trim());
+  request.input("password", sql.VarChar(100), password.trim());
+  await request.query(sqlUpdatePassword);
+
+  const success = await sendEmail({
+    name: "",
+    email: email,
+    subject: "Şifre yenileme",
+    description: `Platforma giriş için yeni şifreniz : <b> ${resPwd.recordset[0].value}<b>`,
+  });
+
+  return success;
+}
+
+export async function signInDB(value: signUpData) {
+  const sqlSelectUser: string = `SELECT * FROM auth_user where email = @email`;
+
+  if (!mmbisConn.connected) await mmbisConn.connect();
+  const request = mmbisConn.request();
+
+  request.input("email", sql.VarChar(100), value.email);
+
+  const result = await request.query(sqlSelectUser);
+
+  return result.recordset;
+}
