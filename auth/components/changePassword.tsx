@@ -7,6 +7,7 @@ import { useAuth } from "../context/authProvider";
 
 export function ChangePasswordForm() {
   const inf = {
+    UserName: "Kullanıcı Adı",
     PasswordOld: "Mevcut şifreniz",
     Password: "Yeni şifreniz",
     Password1: "Şifrenizi onaylayın",
@@ -18,9 +19,15 @@ export function ChangePasswordForm() {
     changePassword,
     undefined,
   );
+  const { UserData } = useAuth();
 
   const eprops = state?.errors?.properties;
   const data = state?.data;
+
+  const errUserName = eprops?.username ? eprops?.username.errors : null;
+  const UserName = data?.username.toString()
+    ? data?.username.toString()
+    : UserData.name;
 
   const errPasswordOld = eprops?.passwordold
     ? eprops?.passwordold.errors
@@ -45,6 +52,10 @@ export function ChangePasswordForm() {
       action={changePasswordAction}
       className="border-buttoncolor flex w-[300px] max-w-[300px] flex-col place-self-center-safe rounded-md border p-1"
     >
+      <p className="pt-1">{inf.UserName}</p>
+      <input name="username" defaultValue={UserName} />
+      {errUserName && <p className="text-red-500">{errUserName}</p>}
+
       <p className="pt-1">{inf.PasswordOld}</p>
       <input name="passwordold" type="password" defaultValue={PasswordOld} />
       {errPasswordOld && <p className="text-red-500">{errPasswordOld}</p>}

@@ -5,12 +5,13 @@
 "use client";
 import { tryCatch } from "@/lib/utils";
 import { createContext, useContext, useEffect, useState } from "react";
-
+type userData = { id: string; name: string; admin: boolean; member: boolean };
 type AuthProviderContextValue = {
   user: string | null;
   setUser: (user: string | null) => void;
   token: unknown;
   setToken: (token: unknown) => void;
+  UserData: Partial<userData>;
 };
 
 const AuthProviderContext = createContext<AuthProviderContextValue | undefined>(
@@ -20,6 +21,12 @@ const AuthProviderContext = createContext<AuthProviderContextValue | undefined>(
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<string | null>(null);
   const [token, setToken] = useState<unknown>();
+  const [UserData, setUserData] = useState<Partial<userData>>({
+    id: "0",
+    name: "",
+    admin: false,
+    member: false,
+  });
 
   async function handleAuthState() {
     const [data, error] = await tryCatch(
@@ -30,12 +37,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         },
       }),
     );
+
     if (error) {
       setUser(null);
       setToken(null);
+      setUserData({});
+      return;
+    }
+    if (!data.ok) {
+      setUser(null);
+      setToken(null);
+      setUserData({});
       return;
     }
     data.json().then((data) => {
+      const uData: userData = {
+        id: data.user,
+        name: data.name,
+        admin: data.admin,
+        member: data.member,
+      };
+      setUserData(uData);
       setUser(data.user);
       setToken(data.accessToken);
     });
@@ -52,6 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser,
         token,
         setToken,
+        UserData,
       }}
     >
       {children}

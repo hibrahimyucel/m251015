@@ -88,6 +88,9 @@ const forgotPasswordSchema = z.object({
 
 const changePasswordSchema = z
   .object({
+    username: z
+      .string("Kullanıcı adınızı yazın.")
+      .min(1, { message: "Kullanıcı adınızı yazın." }),
     passwordold: z
       .string("Mevcut şifrenizi yazın.")
       .min(1, { message: "Mevcut şifrenizi yazın." }),
@@ -186,13 +189,13 @@ export async function changePassword(prevState: unknown, formData: FormData) {
       throw Error("Şifrenizi değiştirebilmek için oturum açmalısınız.");
     const users = await getUserById(user);
 
-    const { passwordold, password, password1 } = result.data;
+    const { username, passwordold, password, password1 } = result.data;
 
     if (!users.length) throw Error("Hesap bulunamadı.!");
 
     if (!compareSync(passwordold, users[0].password))
       throw Error("Geçersiz kullanıcı adı veya şifre.!");
-    await changePasswordDB(user, password);
+    await changePasswordDB(user, password, username);
   } catch (error) {
     return {
       data: data,

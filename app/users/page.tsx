@@ -1,11 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useAuth } from "@/auth/context/authProvider";
 import { base64from, tryCatch } from "@/lib/utils";
-import TextButton from "../../components/textButton";
 import DataTable from "../../components/dataTable";
-import ProtectedRoute from "../../components/authProtected";
 import { CheckIcon } from "../../components/icons";
+import AdminRoute from "@/components/authAdmin";
+
 export interface usersData {
   id: string | number;
   email?: string;
@@ -116,10 +115,10 @@ export default function UsersPage() {
   }, []);
 
   return (
-    <ProtectedRoute>
+    <AdminRoute>
       <div className="flex w-full grow flex-col p-1">
         <DataTable<usersData> data={users} columns={columns} />
       </div>
-    </ProtectedRoute>
+    </AdminRoute>
   );
 }

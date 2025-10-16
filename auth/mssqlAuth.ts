@@ -99,14 +99,19 @@ export async function sendPassword(email: string) {
 
   return success;
 }
-export async function changePasswordDB(user: string, password: string) {
-  const sqlUpdatePassword = `update auth_user set password = @password WHERE pk_user = @id`;
+export async function changePasswordDB(
+  user: string,
+  password: string,
+  username: string,
+) {
+  const sqlUpdatePassword = `update auth_user set name= @name, password = @password WHERE pk_user = @id`;
   const resPwd = hashSync(password);
 
   if (!mmbisConn.connected) await mmbisConn.connect();
   const request = mmbisConn.request();
 
   request.input("id", sql.Int, user);
+  request.input("name", sql.VarChar(100), username);
   request.input("password", sql.VarChar(100), resPwd);
   await request.query(sqlUpdatePassword);
 

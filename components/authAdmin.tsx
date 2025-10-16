@@ -5,13 +5,13 @@ import { useAuth } from "@/auth/context/authProvider";
 
 type ProtectedRouteProps = PropsWithChildren;
 
-export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { user, token } = useAuth();
+export default function AdminRoute({ children }: ProtectedRouteProps) {
+  const { UserData } = useAuth();
   useEffect(() => {
-    if (!user) {
-      redirect("/login");
-    }
-  }, [user]);
+    if (!UserData.id) redirect("/login");
+
+    if (!UserData.admin) redirect("/");
+  }, [UserData]);
 
   return children;
 }
