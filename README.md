@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## References
 
-## Getting Started
+[Node.js](https://nodejs.org/)
+[Visual Studio Code](https://code.visualstudio.com)
+[React](https://react.dev/)
+[Next](http://nextjs.org/)
+[Tailwind](https://tailwindcss.com/docs/installation/framework-guides/nextjs)
+[Tailwind Prettier](https://tailwindcss.com/blog/automatic-class-sorting-with-prettier)
+[jose JWT Library](https://www.npmjs.com/package/jose)
+[zod Validation Library](https://zod.dev/)
+[bcrypt-ts Password Hash Generator](https://www.npmjs.com/package/bcrypt-ts)
+[mssql MS Sql Server Provider](https://www.npmjs.com/package/mssql)
+[nodemailer e-Mail Library](https://www.npmjs.com/package/nodemailer)
+[react-icons](https://react-icons.github.io/react-icons/)
 
-First, run the development server:
+- Start PowerShell (for Windows OS Security) as an Administrator, run the [Set-ExecutionPolicy] cmdlet with the parameter RemoteSigned
+  `Set-ExecutionPolicy RemoteSigned`
+
+## Setup
+
+- [x] [Create app - Install Tailwind CSS with Next.js ](https://tailwindcss.com/docs/installation/framework-guides/nextjs)
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx create-next-app@latest my-project --typescript --eslint --app
+cd my-project
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [x] Create [Git-Hub](https://github.com/) repository
+- [x] Push your project to remote git repository
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+git remote add origin https://github.com/...
+git branch -M main
+git push -u origin main
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [x] packages/types
 
-## Learn More
+```bash
+npm install -D prettier prettier-plugin-tailwindcss
 
-To learn more about Next.js, take a look at the following resources:
+npm i jose
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+npm i zod
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+npm i bcrypt-ts
 
-## Deploy on Vercel
+npm i mssql
+npm i --save-dev @types/mssql
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+npm i nodemailer
+npm i --save-dev @types/nodemailer
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+npm i react-icons
+```
+
+# Development
+
+## Authentication
+
+1. Login page/component
+   SignUp Component -> signUp Action
+
+```mermaid
+sequenceDiagram
+UI ->> Server: Validate formdata
+Server -->> UI: error : validation
+Server ->> DB: is User exists
+DB -->> UI: error : user exists
+Note over DB : verified<br/> Save Data
+DB ->> UI : success : user record created
+Note over DB : not verified
+DB ->> Mail: send verification code
+Mail -->> UI : inform user
+```
