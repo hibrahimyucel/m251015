@@ -2,7 +2,7 @@ import sql from "mssql";
 import { sendEmail } from "@/lib/email";
 import { hashSync } from "bcrypt-ts";
 
-const mmbisConn = await sql.connect(`${process.env.MMBISDATABASE}`);
+export const mmbisConn = await sql.connect(`${process.env.MMBISDATABASE}`);
 
 type signUpData = {
   username: string;
@@ -111,4 +111,25 @@ export async function signInDB(value: signUpData) {
   const result = await request.query(sqlSelectUser);
 
   return result.recordset;
+}
+
+export async function saveAdminStatus(pk_user: string, admin: boolean) {
+  const sqlUpdateAdmin = `update auth_user set admin = ${admin ? "pk_user" : "null"} WHERE pk_user = @pk_user`;
+  if (!mmbisConn.connected) await mmbisConn.connect();
+  const request = mmbisConn.request();
+
+  request.input("pk_user", sql.Int, pk_user.trim());
+  await request.query(sqlUpdateAdmin);
+
+  return { success: true };
+}
+export async function saveMemberStatus(pk_user: string, admin: boolean) {
+  const sqlUpdateMember = `update auth_user set member = ${admin ? "pk_user" : "null"} WHERE pk_user = @pk_user`;
+  if (!mmbisConn.connected) await mmbisConn.connect();
+  const request = mmbisConn.request();
+
+  request.input("pk_user", sql.Int, pk_user.trim());
+  await request.query(sqlUpdateMember);
+
+  return { success: true };
 }

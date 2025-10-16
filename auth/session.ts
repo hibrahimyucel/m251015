@@ -48,6 +48,7 @@ export async function createSession(user: string) {
 }
 export async function getUser(): Promise<string | null> {
   const cookie = (await cookies()).get("session")?.value;
+
   const payload = await payloadFrom(cookie);
   if (payload?.user) return payload?.user as string;
   else return null;

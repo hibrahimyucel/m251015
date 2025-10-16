@@ -10,7 +10,12 @@ const TextButton: FC<textButtonProps> = ({
   ...props
 }: textButtonProps) => {
   return (
-    <button onClick={props.onClick} type={props.type} disabled={props.disabled}>
+    <button
+      onClick={props.onClick}
+      type={props.type}
+      disabled={props.disabled}
+      className="text-nowrap"
+    >
       {text}
     </button>
   );

@@ -21,7 +21,7 @@ export function FooterTimer() {
   }, [time]);
 
   return (
-    <div className="flex flex-row border-t">
+    <div className="flex w-full flex-row place-self-end-safe border-t pr-5 pl-5">
       <p className="grow justify-start">Muhasip Modüler Bilgi işlem sistemi</p>
       <p className="justify-end">{time}</p>
     </div>

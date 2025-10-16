@@ -135,8 +135,7 @@ export async function sendForgottenPassword(
     if (!userExists) throw new Error("Hesap bulunamadı.!");
     const verified = await checkVerificationCode(email, emailverify);
     if (!verified) {
-      const success = await sendVerificationCode(email);
-
+      await sendVerificationCode(email);
       throw new Error(
         "Onay kodunuz gönderildi. e-posta hesabınızı kontrol edin",
       );
