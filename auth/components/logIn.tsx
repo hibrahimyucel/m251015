@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { SignUpForm } from "./signUp";
 import { SignInForm } from "./signIn";
+import { ForgottenPasswordForm } from "./forgottenPassword";
 import { useAuth } from "../context/authProvider";
 import { redirect } from "next/navigation";
 import TextButton from "@/app/components/textButton";
@@ -20,6 +21,7 @@ export default function LoginForm() {
     <div className="flex flex-col gap-2 place-self-center pt-1">
       {mode == 0 && <SignInForm />}
       {mode == 1 && <SignUpForm />}
+      {mode == 2 && <ForgottenPasswordForm />}
 
       <div className="border-buttoncolor grid grid-cols-2 gap-0.5 rounded-md border p-0.5">
         {mode != 0 && (

@@ -114,7 +114,10 @@ export async function signIn(prevState: unknown, formData: FormData) {
   }
 }
 
-export async function forgotPassword(prevState: unknown, formData: FormData) {
+export async function sendForgottenPassword(
+  prevState: unknown,
+  formData: FormData,
+) {
   const data = Object.fromEntries(formData);
   const result = forgotPasswordSchema.safeParse(data);
 
@@ -128,17 +131,16 @@ export async function forgotPassword(prevState: unknown, formData: FormData) {
   const { email, emailverify } = result.data;
 
   try {
-    if (!(await isUserExists(email))) throw new Error("Hesap bulunamadı.!");
-
-    if (!emailverify) {
+    const userExists = await isUserExists(email);
+    if (!userExists) throw new Error("Hesap bulunamadı.!");
+    const verified = await checkVerificationCode(email, emailverify);
+    if (!verified) {
       const success = await sendVerificationCode(email);
-      if (success.success)
-        throw new Error(
-          "Onay kodunuz gönderildi. e-posta hesabınızı kontrol edin",
-        );
-      if (!success.success) throw new Error(success.message);
-    } else if (!(await checkVerificationCode(email, emailverify)))
-      throw new Error("Onay kodu bulunamadı.!");
+
+      throw new Error(
+        "Onay kodunuz gönderildi. e-posta hesabınızı kontrol edin",
+      );
+    }
     await sendPassword(email);
   } catch (error) {
     return {
