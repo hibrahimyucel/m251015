@@ -2,7 +2,7 @@
 import { useActionState, useEffect } from "react";
 import { redirect } from "next/navigation";
 import { sendForgottenPassword } from "../actions/logInActions";
-import TextButton from "@/app/components/textButton";
+import TextButton from "@/components/textButton";
 
 export function ForgottenPasswordForm() {
   const [state, sendForgottenPasswordAction, isPending] = useActionState(

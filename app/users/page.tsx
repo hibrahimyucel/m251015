@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/auth/context/authProvider";
 import { base64from, tryCatch } from "@/lib/utils";
-import TextButton from "../components/textButton";
-import DataTable from "../components/dataTable";
-import ProtectedRoute from "../components/authProtected";
-import { CheckIcon } from "../components/icons";
+import TextButton from "../../components/textButton";
+import DataTable from "../../components/dataTable";
+import ProtectedRoute from "../../components/authProtected";
+import { CheckIcon } from "../../components/icons";
 export interface usersData {
   id: string | number;
   email?: string;

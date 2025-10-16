@@ -1,30 +1,31 @@
 "use client";
 import { useActionState, useEffect } from "react";
 import { redirect } from "next/navigation";
-import { signUp } from "../actions/logInActions";
 import TextButton from "@/components/textButton";
+import { changePassword } from "../actions/logInActions";
+import { useAuth } from "../context/authProvider";
 
-export function SignUpForm() {
+export function ChangePasswordForm() {
   const inf = {
-    UserName: "Kullanıcı adınız",
-    eMail: "e-Posta adresiniz",
-    eMailVerify: "Adresinize gönderilen onay kodu",
-    Password: "Şifre belirleyin",
+    PasswordOld: "Mevcut şifreniz",
+    Password: "Yeni şifreniz",
     Password1: "Şifrenizi onaylayın",
-    SignUp: "Kayıt",
-    SignUpCompleted: "Kayıt işlemi tamamlandı.",
+    SignUp: "Şifre değiştir.",
+    SignUpCompleted: "Şifreniz değiştirildi.",
   };
 
-  const [state, signUpAction, isPending] = useActionState(signUp, undefined);
+  const [state, changePasswordAction, isPending] = useActionState(
+    changePassword,
+    undefined,
+  );
 
   const eprops = state?.errors?.properties;
   const data = state?.data;
 
-  const errUserName = eprops?.username ? eprops?.username.errors : null;
-  const UserName = data?.username.toString();
-
-  const errMail = eprops?.email ? eprops?.email.errors : null;
-  const mail = data?.email.toString();
+  const errPasswordOld = eprops?.passwordold
+    ? eprops?.passwordold.errors
+    : null;
+  const PasswordOld = data?.passwordold.toString();
 
   const errPassword = eprops?.password ? eprops?.password.errors : null;
   const Password = data?.password.toString();
@@ -32,27 +33,21 @@ export function SignUpForm() {
   const errPassword1 = eprops?.password1 ? eprops?.password1.errors : null;
   const Password1 = data?.password1.toString();
 
-  const errmailverify = eprops?.emailverify ? eprops?.emailverify.errors : null;
-  const mailverify = data?.emailverify.toString();
-
+  const { setUser } = useAuth();
   useEffect(() => {
     if (state?.success) {
       alert(inf.SignUpCompleted);
-      redirect("/login");
+      setUser(null);
     }
   }, [state]);
   return (
     <form
-      action={signUpAction}
+      action={changePasswordAction}
       className="border-buttoncolor flex w-[300px] max-w-[300px] flex-col place-self-center-safe rounded-md border p-1"
     >
-      <p className="pt-1">{inf.UserName}</p>
-      <input name="username" defaultValue={UserName} />
-      {errUserName && <p className="text-red-500">{errUserName}</p>}
-
-      <p className="pt-1">{inf.eMail}</p>
-      <input name="email" type="email" defaultValue={mail} />
-      {errMail && <p className="text-red-500">{errMail}</p>}
+      <p className="pt-1">{inf.PasswordOld}</p>
+      <input name="passwordold" type="password" defaultValue={PasswordOld} />
+      {errPasswordOld && <p className="text-red-500">{errPasswordOld}</p>}
 
       <p className="pt-1">{inf.Password}</p>
       <input name="password" type="password" defaultValue={Password} />
@@ -65,14 +60,6 @@ export function SignUpForm() {
       <p className="p-1"></p>
       {state?.error && <p className="text-red-500">{state?.error}</p>}
       <TextButton disabled={isPending} type="submit" text={inf.SignUp} />
-
-      <p className="pt-1"></p>
-      <input
-        name="emailverify"
-        placeholder={inf.eMailVerify}
-        defaultValue={mailverify}
-      />
-      {errmailverify && <p className="text-red-500">{errmailverify}</p>}
     </form>
   );
 }

@@ -1,6 +1,6 @@
 "use server";
 import { z } from "zod";
-import { createSession, deleteSession } from "../session";
+import { createSession, deleteSession, getUser } from "../session";
 import { hashSync, compareSync } from "bcrypt-ts";
 import {
   isUserExists,
@@ -9,6 +9,8 @@ import {
   saveSignUpData,
   sendPassword,
   signInDB,
+  getUserById,
+  changePasswordDB,
 } from "../mssqlAuth";
 
 const signUpSchema = z
@@ -84,6 +86,22 @@ const forgotPasswordSchema = z.object({
   emailverify: z.string(),
 });
 
+const changePasswordSchema = z
+  .object({
+    passwordold: z
+      .string("Mevcut şifrenizi yazın.")
+      .min(1, { message: "Mevcut şifrenizi yazın." }),
+    password: z.string().min(1, { message: "Yeni şifrenizi yazın." }).trim(),
+    password1: z
+      .string()
+      .min(1, { message: "Yeni şifrenizi tekrar yazın." })
+      .trim(),
+  })
+  .refine((data) => data.password === data.password1, {
+    message: "Yeni şifre eşleşmiyor.",
+    path: ["password1"],
+  });
+
 export async function signIn(prevState: unknown, formData: FormData) {
   const data = Object.fromEntries(formData);
   const result = signInSchema.safeParse(data);
@@ -148,6 +166,40 @@ export async function sendForgottenPassword(
     };
   }
 
+  return { success: true };
+}
+
+export async function changePassword(prevState: unknown, formData: FormData) {
+  const data = Object.fromEntries(formData);
+  const result = changePasswordSchema.safeParse(data);
+
+  if (!result.success) {
+    return {
+      data: data,
+      errors: z.treeifyError(result.error),
+    };
+  }
+
+  try {
+    const user = await getUser();
+    if (!user)
+      throw Error("Şifrenizi değiştirebilmek için oturum açmalısınız.");
+    const users = await getUserById(user);
+
+    const { passwordold, password, password1 } = result.data;
+
+    if (!users.length) throw Error("Hesap bulunamadı.!");
+
+    if (!compareSync(passwordold, users[0].password))
+      throw Error("Geçersiz kullanıcı adı veya şifre.!");
+    await changePasswordDB(user, password);
+  } catch (error) {
+    return {
+      data: data,
+      error: (error as Error).message,
+    };
+  }
+  await logout();
   return { success: true };
 }
 

@@ -5,7 +5,7 @@ import { SignInForm } from "./signIn";
 import { ForgottenPasswordForm } from "./forgottenPassword";
 import { useAuth } from "../context/authProvider";
 import { redirect } from "next/navigation";
-import TextButton from "@/app/components/textButton";
+import TextButton from "@/components/textButton";
 export default function LoginForm() {
   const [mode, setMode] = useState<number>(0); // SignIn, SignUp, Forgotten Password
   const { user } = useAuth();

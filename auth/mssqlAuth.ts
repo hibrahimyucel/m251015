@@ -99,7 +99,19 @@ export async function sendPassword(email: string) {
 
   return success;
 }
+export async function changePasswordDB(user: string, password: string) {
+  const sqlUpdatePassword = `update auth_user set password = @password WHERE pk_user = @id`;
+  const resPwd = hashSync(password);
 
+  if (!mmbisConn.connected) await mmbisConn.connect();
+  const request = mmbisConn.request();
+
+  request.input("id", sql.Int, user);
+  request.input("password", sql.VarChar(100), resPwd);
+  await request.query(sqlUpdatePassword);
+
+  return true;
+}
 export async function signInDB(value: signUpData) {
   const sqlSelectUser: string = `SELECT * FROM auth_user where email = @email`;
 
@@ -107,6 +119,18 @@ export async function signInDB(value: signUpData) {
   const request = mmbisConn.request();
 
   request.input("email", sql.VarChar(100), value.email);
+
+  const result = await request.query(sqlSelectUser);
+
+  return result.recordset;
+}
+export async function getUserById(id: string) {
+  const sqlSelectUser: string = `SELECT * FROM auth_user where pk_user = @id`;
+
+  if (!mmbisConn.connected) await mmbisConn.connect();
+  const request = mmbisConn.request();
+
+  request.input("id", sql.Int, id);
 
   const result = await request.query(sqlSelectUser);
 

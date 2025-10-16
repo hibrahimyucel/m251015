@@ -3,7 +3,7 @@ import { useActionState, useEffect } from "react";
 import { redirect } from "next/navigation";
 import { useAuth } from "../context/authProvider";
 import { signIn } from "../actions/logInActions";
-import TextButton from "@/app/components/textButton";
+import TextButton from "@/components/textButton";
 
 export function SignInForm() {
   const [state, signInAction, isPending] = useActionState(signIn, undefined);
