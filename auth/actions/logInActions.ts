@@ -94,21 +94,24 @@ export async function signIn(prevState: unknown, formData: FormData) {
       errors: z.treeifyError(result.error),
     };
   }
-  let user: string = "";
-  const { email, password } = result.data;
-  const d = await signInDB({ username: "", email, password });
-  d.map((item: any) => {
-    if (compareSync(password, item.password)) user = item.pk_user;
-  });
+  try {
+    const { email, password } = result.data;
+    const users = await signInDB({ username: "", email, password });
 
-  if (!user)
+    if (!users.length) throw Error("Hesap bulunamadı.!");
+
+    if (!compareSync(password, users[0].password))
+      throw Error("Geçersiz kullanıcı adı veya şifre.!");
+
+    await createSession(users[0].pk_user);
+
+    return { success: true, user: users[0].pk_user };
+  } catch (error) {
     return {
       data: data,
-      errorpassword: ["Geçersiz kullanıcı adı veya şifre.!"],
+      error: (error as Error).message,
     };
-  await createSession(user);
-
-  return { success: true, user };
+  }
 }
 
 export async function forgotPassword(prevState: unknown, formData: FormData) {
