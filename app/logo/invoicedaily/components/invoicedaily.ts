@@ -10,6 +10,7 @@ export interface invoiceData {
   HESAP: string;
   ADDR: string;
   TIP: string;
+  PLAKA: string;
 }
 
 export const sqlInvoiceDailyTotal = `SELECT 
@@ -34,7 +35,7 @@ export const sqlInvoiceDaily = `SELECT STF.LOGICALREF
 	,ITM.name URUN
 	,ul.name BIRIM
 	,clc.DEFINITION_ HESAP
-	,CLC.ADDR1 + ' ' + CLC.ADDR2 AS ADDR
+	,stl.LINEEXP ADDR,stl.OUTPUTIDCODE PLAKA
 	,CASE STF.TRCODE
 		WHEN 1
 			THEN 'Mal alım irsaliyesi'

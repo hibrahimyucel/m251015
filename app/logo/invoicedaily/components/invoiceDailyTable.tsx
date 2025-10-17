@@ -75,7 +75,7 @@ export default function InvoiceDailyTable() {
   }
 
   const [changer, setchanger] = useState<boolean>(true);
-  const debChanger = useDebounce(changer, 5000);
+  const debChanger = useDebounce(changer, 15000);
   const datetime = new Date().toLocaleTimeString();
   useEffect(() => {
     getData();
@@ -112,12 +112,12 @@ export default function InvoiceDailyTable() {
           <div className="flex grow-1 basis-60 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
             Adres
           </div>
-          <div className="flex basis-30 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+          {/*   <div className="flex basis-30 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
             Fiş No
           </div>
           <div className="flex basis-30 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
             Tip
-          </div>
+          </div>*/}
         </div>
 
         {data?.length && (
@@ -131,7 +131,7 @@ export default function InvoiceDailyTable() {
                   {data.DATE_.substring(0, 10).concat(" ").concat(data.SAAT)}
                 </div>
                 <div className="flex shrink-0 basis-20 overflow-hidden text-nowrap text-clip">
-                  {"plaka?"}
+                  {data.PLAKA}
                 </div>
                 <div className="flex shrink-0 basis-12 justify-end overflow-hidden pr-0.5 text-nowrap text-clip">
                   {data.AMOUNT}
@@ -148,25 +148,30 @@ export default function InvoiceDailyTable() {
                 <div className="flex grow-1 basis-60 overflow-hidden text-nowrap text-clip">
                   {data.ADDR}
                 </div>
-                <div className="flex basis-30 justify-end overflow-hidden text-nowrap text-clip">
+                {/* <div className="flex basis-30 justify-end overflow-hidden text-nowrap text-clip">
                   {data.FICHENO}
                 </div>
                 <div className="flex basis-30 overflow-hidden text-nowrap text-clip">
                   {data.TIP}
-                </div>
+                </div>*/}
               </div>
             ))}
           </div>
         )}
         {dataTotal.length && (
           <table className="border-buttoncolor min-w-full border-collapse border">
+            <caption className="font-bold">Toplamlar</caption>
             <tbody>
               {dataTotal.map((item: invoiceDataTotal, index) => (
-                <tr key={index}>
+                <tr
+                  key={index}
+                  className={`border-b ${index % 2 ? "bg-background" : "bg-diffcolor"} `}
+                >
                   <td className="pl-1">{index + 1}</td>
+                  <td className="pl-1">Toplam</td>
                   <td className="pl-1 text-end">{item.TOPLAM}</td>
                   <td className="pl-1">{item.BIRIM}</td>
-                  <td className="pl-1">{item.URUN}</td>
+                  <td className="grow pl-1">{item.URUN}</td>
                 </tr>
               ))}
             </tbody>
