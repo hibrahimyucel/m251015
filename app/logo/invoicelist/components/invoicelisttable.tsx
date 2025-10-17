@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { invoiceData } from "../../invoicedaily/components/invoicedaily";
-
+/*
 const initInvoiceData = [
   {
     LOGICALREF: 1,
@@ -30,9 +30,9 @@ const initInvoiceData = [
     ADDR: "FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ ",
     TIP: "..... .... .... .....",
   },
-];
+];*/
 export default function InvoiceListTable() {
-  const [data, setData] = useState<invoiceData[]>(initInvoiceData);
+  const [data, setData] = useState<invoiceData[]>();
   async function getData() {
     /*    const sql = sqlInvoiceDaily;
     const x = encodebase64(await JSON.stringify({ Sql: sql, Params: [] }));
@@ -98,7 +98,7 @@ export default function InvoiceListTable() {
           </div>
         </div>
 
-        {data.length ? (
+        {data?.length ? (
           <div className="flex w-full grow flex-col overflow-y-scroll border">
             {data.map((data: invoiceData, index) => (
               <div

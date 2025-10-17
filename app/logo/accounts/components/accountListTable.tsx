@@ -2,13 +2,14 @@
 import { useState, useEffect } from "react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { invoiceData } from "../../invoicedaily/components/invoicedaily";
-
+/*
 const initInvoiceData = [
   {
     LOGICALREF: 1,
     FICHENO: "12345678901234",
     DATE_: "12.12.2025",
     FTIME: "",
+    PLAKA: "",
     SAAT: "00:00",
     AMOUNT: 8,
     URUN: "C 30 0000 0000 0000 0000 0000",
@@ -22,6 +23,7 @@ const initInvoiceData = [
     FICHENO: "12345678901234",
     DATE_: "12.12.2025",
     FTIME: "",
+    PLAKA: "",
     SAAT: "00:00",
     AMOUNT: 8,
     URUN: "C 30 0000 0000 0000 0000 0000",
@@ -30,9 +32,9 @@ const initInvoiceData = [
     ADDR: "FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ ",
     TIP: "..... .... .... .....",
   },
-];
+];*/
 export default function AccountListTable() {
-  const [data, setData] = useState<invoiceData[]>(initInvoiceData);
+  const [data, setData] = useState<invoiceData[]>();
   async function getData() {
     /*    const sql = sqlInvoiceDaily;
     const x = encodebase64(await JSON.stringify({ Sql: sql, Params: [] }));
@@ -98,7 +100,7 @@ export default function AccountListTable() {
           </div>
         </div>
 
-        {data.length ? (
+        {data?.length ? (
           <div className="flex w-full grow flex-col overflow-y-scroll border">
             {data.map((data: invoiceData, index) => (
               <div

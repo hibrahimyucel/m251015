@@ -1,4 +1,4 @@
-import sql, { Connection, ConnectionPool } from "mssql";
+import sql, { ConnectionPool } from "mssql";
 
 const pools = new Map();
 
