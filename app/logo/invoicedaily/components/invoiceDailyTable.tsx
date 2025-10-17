@@ -73,6 +73,11 @@ export default function InvoiceDailyTable() {
         setDataTotal(d);
       });
   }
+  let toplam = 0;
+  if (dataTotal.length)
+    dataTotal.map(
+      (i: invoiceDataTotal) => (toplam = toplam + Number(i.TOPLAM)),
+    );
 
   const [changer, setchanger] = useState<boolean>(true);
   const debChanger = useDebounce(changer, 15000);
@@ -168,12 +173,19 @@ export default function InvoiceDailyTable() {
                   className={`border-b ${index % 2 ? "bg-background" : "bg-diffcolor"} `}
                 >
                   <td className="pl-1">{index + 1}</td>
-                  <td className="pl-1">Toplam</td>
+                  <td className="pl-1"> </td>
                   <td className="pl-1 text-end">{item.TOPLAM}</td>
                   <td className="pl-1">{item.BIRIM}</td>
                   <td className="grow pl-1">{item.URUN}</td>
                 </tr>
               ))}
+              <tr key={-1} className={`bg-buttoncolor border-b font-bold`}>
+                <td className="pl-1"></td>
+                <td className="pl-1">Günün Metrajı</td>
+                <td className="pl-1 text-end">{toplam}</td>
+                <td className="pl-1"></td>
+                <td className="grow pl-1"></td>
+              </tr>
             </tbody>
           </table>
         )}
