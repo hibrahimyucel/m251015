@@ -2,17 +2,19 @@
 import React, { useEffect, useState } from "react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import Icons from "@/components/icons";
-type dbFilters = {
+export type invoicedbFilters = {
   dateStart: Date;
   dateEnd: Date;
   plaka: string;
   metraj: string;
   birim: string;
-  sinifi: string;
+
   firma: string;
   fisno: string;
+  adres: string;
+  tarih: string;
 };
-function initdbFilters(): dbFilters {
+function initdbFilters(): invoicedbFilters {
   const s = new Date();
   const e = new Date();
   e.setMonth(e.getMonth() + 1);
@@ -23,14 +25,17 @@ function initdbFilters(): dbFilters {
     plaka: "",
     metraj: "",
     birim: "",
-    sinifi: "",
     firma: "",
     fisno: "",
+    adres: "",
+    tarih: "",
   };
 }
-
-export default function InvoiceListHeader() {
-  const [dbFilter, setdbFilter] = useState<dbFilters>(initdbFilters);
+type invoiceListHeaderProps = {
+  func: (filter: invoicedbFilters) => void;
+};
+export default function InvoiceListHeader({ func }: invoiceListHeaderProps) {
+  const [dbFilter, setdbFilter] = useState<invoicedbFilters>(initdbFilters);
 
   const s = new Date();
   const e = new Date();
@@ -40,6 +45,9 @@ export default function InvoiceListHeader() {
   const debdbFilter = useDebounce(dbFilter, 500);
   //  useEffect(() => {}, [DateStart]);
   console.log(dbFilter);
+  function listele() {
+    func(dbFilter);
+  }
 
   return (
     <div className="flex w-full justify-center gap-1 rounded-sm text-center font-bold">
@@ -121,20 +129,7 @@ export default function InvoiceListHeader() {
           }
         />
       </div>
-      <div className="border-diffcolor flex grow-1 basis-60 flex-col justify-center rounded-sm border">
-        Sınıfı
-        <input
-          type="text"
-          name="birim"
-          defaultValue={dbFilter.sinifi}
-          onChange={(e) =>
-            setdbFilter({
-              ...dbFilter,
-              sinifi: e.target.value,
-            })
-          }
-        />
-      </div>
+
       <div className="border-diffcolor flex grow-2 basis-60 flex-col justify-center rounded-sm border">
         Firma
         <input
@@ -164,7 +159,11 @@ export default function InvoiceListHeader() {
         />
       </div>
       <div className="border-editbox hover:bg-editboxfocus bg-buttoncolor flex w-15 flex-col content-center justify-center rounded-sm border">
-        <button type="button" className="h-full place-self-center">
+        <button
+          type="button"
+          className="h-full place-self-center"
+          onClick={listele}
+        >
           <Icons icon="List" />
         </button>
       </div>

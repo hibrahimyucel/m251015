@@ -47,10 +47,10 @@ export default function AppHeader() {
             <Link href="/logo/invoicelist">
               <TextButton text={"İrsaliye Listesi"} />
             </Link>
-            <Link href="/logo/accounts">
+            {/*<Link href="/logo/accounts">
               <TextButton text={"Cari Hesaplar"} />
             </Link>
-
+*/}
             <Link href="/dashboard">
               <TextButton text={"Profil"} />
             </Link>

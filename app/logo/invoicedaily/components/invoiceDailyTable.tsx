@@ -89,107 +89,103 @@ export default function InvoiceDailyTable() {
   }, [debChanger]);
 
   return (
-    <>
-      <div className="flex w-full flex-col">
-        <h1 className="bg-buttoncolor w-full pt-0.5 pl-2 text-sm font-bold">
-          Güncel İrsaliye Listesi {datetime}
-        </h1>
+    <div className="flex w-full flex-col">
+      <h1 className="bg-buttoncolor w-full pt-0.5 pl-2 text-sm font-bold">
+        Güncel İrsaliye Listesi {datetime}
+      </h1>
 
-        <div className="flex w-full justify-center gap-0.5 pt-0.5 pr-4 font-bold">
-          <div className="flex shrink-0 basis-30 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
-            Tarih-Saat
-          </div>
-          <div className="flex shrink-0 basis-20 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
-            Plaka
-          </div>
-          <div className="flex shrink-0 basis-12 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
-            Metraj
-          </div>
-          <div className="flex shrink-0 basis-12 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
-            Birim
-          </div>
-          <div className="flex grow-1 basis-60 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
-            Sınıfı
-          </div>
-          <div className="flex grow-2 basis-60 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
-            Firma
-          </div>
-          <div className="flex grow-1 basis-60 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
-            Adres
-          </div>
-          {/*   <div className="flex basis-30 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+      <div className="flex w-full justify-center gap-0.5 pt-0.5 pr-4 font-bold">
+        <div className="flex shrink-0 basis-30 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+          Tarih-Saat
+        </div>
+        <div className="flex shrink-0 basis-20 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+          Plaka
+        </div>
+        <div className="flex shrink-0 basis-12 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+          Metraj
+        </div>
+        <div className="flex shrink-0 basis-12 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+          Birim
+        </div>
+        <div className="flex grow-1 basis-60 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+          Sınıfı
+        </div>
+        <div className="flex grow-2 basis-60 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+          Firma
+        </div>
+        <div className="flex grow-1 basis-60 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+          Adres
+        </div>
+        {/*   <div className="flex basis-30 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
             Fiş No
           </div>
           <div className="flex basis-30 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
             Tip
           </div>*/}
-        </div>
+      </div>
 
-        {data?.length && (
-          <div className="flex w-full grow flex-col overflow-y-scroll border">
-            {data.map((data: invoiceData, index) => (
-              <div
-                key={index}
-                className={`flex w-full gap-0.5 border-b ${index % 2 ? "bg-background" : "bg-diffcolor"} `}
-              >
-                <div className="flex shrink-0 basis-30 overflow-hidden text-nowrap text-clip">
-                  {data.DATE_.substring(0, 10).concat(" ").concat(data.SAAT)}
-                </div>
-                <div className="flex shrink-0 basis-20 overflow-hidden text-nowrap text-clip">
-                  {data.PLAKA}
-                </div>
-                <div className="flex shrink-0 basis-12 justify-end overflow-hidden pr-0.5 text-nowrap text-clip">
-                  {data.AMOUNT}
-                </div>
-                <div className="flex shrink-0 basis-12 overflow-hidden text-nowrap text-clip">
-                  {data.BIRIM}
-                </div>
-                <div className="flex grow-1 basis-60 overflow-hidden text-nowrap text-clip">
-                  {data.URUN}
-                </div>
-                <div className="flex grow-2 basis-60 truncate">
-                  {data.HESAP}
-                </div>
-                <div className="flex grow-1 basis-60 overflow-hidden text-nowrap text-clip">
-                  {data.ADDR}
-                </div>
-                {/* <div className="flex basis-30 justify-end overflow-hidden text-nowrap text-clip">
+      {data?.length && (
+        <div className="flex w-full grow flex-col overflow-y-scroll border">
+          {data.map((data: invoiceData, index) => (
+            <div
+              key={index}
+              className={`flex w-full gap-0.5 border-b ${index % 2 ? "bg-background" : "bg-diffcolor"} `}
+            >
+              <div className="flex shrink-0 basis-30 overflow-hidden text-nowrap text-clip">
+                {data.DATE_.substring(0, 10).concat(" ").concat(data.SAAT)}
+              </div>
+              <div className="flex shrink-0 basis-20 overflow-hidden text-nowrap text-clip">
+                {data.PLAKA}
+              </div>
+              <div className="flex shrink-0 basis-12 justify-end overflow-hidden pr-0.5 text-nowrap text-clip">
+                {data.AMOUNT}
+              </div>
+              <div className="flex shrink-0 basis-12 overflow-hidden text-nowrap text-clip">
+                {data.BIRIM}
+              </div>
+              <div className="flex grow-1 basis-60 overflow-hidden text-nowrap text-clip">
+                {data.URUN}
+              </div>
+              <div className="flex grow-2 basis-60 truncate">{data.HESAP}</div>
+              <div className="flex grow-1 basis-60 overflow-hidden text-nowrap text-clip">
+                {data.ADDR}
+              </div>
+              {/* <div className="flex basis-30 justify-end overflow-hidden text-nowrap text-clip">
                   {data.FICHENO}
                 </div>
                 <div className="flex basis-30 overflow-hidden text-nowrap text-clip">
                   {data.TIP}
                 </div>*/}
-              </div>
-            ))}
-          </div>
-        )}
-        {dataTotal.length && (
-          <table className="border-buttoncolor min-w-full border-collapse border">
-            <caption className="font-bold">Toplamlar</caption>
-            <tbody>
-              {dataTotal.map((item: invoiceDataTotal, index) => (
-                <tr
-                  key={index}
-                  className={`border-b ${index % 2 ? "bg-background" : "bg-diffcolor"} `}
-                >
-                  <td className="pl-1">{index + 1}</td>
-                  <td className="pl-1"> </td>
-                  <td className="pl-1 text-end">{item.TOPLAM}</td>
-                  <td className="pl-1">{item.BIRIM}</td>
-                  <td className="grow pl-1">{item.URUN}</td>
-                </tr>
-              ))}
-              <tr key={-1} className={`bg-buttoncolor border-b font-bold`}>
-                <td className="pl-1"></td>
-                <td className="pl-1">Günün Metrajı</td>
-                <td className="pl-1 text-end">{toplam}</td>
-                <td className="pl-1"></td>
-                <td className="grow pl-1"></td>
+            </div>
+          ))}
+        </div>
+      )}
+      {dataTotal.length && (
+        <table className="border-buttoncolor min-w-full border-collapse border">
+          <caption className="font-bold">Toplamlar</caption>
+          <tbody>
+            {dataTotal.map((item: invoiceDataTotal, index) => (
+              <tr
+                key={index}
+                className={`border-b ${index % 2 ? "bg-background" : "bg-diffcolor"} `}
+              >
+                <td className="pl-1">{index + 1}</td>
+                <td className="pl-1"> </td>
+                <td className="pl-1 text-end">{item.TOPLAM}</td>
+                <td className="pl-1">{item.BIRIM}</td>
+                <td className="grow pl-1">{item.URUN}</td>
               </tr>
-            </tbody>
-          </table>
-        )}
-      </div>
-    </>
+            ))}
+            <tr key={-1} className={`bg-buttoncolor border-b font-bold`}>
+              <td className="pl-1"></td>
+              <td className="pl-1">Günün Metrajı</td>
+              <td className="pl-1 text-end">{toplam}</td>
+              <td className="pl-1"></td>
+              <td className="grow pl-1"></td>
+            </tr>
+          </tbody>
+        </table>
+      )}
+    </div>
   );
 }

@@ -33,33 +33,7 @@ const initInvoiceData = [
     TIP: "..... .... .... .....",
   },
 ];*/
-export default function AccountListTable() {
-  const [data, setData] = useState<invoiceData[]>();
-  async function getData() {
-    /*    const sql = sqlInvoiceDaily;
-    const x = encodebase64(await JSON.stringify({ Sql: sql, Params: [] }));
-
-    fetch(getApiPath("/api/dblkssql"), {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        data: x,
-      },
-    })
-      .then((response) => response.json())
-      .then((d) => {
-        setData(d);
-      });
-*/
-  }
-
-  const [changer, setchanger] = useState<boolean>(true);
-  const debChanger = useDebounce(changer, 500);
-  console.log(debChanger);
-  useEffect(() => {
-    getData();
-  }, [debChanger]);
-
+export default function AccountListTable({ data }: { data: invoiceData[] }) {
   return (
     <>
       <div className="flex w-full flex-col py-1">

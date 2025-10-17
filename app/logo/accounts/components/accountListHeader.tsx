@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import Icons from "@/components/icons";
-type dbFilters = {
+export type accountdbFilters = {
   dateStart: Date;
   dateEnd: Date;
   plaka: string;
@@ -12,7 +12,7 @@ type dbFilters = {
   firma: string;
   fisno: string;
 };
-function initdbFilters(): dbFilters {
+function initdbFilters(): accountdbFilters {
   const s = new Date();
   const e = new Date();
   e.setMonth(e.getMonth() + 1);
@@ -28,9 +28,11 @@ function initdbFilters(): dbFilters {
     fisno: "",
   };
 }
-
-export default function AccountListHeader() {
-  const [dbFilter, setdbFilter] = useState<dbFilters>(initdbFilters);
+type AccountListHeaderProps = {
+  func: (filter: accountdbFilters) => void;
+};
+export default function AccountListHeader({ func }: AccountListHeaderProps) {
+  const [dbFilter, setdbFilter] = useState<accountdbFilters>(initdbFilters);
 
   const s = new Date();
   const e = new Date();
@@ -164,7 +166,11 @@ export default function AccountListHeader() {
         />
       </div>
       <div className="border-editbox hover:bg-editboxfocus bg-buttoncolor flex w-15 flex-col content-center justify-center rounded-sm border">
-        <button type="button" className="h-full place-self-center">
+        <button
+          type="button"
+          className="h-full place-self-center"
+          onClick={() => func(dbFilter)}
+        >
           <Icons icon="List" />
         </button>
       </div>
