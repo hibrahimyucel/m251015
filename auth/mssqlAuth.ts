@@ -1,8 +1,9 @@
 import sql from "mssql";
+import { get } from "@/lib/dbmssql";
 import { sendEmail } from "@/lib/email";
 import { hashSync } from "bcrypt-ts";
 
-export const mmbisConn = await sql.connect(`${process.env.MMBISDATABASE}`);
+export const mmbisConn = await get("MMBIS", `${process.env.MMBISDATABASE}`);
 
 type signUpData = {
   username: string;

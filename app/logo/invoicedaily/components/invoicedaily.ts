@@ -12,11 +12,24 @@ export interface invoiceData {
   TIP: string;
 }
 
+export const sqlInvoiceDailyTotal = `SELECT 
+        SUM(STL.AMOUNT) TOPLAM
+        ,ITM.name URUN
+        ,ul.name BIRIM
+        
+FROM LG_020_01_STFICHE STF
+LEFT JOIN LG_020_01_STLINE STL ON STF.LOGICALREF = STL.STFICHEREF
+LEFT JOIN LG_020_UNITSETL UL ON ul.LOGICALREF = STL.uomref
+LEFT JOIN LG_020_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
+WHERE STF.DATE_ > GETDATE() - 1  and STF.TRCODe=8
+group by ITM.name
+        ,ul.name`;
+
 export const sqlInvoiceDaily = `SELECT STF.LOGICALREF
 	,STF.FICHENO
-	,STF.DATE_
+	, CONVERT(varchar, STF.DATE_, 23) DATE_
 	,STF.FTIME
-	,RIGHT('0' + CAST((STF.FTIME / 65536 / 256) AS VARCHAR(2)), 2) + ':' + RIGHT('0' + CAST((((STF.FTIME / 65536) - ((STF.FTIME / 65536 / 256) * 256))) AS VARCHAR(2)), 2) + ':00' AS SAAT
+	,RIGHT('0' + CAST((STF.FTIME / 65536 / 256) AS VARCHAR(2)), 2) + ':' + RIGHT('0' + CAST((((STF.FTIME / 65536) - ((STF.FTIME / 65536 / 256) * 256))) AS VARCHAR(2)), 2)  AS SAAT
 	,STL.AMOUNT
 	,ITM.name URUN
 	,ul.name BIRIM

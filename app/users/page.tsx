@@ -4,6 +4,7 @@ import { base64from, tryCatch } from "@/lib/utils";
 import DataTable from "../../components/dataTable";
 import { CheckIcon } from "../../components/icons";
 import AdminRoute from "@/components/authAdmin";
+import { useAuth } from "@/auth/context/authProvider";
 
 export interface usersData {
   id: string | number;
@@ -15,6 +16,7 @@ export interface usersData {
 }
 export default function UsersPage() {
   async function saveUserAdmin(id: string, padmin: boolean) {
+    if (UserData.id == id) return;
     const sql = `update auth_user set admin = ${padmin ? "pk_user" : "null"} where pk_user = ${id}`;
     const [data, error] = await tryCatch(
       fetch("/api/runsql", {
@@ -41,6 +43,8 @@ export default function UsersPage() {
     if (data) await getUsers();
     if (error) console.log(error.message);
   }
+
+  const { UserData } = useAuth();
 
   const renderV = (value: string | number | undefined) => (
     <p className={`${value ? "block" : "border-b-1"} `}>{value}</p>

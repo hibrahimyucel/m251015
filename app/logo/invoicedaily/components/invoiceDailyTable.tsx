@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
-import { sqlInvoiceDaily } from "./invoicedaily";
+import { sqlInvoiceDaily, sqlInvoiceDailyTotal } from "./invoicedaily";
 import { invoiceData } from "./invoicedaily";
+import { base64from } from "@/lib/utils";
 
 const initInvoiceData = [
   {
@@ -32,13 +33,20 @@ const initInvoiceData = [
     TIP: "..... .... .... .....",
   },
 ];
-export default function InvoiceDailyTable() {
-  const [data, setData] = useState<invoiceData[]>(initInvoiceData);
-  async function getData() {
-    /*    const sql = sqlInvoiceDaily;
-    const x = encodebase64(await JSON.stringify({ Sql: sql, Params: [] }));
+type invoiceDataTotal = {
+  TOPLAM: string;
+  URUN: string;
+  BIRIM: string;
+};
 
-    fetch(getApiPath("/api/dblkssql"), {
+export default function InvoiceDailyTable() {
+  const [data, setData] = useState<invoiceData[]>([]);
+  const [dataTotal, setDataTotal] = useState<invoiceDataTotal[]>([]);
+  async function getData() {
+    const sql = sqlInvoiceDaily;
+    const x = base64from(await JSON.stringify({ Sql: sql, Params: [] }));
+
+    fetch("/api/runlkssql", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -49,7 +57,21 @@ export default function InvoiceDailyTable() {
       .then((d) => {
         setData(d);
       });
-*/
+    const sql1 = sqlInvoiceDailyTotal;
+    const y = base64from(await JSON.stringify({ Sql: sql1, Params: [] }));
+
+    fetch("/api/runlkssql", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        data: y,
+      },
+    })
+      .then((response) => response.json())
+      .then((d) => {
+        console.log(d);
+        setDataTotal(d);
+      });
   }
 
   const [changer, setchanger] = useState<boolean>(true);
@@ -57,7 +79,7 @@ export default function InvoiceDailyTable() {
   const datetime = new Date().toLocaleTimeString();
   useEffect(() => {
     getData();
-    console.log(datetime);
+
     setchanger(!changer);
   }, [debChanger]);
 
@@ -98,7 +120,7 @@ export default function InvoiceDailyTable() {
           </div>
         </div>
 
-        {data.length ? (
+        {data?.length && (
           <div className="flex w-full grow flex-col overflow-y-scroll border">
             {data.map((data: invoiceData, index) => (
               <div
@@ -135,8 +157,20 @@ export default function InvoiceDailyTable() {
               </div>
             ))}
           </div>
-        ) : (
-          "Kayıt bulunamadı"
+        )}
+        {dataTotal.length && (
+          <table className="border-buttoncolor min-w-full border-collapse border">
+            <tbody>
+              {dataTotal.map((item: invoiceDataTotal, index) => (
+                <tr key={index}>
+                  <td className="pl-1">{index + 1}</td>
+                  <td className="pl-1 text-end">{item.TOPLAM}</td>
+                  <td className="pl-1">{item.BIRIM}</td>
+                  <td className="pl-1">{item.URUN}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
     </>
