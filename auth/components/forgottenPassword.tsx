@@ -1,24 +1,25 @@
 "use client";
 import { useActionState, useEffect } from "react";
 import { redirect } from "next/navigation";
-import { sendForgottenPassword } from "../actions/logInActions";
 import TextButton from "@/components/textButton";
+import { sendForgottenPasswordAction } from "../authActions";
 
 export function ForgottenPasswordForm() {
-  const [state, sendForgottenPasswordAction, isPending] = useActionState(
-    sendForgottenPassword,
+  const [state, formAction, isPending] = useActionState(
+    sendForgottenPasswordAction,
     undefined,
   );
 
   useEffect(() => {
+    const infNewPasswordSended = "Şifreniz e-posta hesabınıza gönderildi.";
     if (state?.success) {
-      alert("Şifreniz e-posta hesabınıza gönderildi.");
+      alert(infNewPasswordSended);
       redirect("/login");
     }
   }, [state]);
   return (
     <form
-      action={sendForgottenPasswordAction}
+      action={formAction}
       className="border-buttoncolor flex w-[300px] max-w-[300px] flex-col rounded-md border p-1 text-nowrap"
     >
       <p className="pt-1">e-Posta</p>

@@ -57,19 +57,3 @@ npm i react-icons
 # Development
 
 ## Authentication
-
-1. Login page/component
-   SignUp Component -> signUp Action
-
-```mermaid
-sequenceDiagram
-UI ->> Server: Validate formdata
-Server -->> UI: error : validation
-Server ->> DB: is User exists
-DB -->> UI: error : user exists
-Note over DB : verified<br/> Save Data
-DB ->> UI : success : user record created
-Note over DB : not verified
-DB ->> Mail: send verification code
-Mail -->> UI : inform user
-```

@@ -1,6 +1,9 @@
 import { get } from "../../lib/dbmssql";
-export const LKSConn = await get("LKS", `${process.env.LOGO_DATABASE}`);
 
+export async function getLKSQuery() {
+  const db = await await get("LKS", `${process.env.LOGO_DATABASE}`);
+  return db.request();
+}
 export interface invoiceData {
   LOGICALREF: number;
   FICHENO: string;

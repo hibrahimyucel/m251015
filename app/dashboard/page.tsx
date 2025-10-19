@@ -1,9 +1,9 @@
 "use client";
 import { useAuth } from "@/auth/context/authProvider";
-import { logout } from "@/auth/actions/logInActions";
 import TextButton from "../../components/textButton";
 import { ChangePasswordForm } from "@/auth/components/changePassword";
 import MemberRoute from "@/components/authMember";
+import { logOutAction } from "@/auth/authActions";
 export default function Dashboard() {
   const { setUser } = useAuth();
   return (
@@ -13,7 +13,7 @@ export default function Dashboard() {
           <TextButton
             text="Çıkış"
             onClick={() => {
-              logout().then(() => setUser(null));
+              logOutAction().then(() => setUser(null));
             }}
           />
         </div>

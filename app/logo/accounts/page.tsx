@@ -7,10 +7,7 @@ import AccountListHeader, {
 } from "./components/accountListHeader";
 import AccountListTable from "./components/accountListTable";
 import { base64from } from "@/lib/utils";
-import {
-  sqlInvoiceData,
-  invoiceData,
-} from "../invoiceDaily/components/invoiceDaily";
+import { invoiceData, sqlInvoiceData } from "../logodb";
 
 export default function AccountsPage() {
   const [data, setData] = useState<invoiceData[]>([]);

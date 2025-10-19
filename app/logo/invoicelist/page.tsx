@@ -4,10 +4,7 @@ import InvoiceListTable from "./components/invoiceListTable";
 import InvoiceListHeader from "./components/invoiceListHeader";
 import MemberRoute from "@/components/authMember";
 import { base64from } from "@/lib/utils";
-import {
-  sqlInvoiceData,
-  invoiceData,
-} from "../invoiceDaily/components/invoiceDaily";
+import { sqlInvoiceData, invoiceData } from "../logodb";
 import { invoicedbFilters } from "./components/invoiceListHeader";
 
 export default function InvoiceListPage() {

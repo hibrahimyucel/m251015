@@ -1,40 +1,49 @@
 "use server";
 import { z } from "zod";
-import { createSession, deleteSession, getUser } from "../session";
 import { hashSync, compareSync } from "bcrypt-ts";
 import {
-  isUserExists,
-  sendVerificationCode,
+  checkUserExists,
   checkVerificationCode,
-  saveSignUpData,
-  sendPassword,
-  signInDB,
+  saveForgottenPassword,
+  saveNewPassword,
+  sendVerificationCode,
+  saveNewSignUp,
+  getUserByMail,
   getUserById,
-  changePasswordDB,
-} from "../mssqlAuth";
+} from "./authDb";
+import {
+  getUserFromSession,
+  createSession,
+  deleteSession,
+} from "./authSession";
 
-const signUpSchema = z
-  .object({
-    username: z
-      .string("Kullanıcı adı en az 3 karakter olmalı")
-      .min(3, { message: "Kullanıcı adı en az 3 karakter olmalı" }),
-    email: z.email({ message: "Geçersiz e-posta" }).trim(),
-    emailverify: z.string(),
-    password: z
-      .string()
-      .min(1, { message: "Şifre en az 3 karakter olmalı" })
-      .trim(),
-    password1: z
-      .string()
-      .min(1, { message: "Şifre en az 3 karakter olmalı" })
-      .trim(),
-  })
-  .refine((data) => data.password === data.password1, {
-    message: "Şifre eşleşmiyor.",
-    path: ["password1"],
-  });
+const infVerifyCodeSended =
+  "Onay kodunuz gönderildi. e-posta hesabınızı kontrol edin";
+const errInvalidIdentity = "Geçersiz kullanıcı adı veya şifre.!";
+const errNotFound = "Hesap bulunamadı.!";
+export async function signUpAction(prevState: unknown, formData: FormData) {
+  const errMailExists = "Bu e-mail daha önce kaydedilmiş.!";
+  const signUpSchema = z
+    .object({
+      username: z
+        .string("Kullanıcı adı en az 3 karakter olmalı")
+        .min(3, { message: "Kullanıcı adı en az 3 karakter olmalı" }),
+      email: z.email({ message: "Geçersiz e-posta" }).trim(),
+      emailverify: z.string(),
+      password: z
+        .string()
+        .min(1, { message: "Şifre en az 3 karakter olmalı" })
+        .trim(),
+      password1: z
+        .string()
+        .min(1, { message: "Şifre en az 3 karakter olmalı" })
+        .trim(),
+    })
+    .refine((data) => data.password === data.password1, {
+      message: "Şifre eşleşmiyor.",
+      path: ["password1"],
+    });
 
-export async function signUp(prevState: unknown, formData: FormData) {
   const result = signUpSchema.safeParse(Object.fromEntries(formData));
 
   if (!result.success)
@@ -46,8 +55,7 @@ export async function signUp(prevState: unknown, formData: FormData) {
   const data = result.data;
 
   try {
-    if (await isUserExists(data.email))
-      throw new Error("Bu e-mail daha önce kaydedilmiş.!");
+    if (await checkUserExists(data.email)) throw new Error(errMailExists);
 
     const verified = await checkVerificationCode(
       result.data.email,
@@ -56,12 +64,10 @@ export async function signUp(prevState: unknown, formData: FormData) {
 
     if (!verified) {
       await sendVerificationCode(data.email);
-      throw new Error(
-        "Onay kodunuz gönderildi. e-posta hesabınızı kontrol edin",
-      );
+      throw new Error(infVerifyCodeSended);
     }
     data.password = hashSync(data.password1.trim());
-    if (verified) await saveSignUpData(data);
+    if (verified) await saveNewSignUp(data.username, data.email, data.password);
     return {
       data: data,
       success: true,
@@ -74,13 +80,6 @@ export async function signUp(prevState: unknown, formData: FormData) {
   }
 }
 
-const signInSchema = z.object({
-  email: z.email({ message: "Geçersiz e-posta" }).trim(),
-  password: z
-    .string()
-    .min(1, { message: "Şifre en az 1 karakter olmalı" })
-    .trim(),
-});
 const forgotPasswordSchema = z.object({
   email: z.email({ message: "Geçersiz e-posta" }).trim(),
   emailverify: z.string(),
@@ -105,7 +104,15 @@ const changePasswordSchema = z
     path: ["password1"],
   });
 
-export async function signIn(prevState: unknown, formData: FormData) {
+export async function signInAction(prevState: unknown, formData: FormData) {
+  const signInSchema = z.object({
+    email: z.email({ message: "Geçersiz e-posta" }).trim(),
+    password: z
+      .string()
+      .min(1, { message: "Şifre en az 1 karakter olmalı" })
+      .trim(),
+  });
+
   const data = Object.fromEntries(formData);
   const result = signInSchema.safeParse(data);
 
@@ -117,12 +124,12 @@ export async function signIn(prevState: unknown, formData: FormData) {
   }
   try {
     const { email, password } = result.data;
-    const users = await signInDB({ username: "", email, password });
+    const users = await getUserByMail(email);
 
-    if (!users.length) throw Error("Hesap bulunamadı.!");
+    if (!users.length) throw Error(errNotFound);
 
     if (!compareSync(password, users[0].password))
-      throw Error("Geçersiz kullanıcı adı veya şifre.!");
+      throw Error(errInvalidIdentity);
 
     await createSession(users[0].pk_user);
 
@@ -135,7 +142,7 @@ export async function signIn(prevState: unknown, formData: FormData) {
   }
 }
 
-export async function sendForgottenPassword(
+export async function sendForgottenPasswordAction(
   prevState: unknown,
   formData: FormData,
 ) {
@@ -152,16 +159,14 @@ export async function sendForgottenPassword(
   const { email, emailverify } = result.data;
 
   try {
-    const userExists = await isUserExists(email);
-    if (!userExists) throw new Error("Hesap bulunamadı.!");
+    const userExists = await checkUserExists(email);
+    if (!userExists) throw new Error(errNotFound);
     const verified = await checkVerificationCode(email, emailverify);
     if (!verified) {
       await sendVerificationCode(email);
-      throw new Error(
-        "Onay kodunuz gönderildi. e-posta hesabınızı kontrol edin",
-      );
+      throw new Error(infVerifyCodeSended);
     }
-    await sendPassword(email);
+    await saveForgottenPassword(email);
   } catch (error) {
     return {
       data: data,
@@ -172,7 +177,12 @@ export async function sendForgottenPassword(
   return { success: true };
 }
 
-export async function changePassword(prevState: unknown, formData: FormData) {
+export async function changePasswordAction(
+  prevState: unknown,
+  formData: FormData,
+) {
+  const errSession = "Şifrenizi değiştirebilmek için oturum açmalısınız.";
+
   const data = Object.fromEntries(formData);
   const result = changePasswordSchema.safeParse(data);
 
@@ -184,29 +194,27 @@ export async function changePassword(prevState: unknown, formData: FormData) {
   }
 
   try {
-    const user = await getUser();
-    if (!user)
-      throw Error("Şifrenizi değiştirebilmek için oturum açmalısınız.");
+    const user = await getUserFromSession();
+    if (!user) throw Error(errSession);
     const users = await getUserById(user);
+    if (!users.length) throw Error(errNotFound);
 
-    const { username, passwordold, password, password1 } = result.data;
-
-    if (!users.length) throw Error("Hesap bulunamadı.!");
-
+    const { username, passwordold, password } = result.data;
     if (!compareSync(passwordold, users[0].password))
-      throw Error("Geçersiz kullanıcı adı veya şifre.!");
-    await changePasswordDB(user, password, username);
+      throw Error(errInvalidIdentity);
+
+    await saveNewPassword(user, password, username);
   } catch (error) {
     return {
       data: data,
       error: (error as Error).message,
     };
   }
-  await logout();
+  await logOutAction();
   return { success: true };
 }
 
-export async function logout() {
+export async function logOutAction() {
   await deleteSession();
   return;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { invoiceData } from "../../invoiceDaily/components/invoiceDaily";
+import { invoiceData } from "../../logodb";
 
 export default function AccountListTable({ data }: { data: invoiceData[] }) {
   return (

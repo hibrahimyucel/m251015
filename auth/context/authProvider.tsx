@@ -38,13 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }),
     );
 
-    if (error) {
-      setUser(null);
-      setToken(null);
-      setUserData({});
-      return;
-    }
-    if (!data.ok) {
+    if (error || !data.ok) {
       setUser(null);
       setToken(null);
       setUserData({});

@@ -2,11 +2,15 @@
 import { useActionState, useEffect } from "react";
 import { redirect } from "next/navigation";
 import { useAuth } from "../context/authProvider";
-import { signIn } from "../actions/logInActions";
 import TextButton from "@/components/textButton";
+import { signInAction } from "../authActions";
 
 export function SignInForm() {
-  const [state, signInAction, isPending] = useActionState(signIn, undefined);
+  const inf = { eMail: "e-Posta", password: "Şifre" };
+  const [state, formAction, isPending] = useActionState(
+    signInAction,
+    undefined,
+  );
   const { user, setUser } = useAuth();
   if (user) redirect("/dashboard");
 
@@ -30,14 +34,14 @@ export function SignInForm() {
 
   return (
     <form
-      action={signInAction}
+      action={formAction}
       className="border-buttoncolor flex w-[300px] max-w-[300px] flex-col rounded-md border p-1 text-nowrap"
     >
-      <p className="pt-1"> e-Posta</p>
+      <p className="pt-1"> {inf.eMail}</p>
       <input name="email" type="email" defaultValue={mail} />
       {errMail && <p className="text-red-500">{errMail}</p>}
 
-      <p className="pt-1">Şifre</p>
+      <p className="pt-1">{inf.password}</p>
       <input name="password" type="password" defaultValue={password} />
       {errPassword && <p className="text-red-500">{errPassword}</p>}
 
