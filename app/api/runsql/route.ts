@@ -11,7 +11,6 @@ export async function GET(req: NextRequest) {
       typeof e === "string" ? decodeURIComponent(e) : e,
     );*/
     const Sql = data.Sql;
-    console.log(Sql);
 
     if (!mmbisConn.connected) await mmbisConn.connect();
     const request = mmbisConn.request();

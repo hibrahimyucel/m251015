@@ -5,7 +5,7 @@ import {
   sqlInvoiceDailyTotal,
   invoiceData,
   sqlInvoiceDaily,
-} from "./invoiceDaily";
+} from "../../logodb";
 import { base64from } from "@/lib/utils";
 
 type invoiceDataTotal = {

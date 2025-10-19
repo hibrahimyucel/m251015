@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
-import { invoiceData } from "../../invoiceDaily/components/invoiceDaily";
+import { invoiceData } from "../../logodb";
 
 type invoiceLocalFilters = invoiceData;
 type totalData = { AMOUNT: number; URUN: string; BIRIM: string; ID: string };
@@ -38,7 +38,7 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
   const entries = Object.entries(xlocalfilter).filter((item) =>
     item ? item : false,
   );
-  console.log("xlocalfilter ", xlocalfilter, entries);
+
   if (entries.length)
     localData = data.filter((item) =>
       entries.every(([key, value]) =>
