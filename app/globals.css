@@ -25,12 +25,12 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #020240;
-    --diffcolor: #040440;
-    --editbox: #010140;
+    --diffcolor: #040460;
+    --editbox: #111110;
     --editboxfocus: #010130;
     --foreground: #b6b6d3;
     --bordercolor: #f0f0f0;
-    --buttoncolor: #cfcfcd;
+    --buttoncolor: #140440;
   }
 }
 
@@ -45,13 +45,17 @@ button {
   border-width: 1;
   border-radius: 5;
   background-color: var(--buttoncolor);
-  padding: 3;
   text-align: center;
 }
 button:hover {
   background-color: var(--diffcolor);
 }
-
+button:disabled:hover {
+  background-color: dimgrey;
+  color: linen;
+  opacity: 1;
+  cursor: progress;
+}
 input {
   background-color: var(--editbox);
   border: var(--buttoncolor);
@@ -66,4 +70,10 @@ input {
 input:focus {
   background-color: var(--editboxfocus);
   outline: 0;
+}
+*:disabled {
+  background-color: dimgrey;
+  color: linen;
+  opacity: 1;
+  cursor: none;
 }

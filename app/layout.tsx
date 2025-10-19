@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/auth/context/authProvider";
 import { FooterTimer } from "../components/footerTimer";
 import AppHeader from "../components/appHeader";
+import { info } from "@/project/project";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -24,16 +25,25 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  metadata.title = info.project.caption;
+  metadata.description = info.project.description;
+
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-background min-h-full antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-full antialiased`}
       >
         <AuthProvider>
-          <div className="flex flex-col text-2xl sm:text-sm">
-            <AppHeader />
-            <div className="flex h-[calc(100vh-4rem)] w-full">{children}</div>
-            <FooterTimer />
+          <div className="bg-background grid w-full grid-rows-[48px_1fr_24px] p-0.5">
+            <div className="content-center rounded-t-sm border border-slate-500">
+              <AppHeader />
+            </div>
+            <div className="h-[calc(100vh-5rem)] overflow-x-clip overflow-y-auto border-r border-l border-slate-500">
+              {children}
+            </div>
+            <div className="content-center rounded-b-sm border border-slate-500">
+              <FooterTimer />
+            </div>
           </div>
         </AuthProvider>
       </body>

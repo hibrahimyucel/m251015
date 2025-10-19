@@ -31,7 +31,31 @@ const initInvoiceData = [
     TIP: "..... .... .... .....",
   },
 ];*/
+
 type invoiceLocalFilters = invoiceData;
+type totalData = { AMOUNT: number; URUN: string; BIRIM: string; ID: string };
+function calculateTotal(data: invoiceData[]) {
+  let totalData: totalData[] = [];
+  let totalAmount: number = 0;
+  function add(item: totalData) {
+    const i = totalData.findIndex((f: totalData) => f.ID == item.ID);
+    if (i == -1) totalData.push(item);
+    else totalData[i].AMOUNT += item.AMOUNT;
+    totalAmount += item.AMOUNT;
+  }
+
+  data.map((item: invoiceData) =>
+    add({
+      AMOUNT: item.AMOUNT,
+      URUN: item.URUN,
+      BIRIM: item.BIRIM,
+      ID: item.URUN + item.BIRIM,
+    }),
+  );
+  totalData.sort((a, b) => a.ID.localeCompare(b.ID));
+  return { totalData, totalAmount };
+}
+
 export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
   const [localFilter, setLocalFilter] = useState<Partial<invoiceLocalFilters>>(
     {},
@@ -55,6 +79,8 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
       ),
     );
   else localData = data;
+
+  const { totalData, totalAmount } = calculateTotal(localData);
 
   return (
     <div className="flex w-full flex-col">
@@ -189,6 +215,33 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
               </div>
             </div>
           ))}
+
+        {totalData.length && (
+          <table className="border-buttoncolor min-w-full border-collapse border">
+            <caption className="font-bold">Toplamlar</caption>
+            <tbody>
+              {totalData.map((item: totalData, index) => (
+                <tr
+                  key={index}
+                  className={`border-b ${index % 2 ? "bg-background" : "bg-diffcolor"} `}
+                >
+                  <td className="pl-1">{index + 1}</td>
+                  <td className="pl-1"> </td>
+                  <td className="pl-1 text-end">{item.AMOUNT}</td>
+                  <td className="pl-1">{item.BIRIM}</td>
+                  <td className="grow pl-1">{item.URUN}</td>
+                </tr>
+              ))}
+              <tr key={-1} className={`bg-buttoncolor border-b font-bold`}>
+                <td className="pl-1"></td>
+                <td className="pl-1">Toplam Metraj</td>
+                <td className="pl-1 text-end">{totalAmount}</td>
+                <td className="pl-1"></td>
+                <td className="grow pl-1"></td>
+              </tr>
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

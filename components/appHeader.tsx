@@ -1,19 +1,20 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/auth/context/authProvider";
 import Image from "next/image";
 import TextButton from "./textButton";
 import Icons from "./icons";
+import { info } from "@/project/project";
 export default function AppHeader() {
   const { UserData } = useAuth();
 
   useEffect(() => {}, [UserData]);
 
   return (
-    <div className="border-bordercolor flex w-full rounded-sm border px-1">
-      <div className="content-center">
+    <div className="flex w-full flex-row px-0.5">
+      <div className="content-center px-0.5">
         <Link href="/">
           <Image
             src="/logo.jpg"
@@ -25,15 +26,15 @@ export default function AppHeader() {
           />
         </Link>
       </div>
-      <div className="content-center px-1">
+      <div>
         <Link href="/">
-          <div className="font-serif">Muhasip</div>
-          <div className="font-serif text-sm">{UserData.name}</div>
+          <div className="font-serif">{info.project.caption}</div>
+          <div className="font-serif text-sm text-nowrap">{UserData.name}</div>
         </Link>
       </div>
       <div className="grow"></div>
 
-      <div className="flex flex-row items-center gap-1 text-center">
+      <div className="hidden items-center gap-1 text-center sm:flex sm:flex-row">
         {!UserData.id && (
           <Link href="/login">
             <Icons icon="LogIn"></Icons>
@@ -47,10 +48,7 @@ export default function AppHeader() {
             <Link href="/logo/invoicelist">
               <TextButton text={"İrsaliye Listesi"} />
             </Link>
-            {/*<Link href="/logo/accounts">
-              <TextButton text={"Cari Hesaplar"} />
-            </Link>
-*/}
+
             <Link href="/dashboard">
               <TextButton text={"Profil"} />
             </Link>

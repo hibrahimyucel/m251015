@@ -58,14 +58,25 @@ export default function UsersPage() {
     ) => React.ReactNode;
   }> = [
     {
-      key: "name",
-      header: "Adı",
-      render: renderV,
+      key: "admin",
+      header: "Admin",
+      render: (value: usersData[keyof usersData], id: string | number) => {
+        return (
+          <button
+            className="flex place-self-center align-middle"
+            type="button"
+            onClick={() => {
+              saveUserAdmin(id as string, !value);
+            }}
+          >
+            <CheckIcon Checked={value ? true : false} />
+          </button>
+        );
+      },
     },
-    { key: "email", header: "e-Posta", render: renderV },
     {
       key: "member",
-      header: "Yetkili",
+      header: "User",
       render: (value: usersData[keyof usersData], id: string | number) => {
         return (
           <button
@@ -80,22 +91,11 @@ export default function UsersPage() {
         );
       },
     },
+    { key: "email", header: "e-Posta", render: renderV },
     {
-      key: "admin",
-      header: "Yönetici",
-      render: (value: usersData[keyof usersData], id: string | number) => {
-        return (
-          <button
-            className="flex place-self-center align-middle"
-            type="button"
-            onClick={() => {
-              saveUserAdmin(id as string, !value);
-            }}
-          >
-            <CheckIcon Checked={value ? true : false} />
-          </button>
-        );
-      },
+      key: "name",
+      header: "Adı",
+      render: renderV,
     },
   ];
 
@@ -120,7 +120,7 @@ export default function UsersPage() {
 
   return (
     <AdminRoute>
-      <div className="flex w-full grow flex-col p-1">
+      <div className="w-full overflow-x-auto">
         <DataTable<usersData> data={users} columns={columns} />
       </div>
     </AdminRoute>

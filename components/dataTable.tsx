@@ -16,16 +16,14 @@ export default function DataTable<T extends { id: number | string }>({
   columns,
 }: DataTableProps<T>) {
   return (
-    <div className="overflow-x-auto">
-      <table className="border-buttoncolor min-w-full border-collapse border">
-        <TableHeader columns={columns} />
-        <tbody>
-          {data.map((row, index) => (
-            <TableRow key={row.id} row={row} columns={columns} index={index} />
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <table className="sm:w-full">
+      <TableHeader columns={columns} />
+      <tbody>
+        {data.map((row, index) => (
+          <TableRow key={row.id} row={row} columns={columns} index={index} />
+        ))}
+      </tbody>
+    </table>
   );
 }
 
@@ -38,7 +36,7 @@ function TableHeader<T>({ columns }: TableHeaderProps<T>) {
     <thead>
       <tr className="bg-buttoncolor">
         {columns.map((column) => (
-          <th key={String(column.key)} className="border p-2">
+          <th key={String(column.key)} className="border p-0.5">
             {column.header}
           </th>
         ))}

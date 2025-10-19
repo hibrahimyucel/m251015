@@ -8,8 +8,8 @@ export default function Dashboard() {
   const { setUser } = useAuth();
   return (
     <MemberRoute>
-      <div className="border-diffcolor flex w-full flex-col border">
-        <div className="flex h-10 w-full justify-end p-1">
+      <div className="flex w-full flex-col">
+        <div className="flex w-full justify-end p-1">
           <TextButton
             text="Çıkış"
             onClick={() => {
