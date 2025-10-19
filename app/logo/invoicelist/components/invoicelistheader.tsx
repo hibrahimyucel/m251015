@@ -1,6 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useDebounce } from "@/lib/hooks/useDebounce";
+import React, { useState } from "react";
 import Icons from "@/components/icons";
 export type invoicedbFilters = {
   dateStart: Date;
@@ -8,7 +7,6 @@ export type invoicedbFilters = {
   plaka: string;
   metraj: string;
   birim: string;
-
   firma: string;
   fisno: string;
   adres: string;
@@ -42,9 +40,6 @@ export default function InvoiceListHeader({ func }: invoiceListHeaderProps) {
   s.setFullYear(s.getFullYear() - 30);
   e.setFullYear(e.getFullYear() + 1);
 
-  const debdbFilter = useDebounce(dbFilter, 500);
-  //  useEffect(() => {}, [DateStart]);
-  console.log(dbFilter);
   function listele() {
     func(dbFilter);
   }

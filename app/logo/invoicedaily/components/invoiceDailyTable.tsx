@@ -1,38 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
-import { sqlInvoiceDaily, sqlInvoiceDailyTotal } from "./invoicedaily";
-import { invoiceData } from "./invoicedaily";
+import {
+  sqlInvoiceDailyTotal,
+  invoiceData,
+  sqlInvoiceDaily,
+} from "./invoiceDaily";
 import { base64from } from "@/lib/utils";
 
-const initInvoiceData = [
-  {
-    LOGICALREF: 1,
-    FICHENO: "12345678901234",
-    DATE_: "12.12.2025",
-    FTIME: "",
-    SAAT: "00:00",
-    AMOUNT: 8,
-    URUN: "C 30 0000 0000 0000 0000 0000",
-    BIRIM: "M3",
-    HESAP: "FİRMA ADI FİRMA ADI FİRMA ADI FİRMA ADI ",
-    ADDR: "FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ ",
-    TIP: "..... .... .... .....",
-  },
-  {
-    LOGICALREF: 1,
-    FICHENO: "12345678901234",
-    DATE_: "12.12.2025",
-    FTIME: "",
-    SAAT: "00:00",
-    AMOUNT: 8,
-    URUN: "C 30 0000 0000 0000 0000 0000",
-    BIRIM: "M3",
-    HESAP: "FİRMA ADI FİRMA ADI FİRMA ADI FİRMA ADI ",
-    ADDR: "FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ ",
-    TIP: "..... .... .... .....",
-  },
-];
 type invoiceDataTotal = {
   TOPLAM: string;
   URUN: string;
@@ -85,7 +60,7 @@ export default function InvoiceDailyTable() {
   useEffect(() => {
     getData();
 
-    setchanger(!changer);
+    setchanger((prev) => !prev);
   }, [debChanger]);
 
   return (

@@ -33,7 +33,9 @@ const forgottenPassword: projectUnit = {
 };
 export const logIn: projectUnit = {
   name: "login",
+  caption: "Giriş",
   type: "scope",
+  path: "/login",
   actions: { signIn, signUp, forgottenPassword },
 };
 
@@ -56,10 +58,13 @@ export const dashboard: projectUnit = {
 
 const invoiceDaily: projectUnit = {
   name: "invoiceDaily",
+  path: "/logo/invoiceDaily",
   type: "module",
 };
 const invoiceList: projectUnit = {
-  name: "invoiceDaily",
+  name: "invoiceList",
+  caption: "Sevk Takip",
+  roles: ["admin", "member"],
   type: "module",
 };
 export const logo: projectUnit = {

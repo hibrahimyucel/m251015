@@ -6,15 +6,10 @@ import { ForgottenPasswordForm } from "./forgottenPassword";
 import { useAuth } from "../context/authProvider";
 import { redirect } from "next/navigation";
 import TextButton from "@/components/textButton";
+import { info } from "@/project/project";
 export default function LoginForm() {
   const [mode, setMode] = useState<number>(0); // SignIn, SignUp, Forgotten Password
   const { user } = useAuth();
-
-  const inf = {
-    SignUp: "Kayıt ol",
-    signIn: "Giriş",
-    forgotPassword: "Şifremi unuttum.!",
-  };
 
   if (user) redirect("/dashboard");
   return (
@@ -27,7 +22,7 @@ export default function LoginForm() {
         {mode != 0 && (
           <TextButton
             type="button"
-            text={inf.signIn}
+            text={info.logIn.actions?.signIn.caption}
             onClick={() => setMode(0)}
           />
         )}
@@ -35,14 +30,14 @@ export default function LoginForm() {
         {mode != 1 && (
           <TextButton
             onClick={() => setMode(1)}
-            text={inf.SignUp}
+            text={info.logIn.actions?.signUp.caption}
             type="button"
           />
         )}
         {mode != 2 && (
           <TextButton
             onClick={() => setMode(2)}
-            text={inf.forgotPassword}
+            text={info.logIn.actions?.forgottenPassword.caption}
             type="button"
           />
         )}

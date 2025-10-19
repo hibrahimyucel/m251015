@@ -3,7 +3,7 @@ import { FC } from "react";
 
 interface textButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  text?: string;
+  text?: string | null;
 }
 const TextButton: FC<textButtonProps> = ({
   text,

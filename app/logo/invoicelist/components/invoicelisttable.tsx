@@ -1,41 +1,13 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
-import { invoiceData } from "../../invoicedaily/components/invoicedaily";
-/*
-const initInvoiceData = [
-  {
-    LOGICALREF: 1,
-    FICHENO: "12345678901234",
-    DATE_: "12.12.2025",
-    FTIME: "",
-    SAAT: "00:00",
-    AMOUNT: 8,
-    URUN: "C 30 0000 0000 0000 0000 0000",
-    BIRIM: "M3",
-    HESAP: "FİRMA ADI FİRMA ADI FİRMA ADI FİRMA ADI ",
-    ADDR: "FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ ",
-    TIP: "..... .... .... .....",
-  },
-  {
-    LOGICALREF: 1,
-    FICHENO: "12345678901234",
-    DATE_: "12.12.2025",
-    FTIME: "",
-    SAAT: "00:00",
-    AMOUNT: 8,
-    URUN: "C 30 0000 0000 0000 0000 0000",
-    BIRIM: "M3",
-    HESAP: "FİRMA ADI FİRMA ADI FİRMA ADI FİRMA ADI ",
-    ADDR: "FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ ",
-    TIP: "..... .... .... .....",
-  },
-];*/
+import { invoiceData } from "../../invoiceDaily/components/invoiceDaily";
 
 type invoiceLocalFilters = invoiceData;
 type totalData = { AMOUNT: number; URUN: string; BIRIM: string; ID: string };
+
 function calculateTotal(data: invoiceData[]) {
-  let totalData: totalData[] = [];
+  const totalData: totalData[] = [];
   let totalAmount: number = 0;
   function add(item: totalData) {
     const i = totalData.findIndex((f: totalData) => f.ID == item.ID);

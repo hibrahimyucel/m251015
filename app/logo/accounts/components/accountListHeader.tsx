@@ -1,6 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useDebounce } from "@/lib/hooks/useDebounce";
+import React, { useState } from "react";
 import Icons from "@/components/icons";
 export type accountdbFilters = {
   dateStart: Date;
@@ -38,10 +37,6 @@ export default function AccountListHeader({ func }: AccountListHeaderProps) {
   const e = new Date();
   s.setFullYear(s.getFullYear() - 30);
   e.setFullYear(e.getFullYear() + 1);
-
-  const debdbFilter = useDebounce(dbFilter, 500);
-  //  useEffect(() => {}, [DateStart]);
-  console.log(dbFilter);
 
   return (
     <div className="flex w-full justify-center gap-1 rounded-sm text-center font-bold">

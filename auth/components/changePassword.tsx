@@ -1,6 +1,5 @@
 "use client";
 import { useActionState, useEffect } from "react";
-import { redirect } from "next/navigation";
 import TextButton from "@/components/textButton";
 import { changePassword } from "../actions/logInActions";
 import { useAuth } from "../context/authProvider";

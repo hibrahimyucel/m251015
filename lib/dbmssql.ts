@@ -21,7 +21,7 @@ export async function get(
     }
     const pool: sql.ConnectionPool = await new sql.ConnectionPool(config);
     // automatically remove the pool from the cache if `pool.close()` is called
-    const close = pool.close.bind(pool);
+    //const close = pool.close.bind(pool);
     /*pool.close = (...args) => {
     pools.delete(name);
     return close(...args);

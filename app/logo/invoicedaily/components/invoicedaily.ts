@@ -16,15 +16,13 @@ export interface invoiceData {
 export const sqlInvoiceDailyTotal = `SELECT 
         SUM(STL.AMOUNT) TOPLAM
         ,ITM.name URUN
-        ,ul.name BIRIM
-        
+        ,ul.name BIRIM        
 FROM LG_020_01_STFICHE STF
 LEFT JOIN LG_020_01_STLINE STL ON STF.LOGICALREF = STL.STFICHEREF
 LEFT JOIN LG_020_UNITSETL UL ON ul.LOGICALREF = STL.uomref
 LEFT JOIN LG_020_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
 WHERE STF.DATE_ =CAST (GETDATE() AS DATE )  and STF.TRCODe=8
-group by ITM.name
-        ,ul.name`;
+group by ITM.name, ul.name`;
 
 export const sqlInvoiceDaily = `SELECT STF.LOGICALREF
 	,STF.FICHENO

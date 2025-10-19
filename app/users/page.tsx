@@ -27,6 +27,7 @@ export default function UsersPage() {
         },
       }),
     );
+    if (error) alert(error.message);
     if (data) await getUsers();
   }
   async function saveUserMember(id: string, pmember: boolean) {
