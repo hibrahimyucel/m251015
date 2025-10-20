@@ -12,6 +12,8 @@ type AuthProviderContextValue = {
   token: unknown;
   setToken: (token: unknown) => void;
   UserData: Partial<userData>;
+  statusMessage: string;
+  setStatusMessage: (StatusMessage: string) => void;
 };
 
 const AuthProviderContext = createContext<AuthProviderContextValue | undefined>(
@@ -21,13 +23,18 @@ const AuthProviderContext = createContext<AuthProviderContextValue | undefined>(
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<string | null>(null);
   const [token, setToken] = useState<unknown>();
+  const [statusMessage, setStatusMessageHook] = useState("");
   const [UserData, setUserData] = useState<Partial<userData>>({
     id: "0",
     name: "",
     admin: false,
     member: false,
   });
-
+  function setStatusMessage(statusMessage: string) {
+    setStatusMessageHook(statusMessage);
+    const timeOut = setTimeout(() => setStatusMessageHook(""), 5000);
+    return () => clearTimeout(timeOut);
+  }
   async function handleAuthState() {
     const [data, error] = await tryCatch(
       fetch("/api/me", {
@@ -69,6 +76,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         token,
         setToken,
         UserData,
+        statusMessage,
+        setStatusMessage,
       }}
     >
       {children}

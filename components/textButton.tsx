@@ -14,7 +14,7 @@ const TextButton: FC<textButtonProps> = ({
       onClick={props.onClick}
       type={props.type}
       disabled={props.disabled}
-      className="cursor-pointer p-2 text-nowrap"
+      className="min-h-5 min-w-25 cursor-pointer p-2 text-nowrap"
     >
       {text}
     </button>

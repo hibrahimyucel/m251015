@@ -26,7 +26,11 @@ export async function get(
     pools.delete(name);
     return close(...args);
    }*/
-    pools.set(name, pool.connect());
+    try {
+      pools.set(name, pool.connect());
+    } catch (error) {
+      throw Error((error as Error).message);
+    }
   }
   return pools.get(name);
 }

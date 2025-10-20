@@ -15,8 +15,11 @@ export interface usersData {
   pk_user: string;
 }
 export default function UsersPage() {
+  const { setStatusMessage, UserData } = useAuth();
+
   async function saveUserAdmin(id: string, padmin: boolean) {
     if (UserData.id == id) return;
+    setStatusMessage("Kaydediliyor.");
     const sql = `update auth_user set admin = ${padmin ? "pk_user" : "null"} where pk_user = ${id}`;
     const [data, error] = await tryCatch(
       fetch("/api/runsql", {
@@ -27,11 +30,12 @@ export default function UsersPage() {
         },
       }),
     );
-    if (error) alert(error.message);
+    if (error) setStatusMessage(error.message);
     if (data) await getUsers();
   }
   async function saveUserMember(id: string, pmember: boolean) {
     const sql = `update auth_user set member = ${pmember ? "pk_user" : "null"} where pk_user = ${id}`;
+    setStatusMessage("Kaydediliyor.");
     const [data, error] = await tryCatch(
       fetch("/api/runsql", {
         method: "PATCH",
@@ -42,10 +46,8 @@ export default function UsersPage() {
       }),
     );
     if (data) await getUsers();
-    if (error) console.log(error.message);
+    if (error) setStatusMessage(error.message);
   }
-
-  const { UserData } = useAuth();
 
   const renderV = (value: string | number | undefined) => (
     <p className={`${value ? "block" : "border-b-1"} `}>{value}</p>
@@ -103,6 +105,7 @@ export default function UsersPage() {
   const [users, setusers] = useState<usersData[]>([]);
 
   async function getUsers() {
+    setStatusMessage(`Kullanıcılar listeleniyor...`);
     fetch("/api/user", {
       method: "PATCH",
       headers: {
@@ -113,6 +116,7 @@ export default function UsersPage() {
       .then((data) => {
         setusers(data);
       });
+    setStatusMessage("");
   }
 
   useEffect(() => {
@@ -122,6 +126,10 @@ export default function UsersPage() {
   return (
     <AdminRoute>
       <div className="w-full overflow-x-auto">
+        <h1 className="bg-buttoncolor p-0.5 font-semibold">
+          Kullanıcı Listesi
+        </h1>
+
         <DataTable<usersData> data={users} columns={columns} />
       </div>
     </AdminRoute>

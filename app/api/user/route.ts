@@ -3,7 +3,7 @@ import { getQuery } from "@/auth/authDb";
 
 export async function GET() {
   try {
-    const sqlSelectUsers = `select *,pk_user as id from auth_user`;
+    const sqlSelectUsers = `select name,email,admin,member,pk_user as id from auth_user order by name,email`;
 
     const request = await getQuery();
 

@@ -4,7 +4,7 @@ import { useAuth } from "@/auth/context/authProvider";
 import HomePageCard from "@/components/homePageCard";
 export default function Home() {
   const { UserData } = useAuth();
-  console.log(UserData);
+
   return (
     <div className="h-full w-full gap-2">
       {!UserData.id && (
@@ -16,12 +16,12 @@ export default function Home() {
         <div className="flex flex-wrap justify-center gap-2 py-2 align-top">
           <HomePageCard
             Name={"Sevk Takip"}
-            Href="/logo/invoicedaily"
+            Href="/logo/invoiceDaily"
             Desc={"Sevk Takip"}
           />
           <HomePageCard
             Name={"İrsaliye Listesi"}
-            Href="/logo/invoicelist"
+            Href="/logo/invoiceList"
             Desc={"İrsaliye Listesi"}
           />
           <HomePageCard

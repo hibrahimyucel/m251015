@@ -16,7 +16,7 @@ export default function DataTable<T extends { id: number | string }>({
   columns,
 }: DataTableProps<T>) {
   return (
-    <table className="sm:w-full">
+    <table className="border-diffcolor border-collapse sm:w-full">
       <TableHeader columns={columns} />
       <tbody>
         {data.map((row, index) => (
@@ -34,9 +34,12 @@ type TableHeaderProps<T> = {
 function TableHeader<T>({ columns }: TableHeaderProps<T>) {
   return (
     <thead>
-      <tr className="bg-buttoncolor">
+      <tr className="">
         {columns.map((column) => (
-          <th key={String(column.key)} className="border p-0.5">
+          <th
+            key={String(column.key)}
+            className="bg-buttoncolor border-editbox border p-0.5"
+          >
             {column.header}
           </th>
         ))}
@@ -80,5 +83,9 @@ type TableCellProps<T> = {
 };
 
 function TableCell<T>({ id, value, render }: TableCellProps<T>) {
-  return <td>{render ? render(value, id) : String(value)}</td>;
+  return (
+    <td className="border-editbox border px-0.5">
+      {render ? render(value, id) : String(value)}
+    </td>
+  );
 }

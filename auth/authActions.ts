@@ -182,7 +182,6 @@ export async function changePasswordAction(
   formData: FormData,
 ) {
   const errSession = "Şifrenizi değiştirebilmek için oturum açmalısınız.";
-
   const data = Object.fromEntries(formData);
   const result = changePasswordSchema.safeParse(data);
 

@@ -18,6 +18,7 @@ export function ChangePasswordForm() {
     changePasswordAction,
     undefined,
   );
+
   const { UserData } = useAuth();
 
   const eprops = state?.errors?.properties;

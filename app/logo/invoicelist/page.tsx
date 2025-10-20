@@ -3,13 +3,16 @@ import React, { useState } from "react";
 import InvoiceListTable from "./components/invoiceListTable";
 import InvoiceListHeader from "./components/invoiceListHeader";
 import MemberRoute from "@/components/authMember";
-import { base64from } from "@/lib/utils";
+import { base64from, tryCatch } from "@/lib/utils";
 import { sqlInvoiceData, invoiceData } from "../logodb";
 import { invoicedbFilters } from "./components/invoiceListHeader";
+import { useAuth } from "@/auth/context/authProvider";
 
 export default function InvoiceListPage() {
+  const { setStatusMessage } = useAuth();
   const [data, setData] = useState<invoiceData[]>([]);
   async function getData(filter: invoicedbFilters) {
+    setStatusMessage("Yükleniyor...");
     let sql = sqlInvoiceData;
 
     sql += ` AND (STF.DATE_ BETWEEN '${filter.dateStart.toISOString()}' AND '${filter.dateEnd.toISOString()}' )`;
@@ -25,18 +28,20 @@ export default function InvoiceListPage() {
       sql += ` AND STL.OUTPUTIDCODE LIKE '%${filter.plaka.trim()}%' `;
 
     const x = base64from(await JSON.stringify({ Sql: sql, Params: [] }));
-    //
-    fetch("https://sponge-prepared-commonly.ngrok-free.app/api/runlkssql", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        data: x,
-      },
-    })
-      .then((response) => response.json())
-      .then((d) => {
-        setData(d);
-      });
+    const [d, error] = await tryCatch(
+      fetch("https://sponge-prepared-commonly.ngrok-free.app/api/runlkssql", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          data: x,
+        },
+      })
+        .then((response) => response.json())
+        .then((d) => {
+          setData(d);
+        }),
+    );
+    if (error) setStatusMessage(error.message);
   }
   return (
     <MemberRoute>

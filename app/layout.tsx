@@ -31,14 +31,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-full antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-full text-sm antialiased`}
       >
         <AuthProvider>
-          <div className="bg-background grid w-full grid-rows-[48px_1fr_24px] p-0.5">
+          <div className="bg-background grid w-full grid-rows-[48px_1fr_24px] p-1">
             <div className="content-center rounded-t-sm border border-slate-500">
               <AppHeader />
             </div>
-            <div className="h-[calc(100vh-5rem)] overflow-x-clip overflow-y-auto border-r border-l border-slate-500">
+            <div className="h-[calc(100vh-5rem)] overflow-x-clip overflow-y-auto border-x border-slate-500">
               {children}
             </div>
             <div className="content-center rounded-b-sm border border-slate-500">
