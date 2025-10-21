@@ -4,24 +4,24 @@ import { useAuth } from "@/auth/context/authProvider";
 import HomePageCard from "@/components/homePageCard";
 export default function Home() {
   const { UserData } = useAuth();
-
   return (
     <div className="h-full w-full gap-2">
-      {!UserData.id && (
-        <div className="flex flex-wrap justify-center py-2 align-top">
-          <HomePageCard Name={"Giriş Yap"} Href="/login" Desc={""} />
-        </div>
-      )}
+      {!UserData.id ||
+        (true && (
+          <div className="flex flex-wrap justify-center py-2 align-top">
+            <HomePageCard Name={"Giriş Yap"} Href="/login" Desc={""} />
+          </div>
+        ))}
       {UserData.member && (
         <div className="flex flex-wrap justify-center gap-2 py-2 align-top">
           <HomePageCard
             Name={"Sevk Takip"}
-            Href="/logo/invoiceDaily"
+            Href="/logo/invoicedaily"
             Desc={"Sevk Takip"}
           />
           <HomePageCard
             Name={"İrsaliye Listesi"}
-            Href="/logo/invoiceList"
+            Href="/logo/invoicelist"
             Desc={"İrsaliye Listesi"}
           />
           <HomePageCard

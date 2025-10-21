@@ -1,6 +1,6 @@
+import { mmbisConn } from "@/auth/mssqlAuth";
 import { base64to } from "@/lib/utils";
 import { NextResponse, NextRequest } from "next/server";
-import { getQuery } from "@/auth/authDb";
 
 export async function GET(req: NextRequest) {
   try {
@@ -11,8 +11,10 @@ export async function GET(req: NextRequest) {
       typeof e === "string" ? decodeURIComponent(e) : e,
     );*/
     const Sql = data.Sql;
+    console.log(Sql);
 
-    const request = await getQuery();
+    if (!mmbisConn.connected) await mmbisConn.connect();
+    const request = mmbisConn.request();
 
     const result = await request.query(Sql);
 

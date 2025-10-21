@@ -1,6 +1,6 @@
+import { LKSConn } from "@/app/logo/logodb";
 import { base64to } from "@/lib/utils";
 import { NextResponse, NextRequest } from "next/server";
-import { getLKSQuery } from "@/app/logo/logodb";
 
 export async function GET(req: NextRequest) {
   try {
@@ -12,7 +12,8 @@ export async function GET(req: NextRequest) {
     );*/
     const Sql = data.Sql;
 
-    const request = await getLKSQuery();
+    if (!LKSConn.connected) await LKSConn.connect();
+    const request = LKSConn.request();
 
     const result = await request.query(Sql);
 

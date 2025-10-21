@@ -15,23 +15,18 @@ export async function get(
   name: string,
   config: string | null,
 ): Promise<ConnectionPool> {
-  console.log("get");
   if (!pools.has(name)) {
     if (!config) {
       throw new Error("Pool does not exist");
     }
     const pool: sql.ConnectionPool = await new sql.ConnectionPool(config);
     // automatically remove the pool from the cache if `pool.close()` is called
-    //const close = pool.close.bind(pool);
+    const close = pool.close.bind(pool);
     /*pool.close = (...args) => {
     pools.delete(name);
     return close(...args);
    }*/
-    try {
-      pools.set(name, pool.connect());
-    } catch (error) {
-      throw Error((error as Error).message);
-    }
+    pools.set(name, pool.connect());
   }
   return pools.get(name);
 }

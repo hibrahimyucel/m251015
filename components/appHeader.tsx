@@ -42,10 +42,10 @@ export default function AppHeader() {
         )}
         {UserData.member && (
           <>
-            <Link href="/logo/invoiceDaily">
+            <Link href="/logo/invoicedaily">
               <TextButton text={"Sevk Takip"} />
             </Link>
-            <Link href="/logo/invoiceList">
+            <Link href="/logo/invoicelist">
               <TextButton text={"İrsaliye Listesi"} />
             </Link>
 

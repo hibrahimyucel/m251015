@@ -3,7 +3,7 @@ import { FC } from "react";
 
 interface textButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  text?: string | null;
+  text?: string;
 }
 const TextButton: FC<textButtonProps> = ({
   text,
@@ -14,7 +14,7 @@ const TextButton: FC<textButtonProps> = ({
       onClick={props.onClick}
       type={props.type}
       disabled={props.disabled}
-      className="min-h-5 min-w-25 cursor-pointer p-2 text-nowrap"
+      className="cursor-pointer p-2 text-nowrap"
     >
       {text}
     </button>

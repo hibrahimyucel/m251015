@@ -1,8 +1,9 @@
 "use client";
 import { useActionState, useEffect } from "react";
+import { redirect } from "next/navigation";
 import TextButton from "@/components/textButton";
+import { changePassword } from "../actions/logInActions";
 import { useAuth } from "../context/authProvider";
-import { changePasswordAction } from "../authActions";
 
 export function ChangePasswordForm() {
   const inf = {
@@ -14,11 +15,10 @@ export function ChangePasswordForm() {
     SignUpCompleted: "Şifreniz değiştirildi.",
   };
 
-  const [state, formAction, isPending] = useActionState(
-    changePasswordAction,
+  const [state, changePasswordAction, isPending] = useActionState(
+    changePassword,
     undefined,
   );
-
   const { UserData } = useAuth();
 
   const eprops = state?.errors?.properties;
@@ -49,7 +49,7 @@ export function ChangePasswordForm() {
   }, [state]);
   return (
     <form
-      action={formAction}
+      action={changePasswordAction}
       className="border-buttoncolor flex w-[300px] max-w-[300px] flex-col place-self-center-safe rounded-md border p-1"
     >
       <p className="pt-1">{inf.UserName}</p>

@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
-import { getQuery } from "@/auth/authDb";
+import { mmbisConn } from "@/auth/mssqlAuth";
+import { NextResponse, NextRequest } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const sqlSelectUsers = `select name,email,admin,member,pk_user as id from auth_user order by name,email`;
-
-    const request = await getQuery();
+    const sqlSelectUsers = `select *,pk_user as id from auth_user`;
+    if (!mmbisConn.connected) await mmbisConn.connect();
+    const request = mmbisConn.request();
 
     const result = await request.query(sqlSelectUsers);
 
@@ -15,10 +15,10 @@ export async function GET() {
   }
 }
 
-export const PATCH = async () => {
-  return GET();
+export const PATCH = async (request: NextRequest) => {
+  return GET(request);
 };
 
-export const OPTIONS = async () => {
-  return GET();
+export const OPTIONS = async (request: NextRequest) => {
+  return GET(request);
 };

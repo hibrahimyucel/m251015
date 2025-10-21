@@ -1,13 +1,41 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
-import { invoiceData } from "../../logodb";
+import { invoiceData } from "../../invoicedaily/components/invoicedaily";
+/*
+const initInvoiceData = [
+  {
+    LOGICALREF: 1,
+    FICHENO: "12345678901234",
+    DATE_: "12.12.2025",
+    FTIME: "",
+    SAAT: "00:00",
+    AMOUNT: 8,
+    URUN: "C 30 0000 0000 0000 0000 0000",
+    BIRIM: "M3",
+    HESAP: "FİRMA ADI FİRMA ADI FİRMA ADI FİRMA ADI ",
+    ADDR: "FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ ",
+    TIP: "..... .... .... .....",
+  },
+  {
+    LOGICALREF: 1,
+    FICHENO: "12345678901234",
+    DATE_: "12.12.2025",
+    FTIME: "",
+    SAAT: "00:00",
+    AMOUNT: 8,
+    URUN: "C 30 0000 0000 0000 0000 0000",
+    BIRIM: "M3",
+    HESAP: "FİRMA ADI FİRMA ADI FİRMA ADI FİRMA ADI ",
+    ADDR: "FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ ",
+    TIP: "..... .... .... .....",
+  },
+];*/
 
 type invoiceLocalFilters = invoiceData;
 type totalData = { AMOUNT: number; URUN: string; BIRIM: string; ID: string };
-
 function calculateTotal(data: invoiceData[]) {
-  const totalData: totalData[] = [];
+  let totalData: totalData[] = [];
   let totalAmount: number = 0;
   function add(item: totalData) {
     const i = totalData.findIndex((f: totalData) => f.ID == item.ID);
@@ -38,7 +66,7 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
   const entries = Object.entries(xlocalfilter).filter((item) =>
     item ? item : false,
   );
-
+  console.log("xlocalfilter ", xlocalfilter, entries);
   if (entries.length)
     localData = data.filter((item) =>
       entries.every(([key, value]) =>

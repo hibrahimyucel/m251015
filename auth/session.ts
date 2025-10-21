@@ -18,7 +18,7 @@ const secretKey = process.env.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
 
 export async function createAccessToken() {
-  const user = await getUserFromSession();
+  const user = await getUser();
   const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
 
   return new SignJWT({ user, expiresAt })
@@ -46,7 +46,7 @@ export async function createSession(user: string) {
     expires: expiresAt,
   });
 }
-export async function getUserFromSession(): Promise<string | null> {
+export async function getUser(): Promise<string | null> {
   const cookie = (await cookies()).get("session")?.value;
 
   const payload = await payloadFrom(cookie);

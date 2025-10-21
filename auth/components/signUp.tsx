@@ -1,7 +1,7 @@
 "use client";
 import { useActionState, useEffect } from "react";
 import { redirect } from "next/navigation";
-import { signUpAction } from "../authActions";
+import { signUp } from "../actions/logInActions";
 import TextButton from "@/components/textButton";
 
 export function SignUpForm() {
@@ -15,10 +15,7 @@ export function SignUpForm() {
     SignUpCompleted: "Kayıt işlemi tamamlandı.",
   };
 
-  const [state, formAction, isPending] = useActionState(
-    signUpAction,
-    undefined,
-  );
+  const [state, signUpAction, isPending] = useActionState(signUp, undefined);
 
   const eprops = state?.errors?.properties;
   const data = state?.data;
@@ -46,7 +43,7 @@ export function SignUpForm() {
   }, [state]);
   return (
     <form
-      action={formAction}
+      action={signUpAction}
       className="border-buttoncolor flex w-[300px] max-w-[300px] flex-col place-self-center-safe rounded-md border p-1"
     >
       <p className="pt-1">{inf.UserName}</p>
