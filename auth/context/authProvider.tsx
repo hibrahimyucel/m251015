@@ -12,8 +12,8 @@ type AuthProviderContextValue = {
   token: unknown;
   setToken: (token: unknown) => void;
   UserData: Partial<userData>;
-  statusMessage: string;
-  setStatusMessage: (StatusMessage: string) => void;
+  /* statusMessage: string;
+  setStatusMessage: (StatusMessage: string) => void;*/
 };
 
 const AuthProviderContext = createContext<AuthProviderContextValue | undefined>(
@@ -76,8 +76,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         token,
         setToken,
         UserData,
-        statusMessage,
-        setStatusMessage,
+        /* statusMessage,
+        setStatusMessage,*/
       }}
     >
       {children}

@@ -15,6 +15,7 @@ export async function get(
   name: string,
   config: string | null,
 ): Promise<ConnectionPool> {
+  console.log("get");
   if (!pools.has(name)) {
     if (!config) {
       throw new Error("Pool does not exist");
