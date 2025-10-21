@@ -29,8 +29,8 @@ export default function InvoiceListPage() {
       sql += ` AND STL.OUTPUTIDCODE LIKE '%${filter.plaka.trim()}%' `;
 
     const x = base64from(await JSON.stringify({ Sql: sql, Params: [] }));
-    //
-    fetch("https://sponge-prepared-commonly.ngrok-free.app/api/runlkssql", {
+    //https://sponge-prepared-commonly.ngrok-free.app
+    fetch("/api/runlkssql", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

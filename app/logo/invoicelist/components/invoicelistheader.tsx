@@ -102,7 +102,7 @@ export default function InvoiceListHeader({ func }: invoiceListHeaderProps) {
         />
       </div>
       <div className="border-diffcolor flex shrink-0 basis-25 flex-col justify-center rounded-sm border">
-        Metraj
+        Sınıfı
         <input
           type="text"
           name="metraj"
@@ -158,12 +158,13 @@ export default function InvoiceListHeader({ func }: invoiceListHeaderProps) {
           }
         />
       </div>
-      <div className="border-editbox hover:bg-editboxfocus bg-buttoncolor flex w-15 flex-col content-center justify-center rounded-sm border">
+      <div className="border-editbox content-center justify-center rounded-sm border">
         <button
           type="button"
-          className="h-full place-self-center"
+          className="flex h-full flex-row items-center p-1 font-bold"
           onClick={listele}
         >
+          Listele
           <Icons icon="List" />
         </button>
       </div>

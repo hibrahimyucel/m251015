@@ -34,7 +34,7 @@ const initInvoiceData = [
   },
 ];
 type invoiceDataTotal = {
-  TOPLAM: string;
+  TOPLAM: number;
   URUN: string;
   BIRIM: string;
 };
@@ -89,7 +89,7 @@ export default function InvoiceDailyTable() {
   }, [debChanger]);
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex h-[calc(100vh-6rem)] w-full flex-col overflow-hidden overflow-y-scroll border">
       <h1 className="bg-buttoncolor w-full pt-0.5 pl-2 text-sm font-bold">
         Güncel İrsaliye Listesi {datetime}
       </h1>
@@ -107,13 +107,13 @@ export default function InvoiceDailyTable() {
         <div className="flex shrink-0 basis-12 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Birim
         </div>
-        <div className="flex grow-1 basis-60 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+        <div className="flex grow basis-60 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Sınıfı
         </div>
         <div className="flex grow-2 basis-60 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Firma
         </div>
-        <div className="flex grow-1 basis-60 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+        <div className="flex grow basis-60 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Adres
         </div>
         {/*   <div className="flex basis-30 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
@@ -125,7 +125,7 @@ export default function InvoiceDailyTable() {
       </div>
 
       {data?.length && (
-        <div className="flex w-full grow flex-col overflow-y-scroll border">
+        <div className="flex w-full grow flex-col border">
           {data.map((data: invoiceData, index) => (
             <div
               key={index}
@@ -143,11 +143,11 @@ export default function InvoiceDailyTable() {
               <div className="flex shrink-0 basis-12 overflow-hidden text-nowrap text-clip">
                 {data.BIRIM}
               </div>
-              <div className="flex grow-1 basis-60 overflow-hidden text-nowrap text-clip">
+              <div className="flex grow basis-60 overflow-hidden text-nowrap text-clip">
                 {data.URUN}
               </div>
               <div className="flex grow-2 basis-60 truncate">{data.HESAP}</div>
-              <div className="flex grow-1 basis-60 overflow-hidden text-nowrap text-clip">
+              <div className="flex grow basis-60 overflow-hidden text-nowrap text-clip">
                 {data.ADDR}
               </div>
               {/* <div className="flex basis-30 justify-end overflow-hidden text-nowrap text-clip">
@@ -160,32 +160,36 @@ export default function InvoiceDailyTable() {
           ))}
         </div>
       )}
-      {dataTotal.length && (
-        <table className="border-buttoncolor min-w-full border-collapse border">
-          <caption className="font-bold">Toplamlar</caption>
-          <tbody>
-            {dataTotal.map((item: invoiceDataTotal, index) => (
-              <tr
-                key={index}
-                className={`border-b ${index % 2 ? "bg-background" : "bg-diffcolor"} `}
-              >
-                <td className="pl-1">{index + 1}</td>
-                <td className="pl-1"> </td>
-                <td className="pl-1 text-end">{item.TOPLAM}</td>
-                <td className="pl-1">{item.BIRIM}</td>
-                <td className="grow pl-1">{item.URUN}</td>
+      <div>
+        {dataTotal.length && (
+          <table className="border-buttoncolor min-w-full border-collapse border">
+            <caption className="font-bold">Toplamlar</caption>
+            <tbody>
+              {dataTotal.map((item: invoiceDataTotal, index) => (
+                <tr
+                  key={index}
+                  className={`border-b ${index % 2 ? "bg-background" : "bg-diffcolor"} `}
+                >
+                  <td className="pl-1">{index + 1}</td>
+                  <td className="pl-1"> </td>
+                  <td className="pl-1 text-end">
+                    {item.TOPLAM.toLocaleString()}
+                  </td>
+                  <td className="pl-1">{item.BIRIM}</td>
+                  <td className="grow pl-1">{item.URUN}</td>
+                </tr>
+              ))}
+              <tr key={-1} className={`bg-buttoncolor border-b font-bold`}>
+                <td className="pl-1"></td>
+                <td className="pl-1">Günün Metrajı</td>
+                <td className="pl-1 text-end">{toplam.toLocaleString()}</td>
+                <td className="pl-1"></td>
+                <td className="grow pl-1"></td>
               </tr>
-            ))}
-            <tr key={-1} className={`bg-buttoncolor border-b font-bold`}>
-              <td className="pl-1"></td>
-              <td className="pl-1">Günün Metrajı</td>
-              <td className="pl-1 text-end">{toplam}</td>
-              <td className="pl-1"></td>
-              <td className="grow pl-1"></td>
-            </tr>
-          </tbody>
-        </table>
-      )}
+            </tbody>
+          </table>
+        )}
+      </div>
     </div>
   );
 }
