@@ -56,7 +56,7 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
   return (
     <div className="flex w-full flex-col">
       <div className="flex w-full justify-center gap-0.5 pt-0.5 pr-4 text-center font-bold">
-        <div className="flex shrink-0 grow basis-14 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+        <div className="flex w-30 shrink-0 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Tarih-Saat
           <input
             type="text"
@@ -69,7 +69,7 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
             }}
           />
         </div>
-        <div className="flex shrink-0 basis-20 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+        <div className="flex w-20 shrink-0 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Plaka
           <input
             type="text"
@@ -82,10 +82,10 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
             }}
           />
         </div>
-        <div className="flex basis-13 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+        <div className="flex w-12 shrink-0 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Metraj
         </div>
-        <div className="flex shrink-0 basis-13 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+        <div className="flex w-10 shrink-0 flex-col overflow-hidden rounded-t-md border text-nowrap text-clip">
           Birim
           <input
             type="text"
@@ -98,7 +98,7 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
             }}
           />
         </div>
-        <div className="flex shrink-0 grow-2 basis-25 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+        <div className="flex w-50 shrink-0 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Sınıfı
           <input
             type="text"
@@ -111,7 +111,7 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
             }}
           />
         </div>
-        <div className="flex grow-2 basis-25 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+        <div className="flex grow basis-75 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Firma
           <input
             type="text"
@@ -124,7 +124,7 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
             }}
           />
         </div>
-        <div className="flex grow-2 basis-25 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+        <div className="flex grow basis-25 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Adres
           <input
             type="text"
@@ -137,7 +137,7 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
             }}
           />
         </div>
-        <div className="flex basis-30 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+        <div className="flex w-25 shrink-0 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Fiş No
           <input
             type="text"
@@ -158,26 +158,28 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
               key={index}
               className={`flex w-full gap-0.5 border-b ${index % 2 ? "bg-background" : "bg-diffcolor"} `}
             >
-              <div className="flex shrink-0 grow basis-14 overflow-hidden text-nowrap text-clip">
+              <div className="flex w-30 shrink-0 overflow-hidden text-nowrap text-clip">
                 {data.DATE_.substring(0, 10).concat(" ").concat(data.SAAT)}
               </div>
-              <div className="flex shrink-0 basis-20 overflow-hidden text-nowrap text-clip">
+              <div className="flex w-20 shrink-0 overflow-hidden text-nowrap text-clip">
                 {data.PLAKA}
               </div>
-              <div className="flex shrink-0 basis-13 justify-end overflow-hidden pr-0.5 text-nowrap text-clip">
+              <div className="flex w-12 shrink-0 justify-end overflow-hidden pr-0.5 text-nowrap text-clip">
                 {data.AMOUNT}
               </div>
-              <div className="flex shrink-0 basis-13 overflow-hidden text-nowrap text-clip">
+              <div className="flex w-10 shrink-0 items-center overflow-hidden px-0.5 text-xs text-nowrap text-clip">
                 {data.BIRIM}
               </div>
-              <div className="flex grow-2 basis-25 overflow-hidden text-nowrap text-clip">
+              <div className="flex w-50 shrink-0 overflow-hidden text-xs text-nowrap text-clip">
                 {data.URUN}
               </div>
-              <div className="flex grow-2 basis-25 truncate">{data.HESAP}</div>
-              <div className="flex grow-2 basis-25 overflow-hidden text-nowrap text-clip">
+              <div className="flex grow basis-75 truncate text-[10px]">
+                {data.HESAP}
+              </div>
+              <div className="flex grow basis-25 overflow-hidden text-[10px] text-nowrap text-clip">
                 {data.ADDR}
               </div>
-              <div className="flex basis-30 justify-end overflow-hidden text-nowrap text-clip">
+              <div className="flex w-25 shrink-0 justify-end overflow-hidden text-[10px] text-nowrap text-clip">
                 {data.FICHENO}
               </div>
             </div>

@@ -28,6 +28,7 @@ export default function UsersPage() {
       }),
     );
     if (data) await getUsers();
+    if (error) return error;
   }
   async function saveUserMember(id: string, pmember: boolean) {
     const sql = `update auth_user set member = ${pmember ? "pk_user" : "null"} where pk_user = ${id}`;
@@ -47,7 +48,7 @@ export default function UsersPage() {
   const { UserData } = useAuth();
 
   const renderV = (value: string | number | undefined) => (
-    <p className={`${value ? "block" : "border-b-1"} `}>{value}</p>
+    <p className={`${value ? "block" : "border-b"} `}>{value}</p>
   );
   const columns: Array<{
     key: keyof usersData;

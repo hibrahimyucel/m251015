@@ -5,34 +5,6 @@ import { sqlInvoiceDaily, sqlInvoiceDailyTotal } from "./invoicedaily";
 import { invoiceData } from "./invoicedaily";
 import { base64from } from "@/lib/utils";
 
-const initInvoiceData = [
-  {
-    LOGICALREF: 1,
-    FICHENO: "12345678901234",
-    DATE_: "12.12.2025",
-    FTIME: "",
-    SAAT: "00:00",
-    AMOUNT: 8,
-    URUN: "C 30 0000 0000 0000 0000 0000",
-    BIRIM: "M3",
-    HESAP: "FİRMA ADI FİRMA ADI FİRMA ADI FİRMA ADI ",
-    ADDR: "FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ ",
-    TIP: "..... .... .... .....",
-  },
-  {
-    LOGICALREF: 1,
-    FICHENO: "12345678901234",
-    DATE_: "12.12.2025",
-    FTIME: "",
-    SAAT: "00:00",
-    AMOUNT: 8,
-    URUN: "C 30 0000 0000 0000 0000 0000",
-    BIRIM: "M3",
-    HESAP: "FİRMA ADI FİRMA ADI FİRMA ADI FİRMA ADI ",
-    ADDR: "FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ ",
-    TIP: "..... .... .... .....",
-  },
-];
 type invoiceDataTotal = {
   TOPLAM: number;
   URUN: string;
@@ -89,31 +61,31 @@ export default function InvoiceDailyTable() {
   }, [debChanger]);
 
   return (
-    <div className="flex h-[calc(100vh-6rem)] w-full flex-col overflow-hidden overflow-y-scroll border">
+    <div className="flex h-[calc(100vh-6rem)] w-full flex-col flex-wrap overflow-hidden overflow-y-scroll border">
       <h1 className="bg-buttoncolor w-full pt-0.5 pl-2 text-sm font-bold">
         Güncel İrsaliye Listesi {datetime}
       </h1>
 
-      <div className="flex w-full justify-center gap-0.5 pt-0.5 pr-4 font-bold">
-        <div className="flex shrink-0 basis-30 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+      <div className="flex w-full justify-center pt-0.5 pr-4 font-bold">
+        <div className="flex w-30 shrink-0 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Tarih-Saat
         </div>
-        <div className="flex shrink-0 basis-20 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+        <div className="flex w-20 shrink-0 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Plaka
         </div>
-        <div className="flex shrink-0 basis-12 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+        <div className="flex w-12 shrink-0 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Metraj
         </div>
-        <div className="flex shrink-0 basis-12 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+        <div className="flex w-10 shrink-0 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Birim
         </div>
-        <div className="flex grow basis-60 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+        <div className="flex w-50 shrink-0 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Sınıfı
         </div>
-        <div className="flex grow-2 basis-60 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+        <div className="flex grow basis-75 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Firma
         </div>
-        <div className="flex grow basis-60 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+        <div className="flex grow basis-25 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Adres
         </div>
         {/*   <div className="flex basis-30 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
@@ -125,29 +97,33 @@ export default function InvoiceDailyTable() {
       </div>
 
       {data?.length && (
-        <div className="flex w-full grow flex-col border">
+        <div className="flex flex-col border">
           {data.map((data: invoiceData, index) => (
             <div
               key={index}
-              className={`flex w-full gap-0.5 border-b ${index % 2 ? "bg-background" : "bg-diffcolor"} `}
+              className={`flex border-b ${index % 2 ? "bg-background" : "bg-diffcolor"} `}
             >
-              <div className="flex shrink-0 basis-30 overflow-hidden text-nowrap text-clip">
+              <div className="flex w-30 shrink-0 overflow-hidden px-0.5 text-nowrap text-clip">
                 {data.DATE_.substring(0, 10).concat(" ").concat(data.SAAT)}
               </div>
-              <div className="flex shrink-0 basis-20 overflow-hidden text-nowrap text-clip">
+              <div className="flex w-20 shrink-0 overflow-hidden text-nowrap text-clip">
                 {data.PLAKA}
               </div>
-              <div className="flex shrink-0 basis-12 justify-end overflow-hidden pr-0.5 text-nowrap text-clip">
+
+              <div className="flex w-10 shrink-0 justify-end overflow-hidden px-0.5 text-nowrap text-clip">
                 {data.AMOUNT}
               </div>
-              <div className="flex shrink-0 basis-12 overflow-hidden text-nowrap text-clip">
+
+              <div className="flex w-12 shrink-0 items-center overflow-hidden px-0.5 text-xs text-nowrap text-clip">
                 {data.BIRIM}
               </div>
-              <div className="flex grow basis-60 overflow-hidden text-nowrap text-clip">
+              <div className="flex w-50 overflow-hidden text-xs text-nowrap text-clip">
                 {data.URUN}
               </div>
-              <div className="flex grow-2 basis-60 truncate">{data.HESAP}</div>
-              <div className="flex grow basis-60 overflow-hidden text-nowrap text-clip">
+              <div className="flex grow basis-75 truncate text-[10px]">
+                {data.HESAP}
+              </div>
+              <div className="flex grow basis-25 overflow-hidden text-[10px] text-nowrap text-clip">
                 {data.ADDR}
               </div>
               {/* <div className="flex basis-30 justify-end overflow-hidden text-nowrap text-clip">

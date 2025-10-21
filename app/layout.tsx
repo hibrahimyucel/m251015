@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-full antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-full text-sm antialiased`}
       >
         <AuthProvider>
           <div className="bg-background grid w-full grid-rows-[48px_1fr_24px] p-0.5">

@@ -1,7 +1,7 @@
 import { mmbisConn } from "@/auth/mssqlAuth";
 import { NextResponse, NextRequest } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const sqlSelectUsers = `select *,pk_user as id from auth_user`;
     if (!mmbisConn.connected) await mmbisConn.connect();
@@ -16,9 +16,9 @@ export async function GET(req: NextRequest) {
 }
 
 export const PATCH = async (request: NextRequest) => {
-  return GET(request);
+  return GET();
 };
 
 export const OPTIONS = async (request: NextRequest) => {
-  return GET(request);
+  return GET();
 };

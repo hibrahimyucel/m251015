@@ -3,7 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { tryCatch } from "@/lib/utils";
 import { getUserById } from "@/auth/mssqlAuth";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const [data, error] = await tryCatch(getUser());
   if (error) return NextResponse.json(error, { status: 401 });
   const token = await createAccessToken();
@@ -18,6 +18,10 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json(result, { status: 200 });
     }
+    if (errorUser)
+      return NextResponse.json(errorUser.message, {
+        status: 500,
+      });
   }
   return NextResponse.json("Kullanıcı/oturum bilgileri sorgulanamadı. ", {
     status: 500,
@@ -25,5 +29,5 @@ export async function GET(request: NextRequest) {
 }
 
 export const PATCH = async (request: NextRequest) => {
-  return GET(request);
+  return GET();
 };

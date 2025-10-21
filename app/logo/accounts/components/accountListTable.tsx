@@ -1,38 +1,4 @@
-"use client";
-import { useState, useEffect } from "react";
-import { useDebounce } from "@/lib/hooks/useDebounce";
 import { invoiceData } from "../../invoicedaily/components/invoicedaily";
-/*
-const initInvoiceData = [
-  {
-    LOGICALREF: 1,
-    FICHENO: "12345678901234",
-    DATE_: "12.12.2025",
-    FTIME: "",
-    PLAKA: "",
-    SAAT: "00:00",
-    AMOUNT: 8,
-    URUN: "C 30 0000 0000 0000 0000 0000",
-    BIRIM: "M3",
-    HESAP: "FİRMA ADI FİRMA ADI FİRMA ADI FİRMA ADI ",
-    ADDR: "FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ ",
-    TIP: "..... .... .... .....",
-  },
-  {
-    LOGICALREF: 1,
-    FICHENO: "12345678901234",
-    DATE_: "12.12.2025",
-    FTIME: "",
-    PLAKA: "",
-    SAAT: "00:00",
-    AMOUNT: 8,
-    URUN: "C 30 0000 0000 0000 0000 0000",
-    BIRIM: "M3",
-    HESAP: "FİRMA ADI FİRMA ADI FİRMA ADI FİRMA ADI ",
-    ADDR: "FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ FİRMA ADRESİ ",
-    TIP: "..... .... .... .....",
-  },
-];*/
 export default function AccountListTable({ data }: { data: invoiceData[] }) {
   return (
     <>
@@ -54,15 +20,15 @@ export default function AccountListTable({ data }: { data: invoiceData[] }) {
             Birim
             <input type="text" />
           </div>
-          <div className="flex grow-1 basis-60 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+          <div className="flex grow basis-60 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
             Sınıfı
             <input type="text" />
           </div>
-          <div className="flex grow-2 basis-60 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+          <div className="flex grow basis-60 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
             Firma
             <input type="text" />
           </div>
-          <div className="flex grow-1 basis-60 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
+          <div className="flex grow basis-60 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
             Adres
           </div>
           <div className="flex basis-30 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
@@ -93,13 +59,13 @@ export default function AccountListTable({ data }: { data: invoiceData[] }) {
                 <div className="flex shrink-0 basis-12 overflow-hidden text-nowrap text-clip">
                   {data.BIRIM}
                 </div>
-                <div className="flex grow-1 basis-60 overflow-hidden text-nowrap text-clip">
+                <div className="flex grow basis-60 overflow-hidden text-nowrap text-clip">
                   {data.URUN}
                 </div>
                 <div className="flex grow-2 basis-60 truncate">
                   {data.HESAP}
                 </div>
-                <div className="flex grow-1 basis-60 overflow-hidden text-nowrap text-clip">
+                <div className="flex grow basis-60 overflow-hidden text-nowrap text-clip">
                   {data.ADDR}
                 </div>
                 <div className="flex basis-30 justify-end overflow-hidden text-nowrap text-clip">

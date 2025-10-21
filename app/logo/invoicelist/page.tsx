@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import InvoiceListTable from "./components/invoicelisttable";
 import InvoiceListHeader, {
   invoicedbFilters,
@@ -26,7 +26,7 @@ export default function InvoiceListPage() {
       sql += ` AND ITM.NAME LIKE '%${filter.metraj.trim()}%' `;
 
     if (filter.plaka.trim())
-      sql += ` AND STL.OUTPUTIDCODE LIKE '%${filter.plaka.trim()}%' `;
+      sql += ` AND P.CODE LIKE '%${filter.plaka.trim()}%' `;
 
     const x = base64from(await JSON.stringify({ Sql: sql, Params: [] }));
     //https://sponge-prepared-commonly.ngrok-free.app
