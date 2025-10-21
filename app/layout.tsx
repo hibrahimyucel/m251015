@@ -38,7 +38,7 @@ export default function RootLayout({
             <div className="content-center rounded-t-sm border border-slate-500">
               <AppHeader />
             </div>
-            <div className="h-[calc(100vh-5rem)] overflow-x-clip overflow-y-auto border-r border-l border-slate-500">
+            <div className="h-[calc(100vh-5rem)] overflow-y-auto border-r border-l border-slate-500">
               {children}
             </div>
             <div className="content-center rounded-b-sm border border-slate-500">

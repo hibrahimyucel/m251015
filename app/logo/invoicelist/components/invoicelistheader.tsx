@@ -50,8 +50,8 @@ export default function InvoiceListHeader({ func }: invoiceListHeaderProps) {
   }
 
   return (
-    <div className="flex w-full justify-center gap-1 rounded-sm text-center font-bold">
-      <div className="border-diffcolor flex basis-60 flex-col justify-center rounded-sm border">
+    <div className="flex w-full gap-1 rounded-sm text-center font-bold">
+      <div className="border-diffcolor flex shrink-0 basis-60 flex-col justify-center rounded-sm border sm:flex-col">
         Tarih aralığı
         <div className="grid grid-cols-2">
           <input
@@ -86,7 +86,7 @@ export default function InvoiceListHeader({ func }: invoiceListHeaderProps) {
           />
         </div>
       </div>
-      <div className="border-diffcolor flex basis-25 flex-col justify-center rounded-sm border">
+      <div className="border-diffcolor flex basis-10 flex-col justify-center rounded-sm border">
         Plaka
         <input
           type="text"
@@ -101,7 +101,7 @@ export default function InvoiceListHeader({ func }: invoiceListHeaderProps) {
           className="focus:bg-editboxfocus bg-editbox w-full rounded-sm outline-0 focus:outline-0"
         />
       </div>
-      <div className="border-diffcolor flex shrink-0 basis-25 flex-col justify-center rounded-sm border">
+      <div className="border-diffcolor flex basis-15 flex-col justify-center rounded-sm border">
         Sınıfı
         <input
           type="text"
@@ -115,7 +115,7 @@ export default function InvoiceListHeader({ func }: invoiceListHeaderProps) {
           }
         />
       </div>
-      <div className="border-diffcolor flex shrink-0 basis-25 flex-col justify-center rounded-sm border">
+      <div className="border-diffcolor flex basis-5 flex-col justify-center rounded-sm border">
         Birim
         <input
           type="text"
@@ -130,7 +130,7 @@ export default function InvoiceListHeader({ func }: invoiceListHeaderProps) {
         />
       </div>
 
-      <div className="border-diffcolor flex grow-2 basis-60 flex-col justify-center rounded-sm border">
+      <div className="border-diffcolor flex grow basis-15 flex-col justify-center rounded-sm border">
         Firma
         <input
           type="text"
@@ -144,7 +144,7 @@ export default function InvoiceListHeader({ func }: invoiceListHeaderProps) {
           }
         />
       </div>
-      <div className="border-diffcolor flex basis-30 flex-col justify-center rounded-sm border">
+      <div className="border-diffcolor hidden basis-15 flex-col justify-center rounded-sm border sm:flex">
         Fiş No
         <input
           type="text"

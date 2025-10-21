@@ -6,12 +6,11 @@ export default function Home() {
   const { UserData } = useAuth();
   return (
     <div className="h-full w-full gap-2">
-      {!UserData.id ||
-        (true && (
-          <div className="flex flex-wrap justify-center py-2 align-top">
-            <HomePageCard Name={"Giriş Yap"} Href="/login" Desc={""} />
-          </div>
-        ))}
+      {!UserData.id && (
+        <div className="flex flex-wrap justify-center py-2 align-top">
+          <HomePageCard Name={"Giriş Yap"} Href="/login" Desc={""} />
+        </div>
+      )}
       {UserData.member && (
         <div className="flex flex-wrap justify-center gap-2 py-2 align-top">
           <HomePageCard
