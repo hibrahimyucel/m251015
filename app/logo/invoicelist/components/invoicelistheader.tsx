@@ -8,13 +8,12 @@ export type invoicedbFilters = {
   plaka: string;
   metraj: string;
   birim: string;
-
   firma: string;
   fisno: string;
   adres: string;
   tarih: string;
 };
-function initdbFilters(): invoicedbFilters {
+export function initdbFilters(): invoicedbFilters {
   const s = new Date();
   const e = new Date();
   e.setMonth(e.getMonth() + 1);
@@ -33,8 +32,12 @@ function initdbFilters(): invoicedbFilters {
 }
 type invoiceListHeaderProps = {
   func: (filter: invoicedbFilters) => void;
+  downloadxlsx: (filter: invoicedbFilters) => void;
 };
-export default function InvoiceListHeader({ func }: invoiceListHeaderProps) {
+export default function InvoiceListHeader({
+  func,
+  downloadxlsx,
+}: invoiceListHeaderProps) {
   const [dbFilter, setdbFilter] = useState<invoicedbFilters>(initdbFilters);
 
   const s = new Date();
@@ -44,6 +47,9 @@ export default function InvoiceListHeader({ func }: invoiceListHeaderProps) {
 
   function listele() {
     func(dbFilter);
+  }
+  function savexls() {
+    downloadxlsx(dbFilter);
   }
 
   return (
@@ -163,6 +169,16 @@ export default function InvoiceListHeader({ func }: invoiceListHeaderProps) {
         >
           Listele
           <Icons icon="List" />
+        </button>
+      </div>
+      <div className="border-editbox content-center justify-center rounded-sm border">
+        <button
+          type="button"
+          className="flex h-full flex-row items-center p-1 font-bold"
+          onClick={savexls}
+        >
+          Excel
+          <Icons icon="Download" />
         </button>
       </div>
     </div>

@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { invoiceData } from "../../invoicedaily/components/invoicedaily";
 
-type invoiceLocalFilters = invoiceData;
 type totalData = { AMOUNT: number; URUN: string; BIRIM: string; ID: string };
 function calculateTotal(data: invoiceData[]) {
   const totalData: totalData[] = [];
@@ -26,18 +25,28 @@ function calculateTotal(data: invoiceData[]) {
   totalData.sort((a, b) => a.ID.localeCompare(b.ID));
   return { totalData, totalAmount };
 }
+type invoiceListTableProps = {
+  data: invoiceData[];
+  setlocalFilter: (filter: Partial<invoiceData>) => void;
+};
 
-export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
-  const [localFilter, setLocalFilter] = useState<Partial<invoiceLocalFilters>>(
-    {},
-  );
+export default function InvoiceListTable({
+  data,
+  setlocalFilter,
+}: invoiceListTableProps) {
+  const [localFilter, setLocalFilter] = useState<Partial<invoiceData>>({});
   const xlocalfilter = useDebounce(localFilter, 500);
+
+  function setFilter(filter: Partial<invoiceData>) {
+    setlocalFilter(filter);
+    setLocalFilter(filter);
+  }
 
   let localData: invoiceData[] = [];
   const entries = Object.entries(xlocalfilter).filter((item) =>
     item ? item : false,
   );
-  console.log("xlocalfilter ", xlocalfilter, entries);
+
   if (entries.length)
     localData = data.filter((item) =>
       entries.every(([key, value]) =>
@@ -62,9 +71,9 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
             type="text"
             onChange={(e) => {
               if (e.target.value.trim()) {
-                setLocalFilter({ DATE_: e.target.value });
+                setFilter({ DATE_: e.target.value });
               } else {
-                setLocalFilter({});
+                setFilter({});
               }
             }}
           />
@@ -75,9 +84,9 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
             type="text"
             onChange={(e) => {
               if (e.target.value.trim()) {
-                setLocalFilter({ PLAKA: e.target.value });
+                setFilter({ PLAKA: e.target.value });
               } else {
-                setLocalFilter({});
+                setFilter({});
               }
             }}
           />
@@ -91,9 +100,9 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
             type="text"
             onChange={(e) => {
               if (e.target.value.trim()) {
-                setLocalFilter({ BIRIM: e.target.value });
+                setFilter({ BIRIM: e.target.value });
               } else {
-                setLocalFilter({});
+                setFilter({});
               }
             }}
           />
@@ -104,9 +113,9 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
             type="text"
             onChange={(e) => {
               if (e.target.value.trim()) {
-                setLocalFilter({ URUN: e.target.value });
+                setFilter({ URUN: e.target.value });
               } else {
-                setLocalFilter({});
+                setFilter({});
               }
             }}
           />
@@ -117,9 +126,9 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
             type="text"
             onChange={(e) => {
               if (e.target.value.trim()) {
-                setLocalFilter({ HESAP: e.target.value });
+                setFilter({ HESAP: e.target.value });
               } else {
-                setLocalFilter({});
+                setFilter({});
               }
             }}
           />
@@ -130,9 +139,9 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
             type="text"
             onChange={(e) => {
               if (e.target.value.trim()) {
-                setLocalFilter({ ADDR: e.target.value });
+                setFilter({ ADDR: e.target.value });
               } else {
-                setLocalFilter({});
+                setFilter({});
               }
             }}
           />
@@ -143,9 +152,9 @@ export default function InvoiceListTable({ data }: { data: invoiceData[] }) {
             type="text"
             onChange={(e) => {
               if (e.target.value.trim()) {
-                setLocalFilter({ FICHENO: e.target.value });
+                setFilter({ FICHENO: e.target.value });
               } else {
-                setLocalFilter({});
+                setFilter({});
               }
             }}
           />

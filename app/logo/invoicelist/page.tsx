@@ -1,7 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import InvoiceListTable from "./components/invoicelisttable";
 import InvoiceListHeader, {
+  initdbFilters,
   invoicedbFilters,
 } from "./components/invoicelistheader";
 import MemberRoute from "@/components/authMember";
@@ -13,6 +14,46 @@ import { base64from } from "@/lib/utils";
 
 export default function InvoiceListPage() {
   const [data, setData] = useState<invoiceData[]>([]);
+  const localFilter = useRef<Partial<invoiceData>>({});
+  const dbFilter = useRef<invoicedbFilters>(initdbFilters());
+  function setdbFilter(filter: invoicedbFilters) {
+    dbFilter.current = filter;
+  }
+  function setlocalFilter(filter: Partial<invoiceData>) {
+    localFilter.current = filter;
+  }
+  function geFileName() {
+    const d = new Date();
+    const s = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}-${d.getMilliseconds()}.xlsx`;
+    return s;
+  }
+  async function getXlsxFile(filter: invoicedbFilters) {
+    try {
+      setdbFilter(filter);
+      console.log(dbFilter.current, localFilter.current);
+      const x = base64from(
+        await JSON.stringify({ db: dbFilter, local: localFilter }),
+      );
+      fetch("/api/fileirsaliye", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          data: x,
+        },
+      }).then((response) => {
+        response.blob().then((blob) => {
+          const fileURL = window.URL.createObjectURL(blob);
+          let alink = document.createElement("a");
+          alink.href = fileURL;
+          alink.download = geFileName();
+          alink.click();
+        });
+      });
+    } catch (error) {
+      alert((error as Error).message);
+    }
+  }
+
   async function getData(filter: invoicedbFilters) {
     let sql = sqlInvoiceData;
 
@@ -48,8 +89,8 @@ export default function InvoiceListPage() {
         <h1 className="bg-buttoncolor pt-0.5 pl-2 text-sm font-bold">
           İrsaliye Listesi
         </h1>
-        <InvoiceListHeader func={getData} />
-        <InvoiceListTable data={data} />
+        <InvoiceListHeader func={getData} downloadxlsx={getXlsxFile} />
+        <InvoiceListTable data={data} setlocalFilter={setlocalFilter} />
       </div>
     </MemberRoute>
   );

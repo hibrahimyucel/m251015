@@ -15,6 +15,7 @@ import {
   FiCheckSquare,
   FiSquare,
   FiDelete,
+  FiDownloadCloud,
 } from "react-icons/fi";
 
 type Ico =
@@ -31,7 +32,8 @@ type Ico =
   | "Circle"
   | "Checked"
   | "CheckedX"
-  | "DeleteRow";
+  | "DeleteRow"
+  | "Download";
 export function CheckIcon({ Checked }: { Checked: boolean | undefined }) {
   if (Checked)
     return (
@@ -71,6 +73,8 @@ export default function Icons({ icon }: { icon: Ico }) {
       return <FiSquare className="shrink-0 text-2xl text-gray-500" />;
     case "DeleteRow":
       return <FiDelete className="shrink-0 text-2xl text-red-500" />;
+    case "Download":
+      return <FiDownloadCloud className="shrink-0 text-2xl text-blue-400" />;
     default:
       return null;
   }

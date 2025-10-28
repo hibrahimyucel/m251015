@@ -118,10 +118,26 @@ export default function UsersPage() {
   useEffect(() => {
     getUsers();
   }, []);
-
+  async function getFile() {
+    await fetch("/api/fileirsaliye", {
+      method: "GET",
+      headers: {
+        "Content-Type": "blob",
+      },
+    }).then((response) => {
+      response.blob().then((blob) => {
+        const fileURL = window.URL.createObjectURL(blob);
+        let alink = document.createElement("a");
+        alink.href = fileURL;
+        alink.download = "rapor.xlsx";
+        alink.click();
+      });
+    });
+  }
   return (
     <AdminRoute>
       <div className="w-full overflow-x-auto">
+        <button onClick={getFile}>aaaaaaa</button>
         <DataTable<usersData> data={users} columns={columns} />
       </div>
     </AdminRoute>

@@ -2,8 +2,11 @@ import sql from "mssql";
 import { get } from "@/lib/dbmssql";
 import { sendEmail } from "@/lib/email";
 import { hashSync } from "bcrypt-ts";
-
-export const mmbisConn = await get("MMBIS", `${process.env.MMBISDATABASE}`);
+export async function mmbisRequest() {
+  const Conn = await get("MMBIS", `${process.env.MMBISDATABASE}`);
+  if (!Conn.connected) await Conn.connect();
+  return Conn.request();
+}
 
 type signUpData = {
   username: string;
@@ -14,8 +17,7 @@ type signUpData = {
 export async function isUserExists(value: string) {
   const sqlSelectUser: string = `select * from auth_user where email = @email`;
 
-  if (!mmbisConn.connected) await mmbisConn.connect();
-  const request = mmbisConn.request();
+  const request = await mmbisRequest();
 
   request.input("email", sql.VarChar(100), value.trim());
   const result = await request.query(sqlSelectUser);
@@ -28,10 +30,7 @@ export async function sendVerificationCode(value: string) {
        cast(round(rand() * 1000000, 6) AS varchar(6)) AS value,
        DATEADD(MINUTE, 5, GETDATE()) AS expiresAt`;
   const sqlSelectVerify = `SELECT value FROM auth_verify WHERE expiresAt>=GETDATE() AND email = @email`;
-
-  if (!mmbisConn.connected) await mmbisConn.connect();
-  const request = mmbisConn.request();
-
+  const request = await mmbisRequest();
   request.input("email", sql.VarChar(100), value.trim());
   await request.query(sqlDeleteVerify);
   await request.query(sqlInsertVerify);
@@ -52,10 +51,7 @@ export async function checkVerificationCode(email: string, value: string) {
  WHERE expiresAt>=GETDATE()
   AND email = @email
   AND value = @value`;
-
-  if (!mmbisConn.connected) await mmbisConn.connect();
-  const request = mmbisConn.request();
-
+  const request = await mmbisRequest();
   request.input("email", sql.VarChar(100), email.trim());
   request.input("value", sql.VarChar(100), value.trim());
 
@@ -66,9 +62,7 @@ export async function checkVerificationCode(email: string, value: string) {
 
 export async function saveSignUpData(value: signUpData) {
   const sqlInsertUser: string = `INSERT INTO auth_user (name,email,password) VALUES (@name,@email,@password)`;
-
-  if (!mmbisConn.connected) await mmbisConn.connect();
-  const request = mmbisConn.request();
+  const request = await mmbisRequest();
 
   request.input("name", sql.VarChar(100), value.username.trim());
   request.input("email", sql.VarChar(100), value.email.trim());
@@ -81,8 +75,8 @@ export async function saveSignUpData(value: signUpData) {
 export async function sendPassword(email: string) {
   const sqlGetPassword = `select cast (round(rand()*1000000,6) as varchar(6)) as value`;
   const sqlUpdatePassword = `update auth_user set password = @password WHERE email = @email`;
-  if (!mmbisConn.connected) await mmbisConn.connect();
-  const request = mmbisConn.request();
+
+  const request = await mmbisRequest();
 
   const resPwd = await request.query(sqlGetPassword);
   const password = hashSync(resPwd.recordset[0].value);
@@ -108,8 +102,7 @@ export async function changePasswordDB(
   const sqlUpdatePassword = `update auth_user set name= @name, password = @password WHERE pk_user = @id`;
   const resPwd = hashSync(password);
 
-  if (!mmbisConn.connected) await mmbisConn.connect();
-  const request = mmbisConn.request();
+  const request = await mmbisRequest();
 
   request.input("id", sql.Int, user);
   request.input("name", sql.VarChar(100), username);
@@ -121,9 +114,7 @@ export async function changePasswordDB(
 export async function signInDB(value: signUpData) {
   const sqlSelectUser: string = `SELECT * FROM auth_user where email = @email`;
 
-  if (!mmbisConn.connected) await mmbisConn.connect();
-  const request = mmbisConn.request();
-
+  const request = await mmbisRequest();
   request.input("email", sql.VarChar(100), value.email);
 
   const result = await request.query(sqlSelectUser);
@@ -133,8 +124,7 @@ export async function signInDB(value: signUpData) {
 export async function getUserById(id: string) {
   const sqlSelectUser: string = `SELECT * FROM auth_user where pk_user = @id`;
 
-  if (!mmbisConn.connected) await mmbisConn.connect();
-  const request = mmbisConn.request();
+  const request = await mmbisRequest();
 
   request.input("id", sql.Int, id);
 
@@ -145,8 +135,7 @@ export async function getUserById(id: string) {
 
 export async function saveAdminStatus(pk_user: string, admin: boolean) {
   const sqlUpdateAdmin = `update auth_user set admin = ${admin ? "pk_user" : "null"} WHERE pk_user = @pk_user`;
-  if (!mmbisConn.connected) await mmbisConn.connect();
-  const request = mmbisConn.request();
+  const request = await mmbisRequest();
 
   request.input("pk_user", sql.Int, pk_user.trim());
   await request.query(sqlUpdateAdmin);
@@ -155,8 +144,7 @@ export async function saveAdminStatus(pk_user: string, admin: boolean) {
 }
 export async function saveMemberStatus(pk_user: string, admin: boolean) {
   const sqlUpdateMember = `update auth_user set member = ${admin ? "pk_user" : "null"} WHERE pk_user = @pk_user`;
-  if (!mmbisConn.connected) await mmbisConn.connect();
-  const request = mmbisConn.request();
+  const request = await mmbisRequest();
 
   request.input("pk_user", sql.Int, pk_user.trim());
   await request.query(sqlUpdateMember);
