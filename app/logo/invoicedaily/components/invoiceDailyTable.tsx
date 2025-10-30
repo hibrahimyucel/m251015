@@ -1,5 +1,5 @@
 "use client";
-import { apiPath } from "@/app/api/api";
+import { apiPath, externalApi } from "@/app/api/api";
 import { useState, useEffect } from "react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { invoiceData } from "../../logosql";
@@ -14,7 +14,7 @@ export default function InvoiceDailyTable() {
   const [data, setData] = useState<invoiceData[]>([]);
   const [dataTotal, setDataTotal] = useState<invoiceDataTotal[]>([]);
   async function getData() {
-    fetch(apiPath.dailyInvoice, {
+    fetch(externalApi() + apiPath.dailyInvoice, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -24,8 +24,7 @@ export default function InvoiceDailyTable() {
       .then((d) => {
         setData(d);
       });
-
-    fetch(apiPath.dailyInvoiceTotal, {
+    fetch(externalApi() + apiPath.dailyInvoiceTotal, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

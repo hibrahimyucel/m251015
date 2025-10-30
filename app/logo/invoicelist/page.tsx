@@ -6,9 +6,8 @@ import InvoiceListHeader, {
   invoicedbFilters,
 } from "./components/invoicelistheader";
 import MemberRoute from "@/components/authMember";
-import { base64from } from "@/lib/utils";
 import { invoiceData } from "../logosql";
-import { apiPath } from "@/app/api/api";
+import { apiPath, externalApi } from "@/app/api/api";
 
 export default function InvoiceListPage() {
   const [data, setData] = useState<invoiceData[]>([]);
@@ -34,8 +33,9 @@ export default function InvoiceListPage() {
         db: dbFilter.current,
         local: localFilter.current,
       });
-      fetch(apiPath.invoiceListXLS, {
-        method: "GET",
+
+      fetch(externalApi() + apiPath.invoiceListXLS, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -59,7 +59,7 @@ export default function InvoiceListPage() {
   async function getData(filter: invoicedbFilters) {
     const data = await JSON.stringify(filter);
 
-    fetch(apiPath.invoiceList, {
+    fetch(externalApi() + apiPath.invoiceList, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -79,14 +79,14 @@ export default function InvoiceListPage() {
       .catch((error) => alert(error.message));
   }
   return (
-    /*<MemberRoute>*/
-    <div className="w-full">
-      <h1 className="bg-buttoncolor pt-0.5 pl-2 text-sm font-bold">
-        İrsaliye Listesi
-      </h1>
-      <InvoiceListHeader func={getData} downloadxlsx={getXlsxFile} />
-      <InvoiceListTable data={data} setlocalFilter={setlocalFilter} />
-    </div>
-    /*</MemberRoute>*/
+    <MemberRoute>
+      <div className="w-full">
+        <h1 className="bg-buttoncolor pt-0.5 pl-2 text-sm font-bold">
+          İrsaliye Listesi
+        </h1>
+        <InvoiceListHeader func={getData} downloadxlsx={getXlsxFile} />
+        <InvoiceListTable data={data} setlocalFilter={setlocalFilter} />
+      </div>
+    </MemberRoute>
   );
 }
