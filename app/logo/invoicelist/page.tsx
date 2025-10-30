@@ -62,7 +62,7 @@ export default function InvoiceListPage() {
   async function getData(filter: invoicedbFilters) {
     const headerData = await JSON.stringify(filter);
     const c = "https://sponge-prepared-commonly.ngrok-free.app";
-    fetch(c + apiPath.invoiceList, {
+    fetch(apiPath.invoiceList, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
