@@ -1,14 +1,15 @@
 import { LKSRequest, sqlInvoice } from "@/app/logo/logosql";
 import { NextResponse, NextRequest } from "next/server";
 import { base64to } from "@/lib/utils";
+import { apiPath } from "../../api";
 export async function GET(req: NextRequest) {
   try {
-    const dataStr = req.headers.get("data");
-
-    const data = JSON.parse(base64to(dataStr as string));
+    const data = await req.json();
+    console.log("......... " + data);
+    //const data = JSON.parse(dataStr as string);
 
     if (data) {
-      const dbFilter = data.dbFilter;
+      const dbFilter = data;
       let whereSql = "";
       const params = [];
       /** sorgu kriterleri */

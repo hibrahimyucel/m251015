@@ -36,12 +36,13 @@ export default function InvoiceListPage() {
           local: localFilter.current,
         }),
       );
+
       fetch(apiPath.invoiceListXLS, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          data: x,
         },
+        body: x,
       })
         .then((response) => {
           response.blob().then((blob) => {
@@ -59,14 +60,14 @@ export default function InvoiceListPage() {
   }
 
   async function getData(filter: invoicedbFilters) {
-    const headerData = base64from(await JSON.stringify({ dbFilter: filter }));
+    const headerData = await JSON.stringify(filter);
 
     fetch(apiPath.invoiceList, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        data: headerData,
       },
+      body: headerData,
     })
       .then((response) => {
         if (response.status != 200) {
