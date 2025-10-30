@@ -17,5 +17,5 @@ export const PATCH = async () => {
 };
 
 export const OPTIONS = async () => {
-  return GET();
+  return NextResponse.json({ status: 200 });
 };

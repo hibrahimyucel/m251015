@@ -30,15 +30,12 @@ export default function InvoiceListPage() {
     try {
       setdbFilter(filterDB);
 
-      const x = base64from(
-        await JSON.stringify({
-          db: dbFilter.current,
-          local: localFilter.current,
-        }),
-      );
-
+      const x = await JSON.stringify({
+        db: dbFilter.current,
+        local: localFilter.current,
+      });
       fetch(apiPath.invoiceListXLS, {
-        method: "PATCH",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
@@ -60,14 +57,14 @@ export default function InvoiceListPage() {
   }
 
   async function getData(filter: invoicedbFilters) {
-    const headerData = await JSON.stringify(filter);
-    const c = "https://sponge-prepared-commonly.ngrok-free.app";
+    const data = await JSON.stringify(filter);
+
     fetch(apiPath.invoiceList, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: headerData,
+      body: data,
     })
       .then((response) => {
         if (response.status != 200) {

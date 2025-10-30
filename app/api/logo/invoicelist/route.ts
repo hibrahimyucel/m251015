@@ -5,8 +5,6 @@ import { apiPath } from "../../api";
 export async function GET(req: NextRequest) {
   try {
     const data = await req.json();
-    console.log("......... " + data);
-    //const data = JSON.parse(dataStr as string);
 
     if (data) {
       const dbFilter = data;
@@ -58,5 +56,5 @@ export const PATCH = async (request: NextRequest) => {
 };
 
 export const OPTIONS = async (request: NextRequest) => {
-  return GET(request);
+  return NextResponse.json({ status: 200 });
 };

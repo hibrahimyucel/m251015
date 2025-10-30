@@ -4,9 +4,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { base64to } from "@/lib/utils";
 export async function GET(req: NextRequest) {
   try {
-    const dataStr = req.headers.get("data");
-
-    const data = JSON.parse(base64to(dataStr as string));
+    const data = await req.json();
 
     if (data) {
       const dbFilter = data.db;
@@ -103,5 +101,5 @@ export const PATCH = async (request: NextRequest) => {
 };
 
 export const OPTIONS = async (request: NextRequest) => {
-  return GET(request);
+  return NextResponse.json({ status: 200 });
 };
