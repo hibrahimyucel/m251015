@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Icons from "@/components/icons";
 export type invoicedbFilters = {
   dateStart: Date;
@@ -37,6 +37,7 @@ export default function InvoiceListHeader({
   downloadxlsx,
 }: invoiceListHeaderProps) {
   const [dbFilter, setdbFilter] = useState<invoicedbFilters>(initdbFilters);
+  const [changer, setChanger] = useState(false);
 
   const s = new Date();
   const e = new Date();
@@ -49,18 +50,48 @@ export default function InvoiceListHeader({
   function savexls() {
     downloadxlsx(dbFilter);
   }
+  function handleSelectMonth(month: number) {
+    const year = dbFilter.dateStart.getFullYear();
+    const sDate = new Date(0);
+    sDate.setFullYear(year);
+    sDate.setMonth(month - 1);
+    sDate.setDate(2);
+    const eDate = new Date(sDate);
+    eDate.setMonth(eDate.getMonth() + 1);
+    eDate.setDate(eDate.getDate() - 1);
+
+    setdbFilter({ ...dbFilter, dateStart: sDate, dateEnd: eDate });
+    setChanger(!changer);
+  }
 
   return (
     <div className="flex w-full gap-1 rounded-sm text-center font-bold">
-      <div className="border-diffcolor flex shrink-0 basis-60 flex-col justify-center rounded-sm border sm:flex-col">
+      <div className="border-diffcolor flex shrink-0 basis-80 flex-col justify-center rounded-sm border sm:flex-col">
         Tarih aralığı
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-3">
+          <select
+            id="month"
+            name="month"
+            className="border-0 outline-0"
+            onChange={(e) => handleSelectMonth(Number(e.target.value))}
+          >
+            <option value="1">Ocak</option>
+            <option value="2">Şubat</option>
+            <option value="3">Mart</option>
+            <option value="4">Nisan</option>
+            <option value="5">Mayıs</option>
+            <option value="6">Haziran</option>
+            <option value="7">Temmuz</option>
+            <option value="8">Ağustos</option>
+            <option value="9">Eylül</option>
+            <option value="10">Ekim</option>
+            <option value="11">Kasım</option>
+            <option value="12">Aralık</option>
+          </select>
           <input
             type="date"
             name="DateStart"
-            min={s.toISOString().substring(0, 10)}
-            max={dbFilter.dateEnd.toISOString().substring(0, 10)}
-            defaultValue={dbFilter.dateStart.toISOString().substring(0, 10)}
+            value={dbFilter.dateStart.toISOString().substring(0, 10)}
             onChange={(e) => {
               if (e.target.value)
                 setdbFilter({
@@ -73,9 +104,7 @@ export default function InvoiceListHeader({
           <input
             type="date"
             name="DateEnd"
-            min={dbFilter.dateStart.toISOString().substring(0, 10)}
-            max={e.toISOString().substring(0, 10)}
-            defaultValue={dbFilter.dateEnd.toISOString().substring(0, 10)}
+            value={dbFilter.dateEnd.toISOString().substring(0, 10)}
             onChange={(e) => {
               if (e.target.value)
                 setdbFilter({
