@@ -9,14 +9,14 @@ const isPublicRoute = createRouteMatcher([
 
 */
 export function middleware(request: NextRequest) {
-  const headers = request.headers;
+  /*  const headers = request.headers;
   const origin = headers.get("origin") as string;
   /*if (allowedOrigins.includes(origin))
-   */
+   
 
   const response = NextResponse.next();
   response.headers.append("Access-Control-Allow-Origin", origin);
-  return response;
+  return response;*/
 }
 
 /*export default middleware( ( request) => {
