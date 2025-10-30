@@ -42,7 +42,7 @@ export default function UsersPage() {
       }),
     );
     if (data) await getUsers();
-    if (error) console.log(error.message);
+    if (error) console.error(error.message);
   }
 
   const { UserData } = useAuth();

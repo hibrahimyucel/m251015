@@ -29,7 +29,7 @@ export default function InvoiceListPage() {
   async function getXlsxFile(filterDB: invoicedbFilters) {
     try {
       setdbFilter(filterDB);
-      console.log(dbFilter.current, localFilter.current);
+
       const x = base64from(
         await JSON.stringify({
           db: dbFilter.current,

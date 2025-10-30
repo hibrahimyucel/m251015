@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(result.recordset, { status: 200 });
     } else throw "Sorgu bilgileri eksik...";
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return NextResponse.json(error, { status: 500 });
   }
 }

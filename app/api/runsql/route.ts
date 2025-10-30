@@ -11,7 +11,6 @@ export async function GET(req: NextRequest) {
       typeof e === "string" ? decodeURIComponent(e) : e,
     );*/
     const Sql = data.Sql;
-    console.log(Sql);
 
     const request = await mmbisRequest();
 
@@ -19,7 +18,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(result.rowsAffected, { status: 200 });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return NextResponse.json(error, { status: 500 });
   }
 }

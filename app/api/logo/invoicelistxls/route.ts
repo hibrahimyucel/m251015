@@ -7,9 +7,10 @@ export async function GET(req: NextRequest) {
     const dataStr = req.headers.get("data");
 
     const data = JSON.parse(base64to(dataStr as string));
-    console.log(data);
+
     if (data) {
-      const dbFilter = data.db.current;
+      const dbFilter = data.db;
+
       let whereSql = "";
       const params = [];
       /** sorgu kriterleri */
@@ -41,8 +42,8 @@ export async function GET(req: NextRequest) {
         params.push({ key: "plaka", value: `%${dbFilter.plaka.trim()}%` });
       }
 
-      const filter = data.local.current;
-      console.log(filter);
+      const filter = data.local;
+
       if (filter.PLAKA) {
         whereSql += ` AND P.CODE LIKE @plaka1`;
         params.push({ key: "plaka1", value: `%${filter.PLAKA.trim()}%` });
@@ -71,7 +72,7 @@ export async function GET(req: NextRequest) {
 
       const Sql =
         sqlInvoicexls + whereSql + " ORDER BY STF.DATE_, STF.FTIME DESC";
-      console.log(Sql);
+
       const request = await LKSRequest();
       params.map((item) => request.input(item.key, item.value));
       const result = await request.query(Sql);
@@ -92,7 +93,7 @@ export async function GET(req: NextRequest) {
       });
     } else throw "Sorgu bilgileri eksik...";
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return NextResponse.json(error, { status: 500 });
   }
 }
