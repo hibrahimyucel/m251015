@@ -1,5 +1,5 @@
 import { createAccessToken, getUser } from "@/auth/session";
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { tryCatch } from "@/lib/utils";
 import { getUserById } from "@/auth/mssqlAuth";
 
@@ -28,6 +28,6 @@ export async function GET() {
   });
 }
 
-export const PATCH = async (request: NextRequest) => {
+export const PATCH = async () => {
   return GET();
 };

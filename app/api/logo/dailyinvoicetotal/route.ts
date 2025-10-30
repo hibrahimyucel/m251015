@@ -1,16 +1,13 @@
-import { mmbisRequest } from "@/auth/mssqlAuth";
+import { sqlInvoiceDailyTotal, LKSRequest } from "@/app/logo/logosql";
 import { NextResponse } from "next/server";
-
 export async function GET() {
   try {
-    const sqlSelectUsers = `select *,pk_user as id from auth_user`;
-
-    const request = await mmbisRequest();
-
-    const result = await request.query(sqlSelectUsers);
+    const request = await LKSRequest();
+    const result = await request.query(sqlInvoiceDailyTotal);
 
     return NextResponse.json(result.recordset, { status: 200 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(error, { status: 500 });
   }
 }

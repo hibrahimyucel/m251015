@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
-import { invoiceData } from "../../invoicedaily/components/invoicedaily";
+import { invoiceData } from "../../logosql";
 
 type totalData = { AMOUNT: number; URUN: string; BIRIM: string; ID: string };
 function calculateTotal(data: invoiceData[]) {
@@ -13,15 +13,16 @@ function calculateTotal(data: invoiceData[]) {
     else totalData[i].AMOUNT += item.AMOUNT;
     totalAmount += item.AMOUNT;
   }
-
-  data.map((item: invoiceData) =>
-    add({
-      AMOUNT: item.AMOUNT,
-      URUN: item.URUN,
-      BIRIM: item.BIRIM,
-      ID: item.URUN + item.BIRIM,
-    }),
-  );
+  if (data) {
+    data.map((item: invoiceData) =>
+      add({
+        AMOUNT: item.AMOUNT,
+        URUN: item.URUN,
+        BIRIM: item.BIRIM,
+        ID: item.URUN + item.BIRIM,
+      }),
+    );
+  }
   totalData.sort((a, b) => a.ID.localeCompare(b.ID));
   return { totalData, totalAmount };
 }

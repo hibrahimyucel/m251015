@@ -6,14 +6,13 @@ import InvoiceListHeader, {
   invoicedbFilters,
 } from "./components/invoicelistheader";
 import MemberRoute from "@/components/authMember";
-import {
-  invoiceData,
-  sqlInvoiceData,
-} from "../invoicedaily/components/invoicedaily";
 import { base64from } from "@/lib/utils";
+import { invoiceData } from "../logosql";
+import { apiPath } from "@/app/api/api";
 
 export default function InvoiceListPage() {
   const [data, setData] = useState<invoiceData[]>([]);
+
   const localFilter = useRef<Partial<invoiceData>>({});
   const dbFilter = useRef<invoicedbFilters>(initdbFilters());
   function setdbFilter(filter: invoicedbFilters) {
@@ -27,14 +26,17 @@ export default function InvoiceListPage() {
     const s = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}-${d.getMilliseconds()}.xlsx`;
     return s;
   }
-  async function getXlsxFile(filter: invoicedbFilters) {
+  async function getXlsxFile(filterDB: invoicedbFilters) {
     try {
-      setdbFilter(filter);
+      setdbFilter(filterDB);
       console.log(dbFilter.current, localFilter.current);
       const x = base64from(
-        await JSON.stringify({ db: dbFilter, local: localFilter }),
+        await JSON.stringify({
+          db: dbFilter.current,
+          local: localFilter.current,
+        }),
       );
-      fetch("/api/fileirsaliye", {
+      fetch(apiPath.invoiceListXLS, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -43,7 +45,7 @@ export default function InvoiceListPage() {
       }).then((response) => {
         response.blob().then((blob) => {
           const fileURL = window.URL.createObjectURL(blob);
-          let alink = document.createElement("a");
+          const alink = document.createElement("a");
           alink.href = fileURL;
           alink.download = geFileName();
           alink.click();
@@ -55,27 +57,13 @@ export default function InvoiceListPage() {
   }
 
   async function getData(filter: invoicedbFilters) {
-    let sql = sqlInvoiceData;
+    const headerData = base64from(await JSON.stringify({ dbFilter: filter }));
 
-    sql += ` AND (STF.DATE_ BETWEEN '${filter.dateStart.toISOString()}' AND '${filter.dateEnd.toISOString()}' )`;
-    if (filter.firma.trim())
-      sql += ` AND CLC.DEFINITION_ LIKE '${filter.firma.trim()}%' `;
-    if (filter.fisno.trim())
-      sql += ` AND STF.FICHENO LIKE '%${filter.fisno.trim()}%' `;
-
-    if (filter.metraj.trim())
-      sql += ` AND ITM.NAME LIKE '%${filter.metraj.trim()}%' `;
-
-    if (filter.plaka.trim())
-      sql += ` AND P.CODE LIKE '%${filter.plaka.trim()}%' `;
-
-    const x = base64from(await JSON.stringify({ Sql: sql, Params: [] }));
-    //https://sponge-prepared-commonly.ngrok-free.app
-    fetch("/api/runlkssql", {
+    fetch(apiPath.invoiceList, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        data: x,
+        data: headerData,
       },
     })
       .then((response) => response.json())

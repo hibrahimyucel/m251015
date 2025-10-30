@@ -1,9 +1,8 @@
 "use client";
+import { apiPath } from "@/app/api/api";
 import { useState, useEffect } from "react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
-import { sqlInvoiceDaily, sqlInvoiceDailyTotal } from "./invoicedaily";
-import { invoiceData } from "./invoicedaily";
-import { base64from } from "@/lib/utils";
+import { invoiceData } from "../../logosql";
 
 type invoiceDataTotal = {
   TOPLAM: number;
@@ -15,33 +14,25 @@ export default function InvoiceDailyTable() {
   const [data, setData] = useState<invoiceData[]>([]);
   const [dataTotal, setDataTotal] = useState<invoiceDataTotal[]>([]);
   async function getData() {
-    const sql = sqlInvoiceDaily;
-    const x = base64from(await JSON.stringify({ Sql: sql, Params: [] }));
-
-    fetch("/api/runlkssql", {
+    fetch(apiPath.dailyInvoice, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        data: x,
       },
     })
       .then((response) => response.json())
       .then((d) => {
         setData(d);
       });
-    const sql1 = sqlInvoiceDailyTotal;
-    const y = base64from(await JSON.stringify({ Sql: sql1, Params: [] }));
 
-    fetch("/api/runlkssql", {
+    fetch(apiPath.dailyInvoiceTotal, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        data: y,
       },
     })
       .then((response) => response.json())
       .then((d) => {
-        console.log(d);
         setDataTotal(d);
       });
   }
@@ -54,10 +45,10 @@ export default function InvoiceDailyTable() {
   const [changer, setchanger] = useState<boolean>(true);
   const debChanger = useDebounce(changer, 15000);
   const datetime = new Date().toLocaleTimeString();
+
   useEffect(() => {
     getData();
-
-    setchanger(!changer);
+    setchanger(!debChanger);
   }, [debChanger]);
 
   return (
@@ -69,9 +60,7 @@ export default function InvoiceDailyTable() {
       <InvoiceHeader />
       {data?.length && <InvoiceData d={data} />}
       <div>
-        {dataTotal.length && false && (
-          <TotalData dt={dataTotal} toplam={toplam} />
-        )}
+        {dataTotal.length && <TotalData dt={dataTotal} toplam={toplam} />}
       </div>
     </div>
   );

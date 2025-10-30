@@ -1,13 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import { useDebounce } from "@/lib/hooks/useDebounce";
 import Icons from "@/components/icons";
 export type invoicedbFilters = {
   dateStart: Date;
   dateEnd: Date;
   plaka: string;
   metraj: string;
-  birim: string;
   firma: string;
   fisno: string;
   adres: string;
@@ -23,7 +21,7 @@ export function initdbFilters(): invoicedbFilters {
     dateEnd: e,
     plaka: "",
     metraj: "",
-    birim: "",
+
     firma: "",
     fisno: "",
     adres: "",
@@ -118,26 +116,12 @@ export default function InvoiceListHeader({
           }
         />
       </div>
-      <div className="border-diffcolor flex basis-5 flex-col justify-center rounded-sm border">
-        Birim
-        <input
-          type="text"
-          name="birim"
-          defaultValue={dbFilter.birim}
-          onChange={(e) =>
-            setdbFilter({
-              ...dbFilter,
-              birim: e.target.value,
-            })
-          }
-        />
-      </div>
 
       <div className="border-diffcolor flex grow basis-15 flex-col justify-center rounded-sm border">
         Firma
         <input
           type="text"
-          name="birim"
+          name="firma"
           defaultValue={dbFilter.firma}
           onChange={(e) =>
             setdbFilter({
@@ -151,7 +135,7 @@ export default function InvoiceListHeader({
         Fiş No
         <input
           type="text"
-          name="birim"
+          name="fisno"
           defaultValue={dbFilter.fisno}
           onChange={(e) =>
             setdbFilter({

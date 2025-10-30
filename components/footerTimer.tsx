@@ -3,17 +3,16 @@ import { useState, useEffect } from "react";
 export function FooterTimer() {
   const [time, setTime] = useState("");
 
-  const opt: Intl.DateTimeFormatOptions = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  };
-
   useEffect(() => {
+    const opt: Intl.DateTimeFormatOptions = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    };
     const timeout = setTimeout(() => {
       setTime(new Intl.DateTimeFormat("tr-TR", opt).format(new Date()));
     }, 1000);
