@@ -82,14 +82,14 @@ export default function InvoiceListPage() {
       .catch((error) => alert(error.message));
   }
   return (
-    <MemberRoute>
-      <div className="w-full">
-        <h1 className="bg-buttoncolor pt-0.5 pl-2 text-sm font-bold">
-          İrsaliye Listesi
-        </h1>
-        <InvoiceListHeader func={getData} downloadxlsx={getXlsxFile} />
-        <InvoiceListTable data={data} setlocalFilter={setlocalFilter} />
-      </div>
-    </MemberRoute>
+    /*<MemberRoute>*/
+    <div className="w-full">
+      <h1 className="bg-buttoncolor pt-0.5 pl-2 text-sm font-bold">
+        İrsaliye Listesi
+      </h1>
+      <InvoiceListHeader func={getData} downloadxlsx={getXlsxFile} />
+      <InvoiceListTable data={data} setlocalFilter={setlocalFilter} />
+    </div>
+    /*</MemberRoute>*/
   );
 }
