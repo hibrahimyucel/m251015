@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
     } else throw "Sorgu bilgileri eksik...";
   } catch (error) {
     console.error(error);
-    return NextResponse.json(error, { status: 500 });
+    return NextResponse.json((error as Error).message, { status: 500 });
   }
 }
 

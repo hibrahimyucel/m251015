@@ -42,15 +42,17 @@ export default function InvoiceListPage() {
           "Content-Type": "application/json",
           data: x,
         },
-      }).then((response) => {
-        response.blob().then((blob) => {
-          const fileURL = window.URL.createObjectURL(blob);
-          const alink = document.createElement("a");
-          alink.href = fileURL;
-          alink.download = geFileName();
-          alink.click();
-        });
-      });
+      })
+        .then((response) => {
+          response.blob().then((blob) => {
+            const fileURL = window.URL.createObjectURL(blob);
+            const alink = document.createElement("a");
+            alink.href = fileURL;
+            alink.download = geFileName();
+            alink.click();
+          });
+        })
+        .catch((error) => alert(error.message));
     } catch (error) {
       alert((error as Error).message);
     }
@@ -66,10 +68,17 @@ export default function InvoiceListPage() {
         data: headerData,
       },
     })
-      .then((response) => response.json())
-      .then((d) => {
-        setData(d);
-      });
+      .then((response) => {
+        if (response.status != 200) {
+          response.json().then((error) => {
+            alert(error);
+          });
+        } else
+          response.json().then((d) => {
+            setData(d);
+          });
+      })
+      .catch((error) => alert(error.message));
   }
   return (
     <MemberRoute>

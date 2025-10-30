@@ -1,4 +1,5 @@
 "use client";
+import { logout } from "@/auth/actions/logInActions";
 import React from "react";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -7,6 +8,7 @@ import Image from "next/image";
 import TextButton from "./textButton";
 import Icons from "./icons";
 import { info } from "@/project/project";
+import { redirect } from "next/navigation";
 export default function AppHeader() {
   const { UserData } = useAuth();
 
@@ -58,6 +60,14 @@ export default function AppHeader() {
           <Link href="/users">
             <TextButton text={"Ayarlar"} />
           </Link>
+        )}
+        {UserData.id && (
+          <TextButton
+            text="Çıkış"
+            onClick={() => {
+              logout().then(() => redirect("/"));
+            }}
+          />
         )}
       </div>
     </div>
