@@ -34,9 +34,9 @@ export function SignUpForm() {
 
   const errmailverify = eprops?.emailverify ? eprops?.emailverify.errors : null;
   const mailverify = data?.emailverify.toString();
-
+  console.log(state);
   useEffect(() => {
-    if (state?.success) {
+    if (state?.success == true) {
       alert(inf.SignUpCompleted);
       redirect("/login");
     }

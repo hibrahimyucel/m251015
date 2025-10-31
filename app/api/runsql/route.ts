@@ -28,5 +28,5 @@ export const PATCH = async (request: NextRequest) => {
 };
 
 export const OPTIONS = async (request: NextRequest) => {
-  return GET(request);
+  return NextResponse.json({ status: 200 });
 };

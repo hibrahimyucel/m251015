@@ -8,9 +8,9 @@ import Image from "next/image";
 import TextButton from "./textButton";
 import Icons from "./icons";
 import { info } from "@/project/project";
-import { redirect } from "next/navigation";
+
 export default function AppHeader() {
-  const { UserData } = useAuth();
+  const { UserData, setUser } = useAuth();
 
   useEffect(() => {}, [UserData]);
 
@@ -65,7 +65,7 @@ export default function AppHeader() {
           <TextButton
             text="Çıkış"
             onClick={() => {
-              logout().then(() => redirect("/"));
+              logout().then(() => setUser(null));
             }}
           />
         )}

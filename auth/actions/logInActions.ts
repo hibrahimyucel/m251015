@@ -1,17 +1,10 @@
 "use server";
 import { z } from "zod";
 import { createSession, deleteSession, getUser } from "../session";
-import { hashSync, compareSync } from "bcrypt-ts";
-import {
-  isUserExists,
-  sendVerificationCode,
-  checkVerificationCode,
-  saveSignUpData,
-  sendPassword,
-  signInDB,
-  getUserById,
-  changePasswordDB,
-} from "../mssqlAuth";
+import { compareSync } from "bcrypt-ts";
+import { signInDB } from "../mssqlAuth";
+import { apiPath, externalAuth } from "@/app/api/api";
+import { base64from } from "@/lib/utils";
 
 const signUpSchema = z
   .object({
@@ -43,32 +36,31 @@ export async function signUp(prevState: unknown, formData: FormData) {
       errors: z.treeifyError(result.error),
     };
 
-  const data = result.data;
+  const dataFields = result.data;
+  const x = base64from(await JSON.stringify(dataFields));
 
   try {
-    if (await isUserExists(data.email))
-      throw new Error("Bu e-mail daha önce kaydedilmiş.!");
-
-    const verified = await checkVerificationCode(
-      result.data.email,
-      result.data.emailverify,
-    );
-
-    if (!verified) {
-      await sendVerificationCode(data.email);
-      throw new Error(
-        "Onay kodunuz gönderildi. e-posta hesabınızı kontrol edin",
-      );
-    }
-    data.password = hashSync(data.password1.trim());
-    if (verified) await saveSignUpData(data);
-    return {
-      data: data,
-      success: true,
-    };
+    const response = await fetch(externalAuth() + apiPath.user.signUp, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        data: x,
+      },
+    });
+    console.log(response);
+    if (response.status == 200)
+      return {
+        data: dataFields,
+        success: true,
+      };
+    if (response.status == 201)
+      return {
+        data: dataFields,
+        error: response.json(),
+      };
   } catch (error) {
     return {
-      data: data,
+      data: dataFields,
       error: (error as Error).message,
     };
   }
@@ -115,14 +107,30 @@ export async function signIn(prevState: unknown, formData: FormData) {
       errors: z.treeifyError(result.error),
     };
   }
-  try {
-    const { email, password } = result.data;
-    const users = await signInDB({ username: "", email, password });
 
-    if (!users.length) throw Error("Hesap bulunamadı.!");
+  const dataFields = result.data;
+  const x = base64from(await JSON.stringify(dataFields));
+  const { email, password } = result.data;
+  try {
+    const response = await fetch(externalAuth() + apiPath.user.signIn, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        data: x,
+      },
+    });
+    if (response.status == 201)
+      return {
+        data: dataFields,
+        error: response.json(),
+      };
+    const users = await response.json();
 
     if (!compareSync(password, users[0].password))
-      throw Error("Geçersiz kullanıcı adı veya şifre.!");
+      return {
+        data: dataFields,
+        error: "Geçersiz kullanıcı adı veya şifre.!",
+      };
 
     await createSession(users[0].pk_user);
 
@@ -149,19 +157,25 @@ export async function sendForgottenPassword(
     };
   }
 
-  const { email, emailverify } = result.data;
+  const dataFields = result.data;
+  const x = base64from(await JSON.stringify(dataFields));
 
   try {
-    const userExists = await isUserExists(email);
-    if (!userExists) throw new Error("Hesap bulunamadı.!");
-    const verified = await checkVerificationCode(email, emailverify);
-    if (!verified) {
-      await sendVerificationCode(email);
-      throw new Error(
-        "Onay kodunuz gönderildi. e-posta hesabınızı kontrol edin",
-      );
-    }
-    await sendPassword(email);
+    const response = await fetch(
+      externalAuth() + apiPath.user.forgottenPassword,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          data: x,
+        },
+      },
+    );
+    if (response.status == 201)
+      return {
+        data: dataFields,
+        error: response.json(),
+      };
   } catch (error) {
     return {
       data: data,
@@ -173,6 +187,9 @@ export async function sendForgottenPassword(
 }
 
 export async function changePassword(prevState: unknown, formData: FormData) {
+  const user = await getUser();
+  if (!user) throw Error("Şifrenizi değiştirebilmek için oturum açmalısınız.");
+
   const data = Object.fromEntries(formData);
   const result = changePasswordSchema.safeParse(data);
 
@@ -183,25 +200,30 @@ export async function changePassword(prevState: unknown, formData: FormData) {
     };
   }
 
+  const dataFields = result.data;
+  const x = base64from(await JSON.stringify({ ...dataFields, user: user }));
+
   try {
-    const user = await getUser();
-    if (!user)
-      throw Error("Şifrenizi değiştirebilmek için oturum açmalısınız.");
-    const users = await getUserById(user);
+    const response = await fetch(externalAuth() + apiPath.user.changePassword, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        data: x,
+      },
+    });
 
-    const { username, passwordold, password, password1 } = result.data;
-
-    if (!users.length) throw Error("Hesap bulunamadı.!");
-
-    if (!compareSync(passwordold, users[0].password))
-      throw Error("Geçersiz kullanıcı adı veya şifre.!");
-    await changePasswordDB(user, password, username);
+    if (response.status == 201)
+      return {
+        data: dataFields,
+        error: response.json(),
+      };
   } catch (error) {
     return {
       data: data,
       error: (error as Error).message,
     };
   }
+
   await logout();
   return { success: true };
 }
