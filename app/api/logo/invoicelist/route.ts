@@ -3,7 +3,9 @@ import { NextResponse, NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
-    const data = await req.json();
+    const dataStr = req.headers.get("data");
+    const data = JSON.parse(dataStr ? dataStr : "");
+    //const data = await req.json();
 
     if (data) {
       const dbFilter = data;

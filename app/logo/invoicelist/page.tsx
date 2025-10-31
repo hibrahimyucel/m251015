@@ -63,8 +63,9 @@ export default function InvoiceListPage() {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        data: data,
       },
-      body: data,
+      //body: data,
     })
       .then((response) => {
         if (response.status != 200) {
