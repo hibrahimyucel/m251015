@@ -36,7 +36,7 @@ export default function InvoiceListPage() {
       });
 
       fetch(externalApi() + apiPath.invoiceListXLS, {
-        method: "GET",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -62,7 +62,7 @@ export default function InvoiceListPage() {
     const x = base64from(data);
 
     fetch(externalApi() + apiPath.invoiceList, {
-      method: "GET",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         data: x,
