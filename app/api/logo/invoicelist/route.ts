@@ -1,11 +1,11 @@
 import { LKSRequest, sqlInvoice } from "@/app/logo/logosql";
+import { base64to } from "@/lib/utils";
 import { NextResponse, NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
     const dataStr = req.headers.get("data");
-    const data = JSON.parse(dataStr ? dataStr : "");
-    //const data = await req.json();
+    const data = JSON.parse(base64to(dataStr as string));
 
     if (data) {
       const dbFilter = data;
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
       /** firma */
       if (dbFilter.firma.trim()) {
         whereSql += ` AND CLC.DEFINITION_ LIKE @firma`;
-        params.push({ key: "firma", value: `${dbFilter.firma.trim()}%` });
+        params.push({ key: "firma", value: `%${dbFilter.firma.trim()}%` });
       }
       if (dbFilter.fisno.trim()) {
         whereSql += ` AND STF.FICHENO LIKE @fisno`;
@@ -40,7 +40,8 @@ export async function GET(req: NextRequest) {
         params.push({ key: "plaka", value: `%${dbFilter.plaka.trim()}%` });
       }
 
-      const Sql = sqlInvoice + whereSql + " ORDER BY STF.DATE_, STF.FTIME DESC";
+      const Sql =
+        sqlInvoice + whereSql + " ORDER BY STF.DATE_, CLC.DEFINITION_ ";
       const request = await LKSRequest();
       params.map((item) => request.input(item.key, item.value));
       const result = await request.query(Sql);

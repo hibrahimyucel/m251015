@@ -15,7 +15,7 @@ export default function InvoiceDailyTable() {
   const [dataTotal, setDataTotal] = useState<invoiceDataTotal[]>([]);
   async function getData() {
     fetch(externalApi() + apiPath.dailyInvoice, {
-      method: "PATCH",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
@@ -25,7 +25,7 @@ export default function InvoiceDailyTable() {
         setData(d);
       });
     fetch(externalApi() + apiPath.dailyInvoiceTotal, {
-      method: "PATCH",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },

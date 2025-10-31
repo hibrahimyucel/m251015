@@ -4,7 +4,8 @@ import { NextResponse, NextRequest } from "next/server";
 import { base64to } from "@/lib/utils";
 export async function GET(req: NextRequest) {
   try {
-    const data = await req.json();
+    const dataStr = req.headers.get("data");
+    const data = JSON.parse(base64to(dataStr as string));
 
     if (data) {
       const dbFilter = data.db;

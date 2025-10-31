@@ -8,6 +8,7 @@ import InvoiceListHeader, {
 import MemberRoute from "@/components/authMember";
 import { invoiceData } from "../logosql";
 import { apiPath, externalApi } from "@/app/api/api";
+import { base64from } from "@/lib/utils";
 
 export default function InvoiceListPage() {
   const [data, setData] = useState<invoiceData[]>([]);
@@ -35,7 +36,7 @@ export default function InvoiceListPage() {
       });
 
       fetch(externalApi() + apiPath.invoiceListXLS, {
-        method: "PATCH",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
@@ -58,14 +59,14 @@ export default function InvoiceListPage() {
 
   async function getData(filter: invoicedbFilters) {
     const data = await JSON.stringify(filter);
+    const x = base64from(data);
 
     fetch(externalApi() + apiPath.invoiceList, {
-      method: "PATCH",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
-        data: data,
+        data: x,
       },
-      //body: data,
     })
       .then((response) => {
         if (response.status != 200) {
