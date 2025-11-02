@@ -5,6 +5,7 @@ import DataTable from "../../components/dataTable";
 import { CheckIcon } from "../../components/icons";
 import AdminRoute from "@/components/authAdmin";
 import { useAuth } from "@/auth/context/authProvider";
+import { apiPath, externalAuth } from "../api/api";
 
 export interface usersData {
   id: string | number;
@@ -19,7 +20,7 @@ export default function UsersPage() {
     if (UserData.id == id) return;
     const sql = `update auth_user set admin = ${padmin ? "pk_user" : "null"} where pk_user = ${id}`;
     const [data, error] = await tryCatch(
-      fetch("/api/runsql", {
+      fetch(externalAuth() + "/api/runsql", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -33,7 +34,7 @@ export default function UsersPage() {
   async function saveUserMember(id: string, pmember: boolean) {
     const sql = `update auth_user set member = ${pmember ? "pk_user" : "null"} where pk_user = ${id}`;
     const [data, error] = await tryCatch(
-      fetch("/api/runsql", {
+      fetch(externalAuth() + "/api/runsql", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -103,7 +104,7 @@ export default function UsersPage() {
   const [users, setusers] = useState<usersData[]>([]);
 
   async function getUsers() {
-    fetch("/api/user", {
+    fetch(externalAuth() + apiPath.user.list, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

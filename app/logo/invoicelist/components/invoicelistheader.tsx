@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Icons from "@/components/icons";
 export type invoicedbFilters = {
   dateStart: Date;
@@ -65,7 +65,7 @@ export default function InvoiceListHeader({
   }
 
   return (
-    <div className="flex w-full gap-1 rounded-sm text-center font-bold">
+    <div className="flex w-full flex-wrap gap-1 rounded-sm text-center font-bold">
       <div className="border-diffcolor flex shrink-0 basis-80 flex-col justify-center rounded-sm border sm:flex-col">
         Tarih aralığı
         <div className="grid grid-cols-3">

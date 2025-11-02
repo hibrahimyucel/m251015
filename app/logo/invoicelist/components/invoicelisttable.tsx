@@ -64,8 +64,8 @@ export default function InvoiceListTable({
   const { totalData, totalAmount } = calculateTotal(localData);
 
   return (
-    <div className="flex w-full flex-col">
-      <div className="flex w-full justify-center gap-0.5 pt-0.5 pr-4 text-center font-bold">
+    <div className="flex w-full flex-col overflow-hidden overflow-x-scroll">
+      <div className="flex justify-center gap-0.5 pt-0.5 pr-4 text-center font-bold">
         <div className="flex w-30 shrink-0 flex-col justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
           Tarih-Saat
           <input
@@ -161,7 +161,7 @@ export default function InvoiceListTable({
           />
         </div>
       </div>
-      <div className="flex h-[calc(100vh-14rem)] w-full flex-col overflow-hidden overflow-y-scroll border">
+      <div className="flex h-[calc(100vh-14rem)] flex-col overflow-hidden overflow-y-scroll border">
         {localData?.length &&
           localData.map((data: invoiceData, index) => (
             <div

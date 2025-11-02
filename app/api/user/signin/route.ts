@@ -1,12 +1,5 @@
-import {
-  checkVerificationCode,
-  isUserExists,
-  saveSignUpData,
-  sendVerificationCode,
-  signInDB,
-} from "@/auth/mssqlAuth";
+import { signInDB } from "@/auth/mssqlAuth";
 import { base64to } from "@/lib/utils";
-import { hashSync } from "bcrypt-ts";
 import { NextResponse, NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -14,7 +7,7 @@ export async function GET(req: NextRequest) {
     const dataStr = req.headers.get("data");
 
     const data = JSON.parse(base64to(dataStr as string));
-    console.log(data);
+
     if (data) {
       const users = await signInDB({
         username: "",
@@ -40,6 +33,6 @@ export const PATCH = async (request: NextRequest) => {
   return GET(request);
 };
 
-export const OPTIONS = async (request: NextRequest) => {
+export const OPTIONS = async () => {
   return NextResponse.json({ status: 200 });
 };

@@ -1,13 +1,6 @@
-import {
-  changePasswordDB,
-  checkVerificationCode,
-  getUserById,
-  isUserExists,
-  saveSignUpData,
-  sendVerificationCode,
-} from "@/auth/mssqlAuth";
+import { changePasswordDB, getUserById } from "@/auth/mssqlAuth";
 import { base64to } from "@/lib/utils";
-import { compareSync, hashSync } from "bcrypt-ts";
+import { compareSync } from "bcrypt-ts";
 import { NextResponse, NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -16,7 +9,7 @@ export async function GET(req: NextRequest) {
     const data = JSON.parse(base64to(dataStr as string));
 
     if (data) {
-      const { username, passwordold, password, password1, user } = data;
+      const { username, passwordold, password, user } = data;
       const users = await getUserById(user);
 
       if (!users.length)
@@ -43,6 +36,6 @@ export const PATCH = async (request: NextRequest) => {
   return GET(request);
 };
 
-export const OPTIONS = async (request: NextRequest) => {
+export const OPTIONS = async () => {
   return NextResponse.json({ status: 200 });
 };

@@ -48,6 +48,6 @@ export const PATCH = async (request: NextRequest) => {
   return GET(request);
 };
 
-export const OPTIONS = async (request: NextRequest) => {
+export const OPTIONS = async () => {
   return NextResponse.json({ status: 200 });
 };

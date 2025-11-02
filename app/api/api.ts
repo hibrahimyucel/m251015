@@ -18,5 +18,7 @@ export const apiPath = {
     signIn: "/api/user/signin",
     changePassword: "/api/user/changepassword",
     forgottenPassword: "/api/user/forgottenpassword",
+    list: "/api/user/list",
+    me: "/api/me",
   },
 };

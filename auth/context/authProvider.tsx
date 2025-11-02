@@ -3,6 +3,7 @@
    useAuth
  */
 "use client";
+import { apiPath } from "@/app/api/api";
 import { tryCatch } from "@/lib/utils";
 import { createContext, useContext, useEffect, useState } from "react";
 type userData = { id: string; name: string; admin: boolean; member: boolean };
@@ -30,7 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function handleAuthState() {
     const [data, error] = await tryCatch(
-      fetch("/api/me", {
+      fetch(apiPath.user.me, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
