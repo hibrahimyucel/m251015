@@ -127,7 +127,7 @@ function InvoiceData({ d }: { d: invoiceData[] }) {
 }
 function TotalData({ dt }: { dt: invoiceDataTotal[] }) {
   return (
-    <table className="border-buttoncolor min-w-full border-collapse border">
+    <table className="border-buttoncolor min-w-full border-collapse border text-xs">
       <thead>
         <tr className={`bg-buttoncolor border font-bold`}>
           <td className="grow pl-1">Araç</td>
