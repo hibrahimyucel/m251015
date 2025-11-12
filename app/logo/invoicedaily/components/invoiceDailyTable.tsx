@@ -128,13 +128,29 @@ function InvoiceData({ d }: { d: invoiceData[] }) {
 function TotalData({ dt }: { dt: invoiceDataTotal[] }) {
   return (
     <table className="border-buttoncolor min-w-full border-collapse border">
-      <caption className="font-bold">Toplamlar</caption>
+      <thead>
+        <tr className={`bg-buttoncolor border font-bold`}>
+          <td className="grow pl-1">Araç</td>
+          <td className="border-r pr-1 text-end">Toplam</td>
+          <td className="grow pl-1">Ürün</td>
+          <td className="pl-1 text-end">Toplam</td>
+
+          <td className="border-r pl-1">Birim</td>
+          <td className="grow pl-1">Hesap</td>
+          <td className="border-r pr-1 text-end">Toplam</td>
+        </tr>
+      </thead>
+
       <tbody>
         {dt.map((item: invoiceDataTotal, index) => (
           <tr
             key={index}
             className={`border-b ${index % 2 ? "bg-background" : "bg-diffcolor"} `}
           >
+            <td className="grow pl-1">{item.PLAKA}</td>
+            <td className="border-r pr-1 text-end">
+              {item.PLAKATOPLAM && item.PLAKATOPLAM.toLocaleString()}
+            </td>
             <td className="grow pl-1">{item.URUN}</td>
             <td className="pl-1 text-end">
               {item.URUNTOPLAM && item.URUNTOPLAM.toLocaleString()}
@@ -144,10 +160,6 @@ function TotalData({ dt }: { dt: invoiceDataTotal[] }) {
             <td className="grow pl-1">{item.HESAP}</td>
             <td className="border-r pr-1 text-end">
               {item.HESAPTOPLAM && item.HESAPTOPLAM.toLocaleString()}
-            </td>
-            <td className="grow pl-1">{item.PLAKA}</td>
-            <td className="border-r pr-1 text-end">
-              {item.PLAKATOPLAM && item.PLAKATOPLAM.toLocaleString()}
             </td>
           </tr>
         ))}
