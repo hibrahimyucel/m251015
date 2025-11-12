@@ -1,9 +1,12 @@
 import { LKSRequest, sqlInvoice } from "@/app/logo/logosql";
+import { checkAuth } from "@/auth/session";
 import { base64to } from "@/lib/utils";
 import { NextResponse, NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
+    if (await checkAuth())
+      return NextResponse.json("Yetkiniz yok...", { status: 401 });
     const dataStr = req.headers.get("data");
     const data = JSON.parse(base64to(dataStr as string));
 

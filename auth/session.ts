@@ -8,6 +8,7 @@
 import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import { tryCatch } from "@/lib/utils";
 
 type SessionPayload = {
   user: string;
@@ -45,6 +46,11 @@ export async function createSession(user: string) {
     secure: true,
     expires: expiresAt,
   });
+}
+export async function checkAuth() {
+  const [data, error] = await tryCatch(getUser());
+  if (error) return false;
+  else return true;
 }
 export async function getUser(): Promise<string | null> {
   const cookie = (await cookies()).get("session")?.value;

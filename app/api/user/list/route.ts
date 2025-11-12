@@ -1,9 +1,12 @@
 import { getUserById, mmbisRequest } from "@/auth/mssqlAuth";
+import { checkAuth } from "@/auth/session";
 import { base64to } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
+    if (await checkAuth())
+      return NextResponse.json("Yetkiniz yok...", { status: 401 });
     const dataStr = req.headers.get("data");
     if (dataStr) {
       const data = JSON.parse(base64to(dataStr as string));

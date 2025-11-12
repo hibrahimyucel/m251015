@@ -1,7 +1,11 @@
 import { sqlInvoiceDaily, LKSRequest } from "@/app/logo/logosql";
+import { checkAuth } from "@/auth/session";
 import { NextResponse } from "next/server";
+
 export async function GET() {
   try {
+    if (await checkAuth())
+      return NextResponse.json("Yetkiniz yok...", { status: 401 });
     const request = await LKSRequest();
 
     const result = await request.query(sqlInvoiceDaily);

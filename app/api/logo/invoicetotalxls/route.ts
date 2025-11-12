@@ -7,8 +7,11 @@ import {
 } from "@/app/logo/logosql";
 import { NextResponse, NextRequest } from "next/server";
 import { base64to } from "@/lib/utils";
+import { checkAuth } from "@/auth/session";
 export async function GET(req: NextRequest) {
   try {
+    if (await checkAuth())
+      return NextResponse.json("Yetkiniz yok...", { status: 401 });
     const dataStr = req.headers.get("data");
     const data = JSON.parse(base64to(dataStr as string));
 
