@@ -2,7 +2,6 @@
 import { z } from "zod";
 import { createSession, deleteSession, getUser } from "../session";
 import { compareSync } from "bcrypt-ts";
-import { signInDB } from "../mssqlAuth";
 import { apiPath, externalAuth } from "@/app/api/api";
 import { base64from } from "@/lib/utils";
 
