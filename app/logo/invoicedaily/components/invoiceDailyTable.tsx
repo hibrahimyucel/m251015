@@ -5,9 +5,14 @@ import { useDebounce } from "@/lib/hooks/useDebounce";
 import { invoiceData } from "../../logosql";
 
 type invoiceDataTotal = {
-  TOPLAM: number;
-  URUN: string;
+  X: number;
+  PLAKA: string;
+  PLAKATOPLAM: number;
   BIRIM: string;
+  HESAP: string;
+  HESAPTOPLAM: number;
+  URUN: string;
+  URUNTOPLAM: number;
 };
 
 export default function InvoiceDailyTable() {
@@ -35,11 +40,6 @@ export default function InvoiceDailyTable() {
         setDataTotal(d);
       });
   }
-  let toplam = 0;
-  if (dataTotal.length)
-    dataTotal.map(
-      (i: invoiceDataTotal) => (toplam = toplam + Number(i.TOPLAM)),
-    );
 
   const [changer, setchanger] = useState<boolean>(true);
   const debChanger = useDebounce(changer, 15000);
@@ -58,9 +58,7 @@ export default function InvoiceDailyTable() {
 
       <InvoiceHeader />
       {data?.length && <InvoiceData d={data} />}
-      <div>
-        {dataTotal.length && <TotalData dt={dataTotal} toplam={toplam} />}
-      </div>
+      <div>{dataTotal.length && <TotalData dt={dataTotal} />}</div>
     </div>
   );
 }
@@ -127,7 +125,7 @@ function InvoiceData({ d }: { d: invoiceData[] }) {
     </div>
   );
 }
-function TotalData({ dt, toplam }: { dt: invoiceDataTotal[]; toplam: number }) {
+function TotalData({ dt }: { dt: invoiceDataTotal[] }) {
   return (
     <table className="border-buttoncolor min-w-full border-collapse border">
       <caption className="font-bold">Toplamlar</caption>
@@ -137,20 +135,22 @@ function TotalData({ dt, toplam }: { dt: invoiceDataTotal[]; toplam: number }) {
             key={index}
             className={`border-b ${index % 2 ? "bg-background" : "bg-diffcolor"} `}
           >
-            <td className="pl-1">{index + 1}</td>
-            <td className="pl-1"> </td>
-            <td className="pl-1 text-end">{item.TOPLAM.toLocaleString()}</td>
-            <td className="pl-1">{item.BIRIM}</td>
             <td className="grow pl-1">{item.URUN}</td>
+            <td className="pl-1 text-end">
+              {item.URUNTOPLAM && item.URUNTOPLAM.toLocaleString()}
+            </td>
+
+            <td className="border-r pl-1">{item.BIRIM}</td>
+            <td className="grow pl-1">{item.HESAP}</td>
+            <td className="border-r pr-1 text-end">
+              {item.HESAPTOPLAM && item.HESAPTOPLAM.toLocaleString()}
+            </td>
+            <td className="grow pl-1">{item.PLAKA}</td>
+            <td className="border-r pr-1 text-end">
+              {item.PLAKATOPLAM && item.PLAKATOPLAM.toLocaleString()}
+            </td>
           </tr>
         ))}
-        <tr key={-1} className={`bg-buttoncolor border-b font-bold`}>
-          <td className="pl-1"></td>
-          <td className="pl-1">Günün Metrajı</td>
-          <td className="pl-1 text-end">{toplam.toLocaleString()}</td>
-          <td className="pl-1"></td>
-          <td className="grow pl-1"></td>
-        </tr>
       </tbody>
     </table>
   );

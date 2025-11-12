@@ -362,3 +362,124 @@ ORDER BY
   PLAKA, 
   SIRA, 
   TARIH`;
+export const sqlInvoiceDailyTotal3 = `
+SELECT *
+FROM   (SELECT Row_number()
+                 OVER (
+                   ORDER BY P.code ASC) X,
+               P.code                   PLAKA,
+               Sum(STL.amount)          PLAKATOPLAM,
+               UL.NAME                  BIRIM
+                     FROM LG_${firma}_${donem}_STFICHE STF
+LEFT JOIN LG_${firma}_${donem}_STLINE STL ON STF.LOGICALREF = STL.STFICHEREF
+LEFT JOIN LG_${firma}_UNITSETL UL ON ul.LOGICALREF = STL.UOMREF
+LEFT JOIN LG_${firma}_CLCARD CLC ON CLC.LOGICALREF = STF.CLIENTREF
+LEFT JOIN LG_${firma}_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
+LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
+        WHERE  STF.cancelled = 0
+               AND STF.date_ = Cast (Getdate() AS DATE)
+               AND STF.trcode = 8
+               AND UL.NAME LIKE 'M3'
+        GROUP  BY P.code,
+                  UL.NAME) A
+       FULL OUTER JOIN (SELECT Row_number()
+                                 OVER (
+                                   ORDER BY CLC.DEFINITION_ ASC) X,
+                               CLC.DEFINITION_                   HESAP,
+                               Sum(STL.amount)                   HESAPTOPLAM
+                     FROM LG_${firma}_${donem}_STFICHE STF
+LEFT JOIN LG_${firma}_${donem}_STLINE STL ON STF.LOGICALREF = STL.STFICHEREF
+LEFT JOIN LG_${firma}_UNITSETL UL ON ul.LOGICALREF = STL.UOMREF
+LEFT JOIN LG_${firma}_CLCARD CLC ON CLC.LOGICALREF = STF.CLIENTREF
+LEFT JOIN LG_${firma}_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
+LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
+                        WHERE  STF.cancelled = 0
+                               AND STF.date_ = Cast (Getdate() AS DATE)
+                               AND STF.trcode = 8
+                               AND UL.NAME LIKE 'M3'
+                        GROUP  BY CLC.DEFINITION_,
+                                  UL.NAME) B
+                    ON A.x = B.x
+       FULL OUTER JOIN (SELECT Row_number()
+                                 OVER (
+                                   ORDER BY ITM.NAME ASC) X,
+                               ITM.NAME                   URUN,
+                               Sum(STL.amount)            URUNTOPLAM
+                     FROM LG_${firma}_${donem}_STFICHE STF
+LEFT JOIN LG_${firma}_${donem}_STLINE STL ON STF.LOGICALREF = STL.STFICHEREF
+LEFT JOIN LG_${firma}_UNITSETL UL ON ul.LOGICALREF = STL.UOMREF
+LEFT JOIN LG_${firma}_CLCARD CLC ON CLC.LOGICALREF = STF.CLIENTREF
+LEFT JOIN LG_${firma}_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
+LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
+   WHERE  STF.cancelled = 0
+                               AND STF.date_ = Cast (Getdate() AS DATE)
+                               AND STF.trcode = 8
+                               AND UL.NAME LIKE 'M3'
+                        GROUP  BY ITM.NAME,
+                                  UL.NAME) C
+                    ON A.x = C.x
+UNION ALL
+SELECT NULL,
+       'TOPLAM',
+       Sum(plakatoplam),
+       NULL,
+       NULL,
+       'TOPLAM',
+       Sum(hesaptoplam),
+       NULL,
+       'TOPLAM',
+       Sum(uruntoplam)
+FROM   (SELECT Row_number()
+                 OVER (
+                   ORDER BY P.code ASC) X,
+               P.code                   PLAKA,
+               Sum(STL.amount)          PLAKATOPLAM,
+               UL.NAME                  BIRIM
+                     FROM LG_${firma}_${donem}_STFICHE STF
+LEFT JOIN LG_${firma}_${donem}_STLINE STL ON STF.LOGICALREF = STL.STFICHEREF
+LEFT JOIN LG_${firma}_UNITSETL UL ON ul.LOGICALREF = STL.UOMREF
+LEFT JOIN LG_${firma}_CLCARD CLC ON CLC.LOGICALREF = STF.CLIENTREF
+LEFT JOIN LG_${firma}_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
+LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
+        WHERE  STF.cancelled = 0
+               AND STF.date_ = Cast (Getdate() AS DATE)
+               AND STF.trcode = 8
+               AND UL.NAME LIKE 'M3'
+        GROUP  BY P.code,
+                  UL.NAME) A
+       FULL OUTER JOIN (SELECT Row_number()
+                                 OVER (
+                                   ORDER BY CLC.DEFINITION_ ASC) X,
+                               CLC.DEFINITION_                   HESAP,
+                               Sum(STL.amount)                   HESAPTOPLAM
+                     FROM LG_${firma}_${donem}_STFICHE STF
+LEFT JOIN LG_${firma}_${donem}_STLINE STL ON STF.LOGICALREF = STL.STFICHEREF
+LEFT JOIN LG_${firma}_UNITSETL UL ON ul.LOGICALREF = STL.UOMREF
+LEFT JOIN LG_${firma}_CLCARD CLC ON CLC.LOGICALREF = STF.CLIENTREF
+LEFT JOIN LG_${firma}_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
+LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
+                        WHERE  STF.cancelled = 0
+                               AND STF.date_ = Cast (Getdate() AS DATE)
+                               AND STF.trcode = 8
+                               AND UL.NAME LIKE 'M3'
+                        GROUP  BY CLC.DEFINITION_,
+                                  UL.NAME) B
+                    ON A.x = B.x
+       FULL OUTER JOIN (SELECT Row_number()
+                                 OVER (
+                                   ORDER BY ITM.NAME ASC) X,
+                               ITM.NAME                   URUN,
+                               Sum(STL.amount)            URUNTOPLAM
+                     FROM LG_${firma}_${donem}_STFICHE STF
+LEFT JOIN LG_${firma}_${donem}_STLINE STL ON STF.LOGICALREF = STL.STFICHEREF
+LEFT JOIN LG_${firma}_UNITSETL UL ON ul.LOGICALREF = STL.UOMREF
+LEFT JOIN LG_${firma}_CLCARD CLC ON CLC.LOGICALREF = STF.CLIENTREF
+LEFT JOIN LG_${firma}_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
+LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
+                        WHERE  STF.cancelled = 0
+                               AND STF.date_ = Cast (Getdate() AS DATE)
+                               AND STF.trcode = 8
+                               AND UL.NAME LIKE 'M3'
+                        GROUP  BY ITM.NAME,
+                                  UL.NAME) C
+                    ON A.x = C.x `;

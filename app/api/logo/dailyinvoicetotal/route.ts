@@ -1,9 +1,10 @@
-import { sqlInvoiceDailyTotal, LKSRequest } from "@/app/logo/logosql";
+import { LKSRequest, sqlInvoiceDailyTotal3 } from "@/app/logo/logosql";
 import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const request = await LKSRequest();
-    const result = await request.query(sqlInvoiceDailyTotal);
+
+    const result = await request.query(sqlInvoiceDailyTotal3);
 
     return NextResponse.json(result.recordset, { status: 200 });
   } catch (error) {
