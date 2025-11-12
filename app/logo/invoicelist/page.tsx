@@ -34,13 +34,13 @@ export default function InvoiceListPage() {
         db: dbFilter.current,
         local: localFilter.current,
       });
-
+      const x1 = base64from(x);
       fetch(externalApi() + apiPath.invoiceListXLS, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          data: x1,
         },
-        body: x,
       })
         .then((response) => {
           response.blob().then((blob) => {
