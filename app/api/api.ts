@@ -13,6 +13,7 @@ export const apiPath = {
   dailyInvoiceTotal: "/api/logo/dailyinvoicetotal",
   invoiceList: "/api/logo/invoicelist",
   invoiceListXLS: "/api/logo/invoicelistxls",
+  invoiceTotalXLS: "/api/logo/invoicetotalxls",
   user: {
     signUp: "/api/user/signup",
     signIn: "/api/user/signin",

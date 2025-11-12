@@ -31,10 +31,12 @@ export function initdbFilters(): invoicedbFilters {
 type invoiceListHeaderProps = {
   func: (filter: invoicedbFilters) => void;
   downloadxlsx: (filter: invoicedbFilters) => void;
+  downloadtotalxlsx: (filter: invoicedbFilters) => void;
 };
 export default function InvoiceListHeader({
   func,
   downloadxlsx,
+  downloadtotalxlsx,
 }: invoiceListHeaderProps) {
   const [dbFilter, setdbFilter] = useState<invoicedbFilters>(initdbFilters);
   const [changer, setChanger] = useState(false);
@@ -49,6 +51,9 @@ export default function InvoiceListHeader({
   }
   function savexls() {
     downloadxlsx(dbFilter);
+  }
+  function saveTotalxls() {
+    downloadtotalxlsx(dbFilter);
   }
   function handleSelectMonth(month: number) {
     const year = dbFilter.dateStart.getFullYear();
@@ -191,6 +196,16 @@ export default function InvoiceListHeader({
           onClick={savexls}
         >
           Excel
+          <Icons icon="Download" />
+        </button>
+      </div>
+      <div className="border-editbox content-center justify-center rounded-sm border">
+        <button
+          type="button"
+          className="flex h-full flex-row items-center p-1 font-bold"
+          onClick={saveTotalxls}
+        >
+          Rapor
           <Icons icon="Download" />
         </button>
       </div>

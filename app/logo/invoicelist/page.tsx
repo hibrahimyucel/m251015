@@ -80,13 +80,48 @@ export default function InvoiceListPage() {
       })
       .catch((error) => alert(error.message));
   }
+  async function getTotalXlsxFile(filterDB: invoicedbFilters) {
+    try {
+      setdbFilter(filterDB);
+
+      const x = await JSON.stringify({
+        db: dbFilter.current,
+        local: localFilter.current,
+      });
+      const x1 = base64from(x);
+      fetch(externalApi() + apiPath.invoiceTotalXLS, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          data: x1,
+        },
+      })
+        .then((response) => {
+          response.blob().then((blob) => {
+            const fileURL = window.URL.createObjectURL(blob);
+            const alink = document.createElement("a");
+            alink.href = fileURL;
+            alink.download = geFileName();
+            alink.click();
+          });
+        })
+        .catch((error) => alert(error.message));
+    } catch (error) {
+      alert((error as Error).message);
+    }
+  }
+
   return (
     <MemberRoute>
       <div className="w-full">
         <h1 className="bg-buttoncolor pt-0.5 pl-2 text-sm font-bold">
           İrsaliye Listesi
         </h1>
-        <InvoiceListHeader func={getData} downloadxlsx={getXlsxFile} />
+        <InvoiceListHeader
+          func={getData}
+          downloadxlsx={getXlsxFile}
+          downloadtotalxlsx={getTotalXlsxFile}
+        />
         <InvoiceListTable data={data} setlocalFilter={setlocalFilter} />
       </div>
     </MemberRoute>

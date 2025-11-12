@@ -45,6 +45,7 @@ export async function GET(req: NextRequest) {
       const request = await LKSRequest();
       params.map((item) => request.input(item.key, item.value));
       const result = await request.query(Sql);
+
       return NextResponse.json(result.recordset, { status: 200 });
     } else throw "Sorgu bilgileri eksik...";
   } catch (error) {
