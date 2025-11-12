@@ -79,7 +79,7 @@ LEFT JOIN LG_${firma}_UNITSETL UL ON UL.LOGICALREF = STL.UOMREF
 LEFT JOIN LG_${firma}_CLCARD CLC ON CLC.LOGICALREF = STF.CLIENTREF
 LEFT JOIN LG_${firma}_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
 LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
-WHERE STF.CANCELLED=0 and STF.DATE_ =CAST (GETDATE() AS DATE ) and ul.name = 'M3' 
+WHERE STF.CANCELLED=0 and STF.DATE_ =CAST (GETDATE() AS DATE ) and ul.name = 'M3' AND STL.INVOICEREF=0
 ORDER BY STF.DATE_, STF.FTIME DESC`;
 
 export const sqlInvoiceDailyTotal = `SELECT 
@@ -91,6 +91,7 @@ LEFT JOIN LG_${firma}_${donem}_STLINE STL ON STF.LOGICALREF = STL.STFICHEREF
 LEFT JOIN LG_${firma}_UNITSETL UL ON UL.LOGICALREF = STL.UOMREF
 LEFT JOIN LG_${firma}_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
 WHERE  STF.CANCELLED=0 and STF.DATE_ = CAST (GETDATE() AS DATE ) and STF.TRCODe=8 and UL.Name LIKE 'M3'
+AND STL.INVOICEREF=0
 GROUP BY ITM.NAME  ,UL.NAME`;
 
 export const sqlInvoice = `SELECT STF.LOGICALREF
@@ -148,7 +149,7 @@ LEFT JOIN LG_${firma}_UNITSETL UL ON ul.LOGICALREF = STL.uomref
 LEFT JOIN LG_${firma}_CLCARD CLC ON CLC.LOGICALREF = STF.CLIENTREF
 LEFT JOIN LG_${firma}_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
 LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
-WHERE STF.CANCELLED=0 and UL.Name LIKE 'M3' `;
+WHERE STF.CANCELLED=0 and UL.Name LIKE 'M3' AND STL.INVOICEREF=0 `;
 
 export const sqlInvoicexls = `SELECT STF.LOGICALREF as 'Kayıt No'
 	,STF.FICHENO as 'Fiş No' , P.CODE Plaka
@@ -204,7 +205,7 @@ LEFT JOIN LG_${firma}_UNITSETL UL ON ul.LOGICALREF = STL.uomref
 LEFT JOIN LG_${firma}_CLCARD CLC ON CLC.LOGICALREF = STF.CLIENTREF
 LEFT JOIN LG_${firma}_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
 LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
-WHERE STF.CANCELLED=0 and UL.Name LIKE 'M3' `;
+WHERE STF.CANCELLED=0 and UL.Name LIKE 'M3' AND STL.INVOICEREF=0 `;
 
 export const sqlUrunToplam = `SELECT 
   0 as SIRA, 
@@ -226,7 +227,7 @@ LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
 WHERE 
   STF.CANCELLED = 0 
   and UL.NAME LIKE 'M3' 
-  and STF.TRCODE = 8 
+  and STF.TRCODE = 8 AND STL.INVOICEREF=0
   AND (STF.DATE_ BETWEEN @dateStart AND @dateEnd)
 UNION ALL 
 SELECT 
@@ -249,7 +250,7 @@ LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
 WHERE 
   STF.CANCELLED = 0 
   and UL.NAME LIKE 'M3' 
-  and STF.TRCODE = 8 
+  and STF.TRCODE = 8 AND STL.INVOICEREF=0 
   AND (STF.DATE_ BETWEEN @dateStart AND @dateEnd)
 GROUP BY 
   ITM.NAME, 
@@ -278,7 +279,7 @@ LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
 WHERE 
   STF.CANCELLED = 0 
   and UL.NAME LIKE 'M3' 
-  and STF.TRCODE = 8 
+  and STF.TRCODE = 8 AND STL.INVOICEREF=0 
   AND (STF.DATE_ BETWEEN @dateStart AND @dateEnd)
 UNION ALL 
 SELECT 
@@ -301,7 +302,7 @@ LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
 WHERE 
   STF.CANCELLED = 0 
   and UL.NAME LIKE 'M3' 
-  and STF.TRCODE = 8 
+  and STF.TRCODE = 8 AND STL.INVOICEREF=0 
   AND (STF.DATE_ BETWEEN @dateStart AND @dateEnd)
 group by 
   clc.DEFINITION_, 
@@ -330,7 +331,7 @@ LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
 WHERE 
   STF.CANCELLED = 0 
   and UL.NAME LIKE 'M3' 
-  and STF.TRCODE = 8 
+  and STF.TRCODE = 8 AND STL.INVOICEREF=0
   AND (STF.DATE_ BETWEEN @dateStart AND @dateEnd)
 UNION ALL 
 SELECT 
@@ -353,7 +354,7 @@ LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
 WHERE 
   STF.CANCELLED = 0 
   and UL.NAME LIKE 'M3' 
-  and STF.TRCODE = 8 
+  and STF.TRCODE = 8 AND STL.INVOICEREF=0 
   AND (STF.DATE_ BETWEEN @dateStart AND @dateEnd)
 group by 
   P.CODE, 
@@ -378,7 +379,7 @@ LEFT JOIN LG_${firma}_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
 LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
         WHERE  STF.cancelled = 0
                AND STF.date_ = Cast (Getdate() AS DATE)
-               AND STF.trcode = 8
+               AND STF.trcode = 8 AND STL.INVOICEREF=0
                AND UL.NAME LIKE 'M3'
         GROUP  BY P.code,
                   UL.NAME) A
@@ -395,7 +396,7 @@ LEFT JOIN LG_${firma}_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
 LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
                         WHERE  STF.cancelled = 0
                                AND STF.date_ = Cast (Getdate() AS DATE)
-                               AND STF.trcode = 8
+                               AND STF.trcode = 8 AND STL.INVOICEREF=0
                                AND UL.NAME LIKE 'M3'
                         GROUP  BY CLC.DEFINITION_,
                                   UL.NAME) B
@@ -413,7 +414,7 @@ LEFT JOIN LG_${firma}_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
 LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
    WHERE  STF.cancelled = 0
                                AND STF.date_ = Cast (Getdate() AS DATE)
-                               AND STF.trcode = 8
+                               AND STF.trcode = 8 AND STL.INVOICEREF=0
                                AND UL.NAME LIKE 'M3'
                         GROUP  BY ITM.NAME,
                                   UL.NAME) C
@@ -443,7 +444,7 @@ LEFT JOIN LG_${firma}_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
 LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
         WHERE  STF.cancelled = 0
                AND STF.date_ = Cast (Getdate() AS DATE)
-               AND STF.trcode = 8
+               AND STF.trcode = 8 AND STL.INVOICEREF=0
                AND UL.NAME LIKE 'M3'
         GROUP  BY P.code,
                   UL.NAME) A
@@ -460,7 +461,7 @@ LEFT JOIN LG_${firma}_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
 LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
                         WHERE  STF.cancelled = 0
                                AND STF.date_ = Cast (Getdate() AS DATE)
-                               AND STF.trcode = 8
+                               AND STF.trcode = 8 AND STL.INVOICEREF=0 
                                AND UL.NAME LIKE 'M3'
                         GROUP  BY CLC.DEFINITION_,
                                   UL.NAME) B
@@ -478,7 +479,7 @@ LEFT JOIN LG_${firma}_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF
 LEFT JOIN LG_SLSMAN P  ON P.LOGICALREF = STF.SALESMANREF
                         WHERE  STF.cancelled = 0
                                AND STF.date_ = Cast (Getdate() AS DATE)
-                               AND STF.trcode = 8
+                               AND STF.trcode = 8 AND STL.INVOICEREF=0
                                AND UL.NAME LIKE 'M3'
                         GROUP  BY ITM.NAME,
                                   UL.NAME) C
