@@ -49,8 +49,8 @@ export async function createSession(user: string) {
 }
 export async function checkAuth() {
   const [data, error] = await tryCatch(getUser());
-  if (error) return false;
-  else return true;
+  if (error) return true;
+  else return false;
 }
 export async function getUser(): Promise<string | null> {
   const cookie = (await cookies()).get("session")?.value;
