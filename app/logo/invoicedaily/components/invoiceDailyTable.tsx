@@ -42,7 +42,7 @@ export default function InvoiceDailyTable() {
   }
 
   const [changer, setchanger] = useState<boolean>(true);
-  const debChanger = useDebounce(changer, 15000);
+  const debChanger = useDebounce(changer, 30000);
   const datetime = new Date().toLocaleTimeString();
 
   useEffect(() => {
