@@ -1,12 +1,12 @@
-export function externalApi() {
+export function externalApi(path: string) {
   return process.env.NEXT_PUBLIC_EXTERNAL
     ? process.env.NEXT_PUBLIC_EXTERNAL
-    : "";
+    : "" + path;
 }
-export function externalAuth() {
+export function externalAuth(path: string) {
   return process.env.NEXT_PUBLIC_AUTH
     ? process.env.NEXT_PUBLIC_AUTH
-    : process.env.NEXT_PUBLIC_SELF;
+    : process.env.NEXT_PUBLIC_SELF + path;
 }
 export const apiPath = {
   dailyInvoice: "/api/logo/dailyinvoice",

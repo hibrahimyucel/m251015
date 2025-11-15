@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { santralData, santralDataTotal } from "../types";
 
-export default function InvoiceDailyTable() {
+export default function SantralDailyPage() {
   const [data, setData] = useState<santralData[]>([]);
   const [dataTotal, setDataTotal] = useState<santralDataTotal[]>([]);
 
   async function getData() {
-    fetch(externalApi() + apiPath.santral.listDaily, {
+    fetch(externalApi(apiPath.santral.listDaily), {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -20,7 +20,7 @@ export default function InvoiceDailyTable() {
         setData(d);
       });
 
-    fetch(externalApi() + apiPath.santral.listDailyTotal, {
+    fetch(externalApi(apiPath.santral.listDailyTotal), {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -42,93 +42,84 @@ export default function InvoiceDailyTable() {
   }, [debChanger]);
 
   return (
-    <div className="flex h-[calc(100vh-6rem)] w-full flex-col overflow-hidden overflow-y-scroll border">
+    <div className="flex h-[calc(100vh-6rem)] w-full flex-col overflow-hidden overflow-y-scroll">
       <h1 className="bg-buttoncolor w-full pt-0.5 pl-2 text-sm font-bold">
-        Güncel İrsaliye Listesi {datetime}
+        Güncel Sevk Listesi {datetime}
       </h1>
 
-      <InvoiceHeader />
-      {data?.length && <InvoiceData d={data} />}
-      {dataTotal?.length && <TotalData dt={dataTotal} />}
+      {data?.length && <SantralData d={data} />}
+      <h1 className="bg-buttoncolor w-full pt-0.5 pl-2 text-sm font-bold">
+        Toplamlar
+      </h1>
+      {dataTotal?.length && <SantralDataTotal dt={dataTotal} />}
     </div>
   );
 }
-function InvoiceHeader() {
-  return (
-    <div className="flex w-full justify-center pt-0.5 pr-4 font-bold">
-      <div className="flex w-30 shrink-0 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
-        Tarih-Saat
-      </div>
-      <div className="flex w-20 shrink-0 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
-        Plaka
-      </div>
-      <div className="flex w-12 shrink-0 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
-        Metraj
-      </div>
-      <div className="flex w-10 shrink-0 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
-        Birim
-      </div>
-      <div className="flex w-50 shrink-0 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
-        Sınıfı
-      </div>
-      <div className="flex grow basis-75 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
-        Firma
-      </div>
-      <div className="flex grow basis-25 justify-center overflow-hidden rounded-t-md border text-nowrap text-clip">
-        Adres
-      </div>
-    </div>
-  );
-}
-function InvoiceData({ d }: { d: santralData[] }) {
-  return (
-    <div className="flex flex-col border">
-      {d.map((data: santralData, index) => (
-        <div
-          key={index}
-          className={`flex border-b ${index % 2 ? "bg-background" : "bg-diffcolor"} `}
-        >
-          <div className="flex w-30 shrink-0 overflow-hidden px-0.5 text-nowrap text-clip">
-            {data.TARIH}
-          </div>
-          <div className="flex w-20 shrink-0 overflow-hidden text-nowrap text-clip">
-            {data.PLAKA}
-          </div>
 
-          <div className="flex w-10 shrink-0 justify-end overflow-hidden px-0.5 text-nowrap text-clip">
-            {data.MIKTAR}
-          </div>
-
-          <div className="flex w-12 shrink-0 items-center overflow-hidden px-0.5 text-xs text-nowrap text-clip">
-            m3
-          </div>
-          <div className="flex w-50 overflow-hidden text-xs text-nowrap text-clip">
-            {data.SINIF}
-          </div>
-          <div className="flex grow basis-75 truncate text-[10px]">
-            {data.HESAP}
-          </div>
-          <div className="flex grow basis-25 overflow-hidden text-[10px] text-nowrap text-clip">
-            {data.SANTIYE}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-function TotalData({ dt }: { dt: santralDataTotal[] }) {
+function SantralData({ d }: { d: santralData[] }) {
   return (
-    <table className="border-buttoncolor min-w-full border-collapse border text-xs">
+    <table className="border-diffcolor min-w-full border text-sm">
       <thead>
-        <tr className={`bg-buttoncolor border font-bold`}>
-          <td className="grow pl-1">Araç</td>
-          <td className="border-r pr-1 text-end">Toplam</td>
-          <td className="grow pl-1">Ürün</td>
-          <td className="pl-1 text-end">Toplam</td>
+        <tr
+          className={`bg-buttoncolor border-diffcolor h-6 border text-center font-bold`}
+        >
+          <td className="">Tarih-Saat</td>
+          <td className="">Plaka</td>
+          <td className="">Metraj</td>
 
-          <td className="border-r pl-1">Birim</td>
-          <td className="grow pl-1">Hesap</td>
-          <td className="border-r pr-1 text-end">Toplam</td>
+          <td className="">Sınıfı</td>
+          <td className="">Hesap</td>
+          <td>Şantiye</td>
+        </tr>
+      </thead>
+      <tbody>
+        {d.map((data: santralData, index) => (
+          <tr
+            key={index}
+            className={` ${index % 2 ? "bg-background" : "bg-diffcolor"} `}
+          >
+            <td className="border-buttoncolor overflow-hidden border-r px-0.5 text-nowrap text-clip">
+              {data.TARIH
+                ? data.TARIH.substring(0, 10).concat(
+                    " ",
+                    data.TARIH.substring(11, 16),
+                  )
+                : ""}
+            </td>
+            <td className="border-buttoncolor overflow-hidden border-r px-0.5 text-nowrap text-clip">
+              {data.PLAKA}
+            </td>
+
+            <td className="border-buttoncolor overflow-hidden border-r pr-1 text-end text-nowrap text-clip">
+              {data.MIKTAR}
+            </td>
+
+            <td className="border-buttoncolor overflow-hidden border-r px-0.5 text-nowrap text-clip">
+              {data.SINIF}
+            </td>
+            <td className="border-buttoncolor truncate overflow-hidden border-r px-0.5 text-nowrap text-clip">
+              {data.HESAP}
+            </td>
+            <td className="overflow-hidden px-0.5 text-nowrap text-clip">
+              {data.SANTIYE}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+function SantralDataTotal({ dt }: { dt: santralDataTotal[] }) {
+  return (
+    <table className="min-w-full border-collapse text-sm">
+      <thead>
+        <tr className={`bg-buttoncolor border-diffcolor h-6 border font-bold`}>
+          <td className="grow px-1">Araç</td>
+          <td className="px-1 text-end">Toplam</td>
+          <td className="grow pl-1">Ürün</td>
+          <td className="px-1 text-end">Toplam</td>
+          <td className="grow px-1">Hesap</td>
+          <td className="px-1 text-end">Toplam</td>
         </tr>
       </thead>
 
@@ -136,20 +127,19 @@ function TotalData({ dt }: { dt: santralDataTotal[] }) {
         {dt.map((item: santralDataTotal, index) => (
           <tr
             key={index}
-            className={`border-b ${index % 2 ? "bg-background" : "bg-diffcolor"} `}
+            className={` ${index % 2 ? "bg-background" : "bg-diffcolor"} ${index == dt.length - 1 ? "font-bold" : ""} `}
           >
-            <td className="grow pl-1">{item.PLAKA}</td>
-            <td className="border-r pr-1 text-end">
+            <td className="grow px-1">{item.PLAKA}</td>
+            <td className="border-buttoncolor border-r px-1 text-end">
               {item.PLAKATOPLAM && item.PLAKATOPLAM.toLocaleString()}
             </td>
             <td className="grow pl-1">{item.URUN}</td>
-            <td className="pl-1 text-end">
+            <td className="border-buttoncolor border-r px-1 text-end">
               {item.URUNTOPLAM && item.URUNTOPLAM.toLocaleString()}
             </td>
 
-            <td className="border-r pl-1">m³</td>
-            <td className="grow pl-1">{item.HESAP}</td>
-            <td className="border-r pr-1 text-end">
+            <td className="grow px-1">{item.HESAP}</td>
+            <td className="px-1 text-end">
               {item.HESAPTOPLAM && item.HESAPTOPLAM.toLocaleString()}
             </td>
           </tr>

@@ -31,7 +31,7 @@ export function SantralProvider({ children }: { children: React.ReactNode }) {
     const data = await JSON.stringify(filter);
     const x = base64from(data);
 
-    fetch(externalApi() + apiPath.santral.list, {
+    fetch(externalApi(apiPath.santral.list), {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
