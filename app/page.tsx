@@ -19,6 +19,11 @@ export default function Home() {
             Desc={"Sevk Takip"}
           />
           <HomePageCard
+            Name={"Sevk Takip Santral"}
+            Href="/santral/daily"
+            Desc={"Sevk Takip"}
+          />
+          <HomePageCard
             Name={"İrsaliye Listesi"}
             Href="/logo/invoicelist"
             Desc={"İrsaliye Listesi"}

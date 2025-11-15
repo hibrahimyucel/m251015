@@ -14,6 +14,11 @@ export const apiPath = {
   invoiceList: "/api/logo/invoicelist",
   invoiceListXLS: "/api/logo/invoicelistxls",
   invoiceTotalXLS: "/api/logo/invoicetotalxls",
+  santral: {
+    listDaily: "/api/santral/listdaily",
+    listDailyTotal: "/api/santral/listdailytotal",
+    list: "/api/santral/list",
+  },
   user: {
     signUp: "/api/user/signup",
     signIn: "/api/user/signin",

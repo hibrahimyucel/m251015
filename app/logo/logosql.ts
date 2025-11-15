@@ -5,6 +5,11 @@ export async function LKSRequest() {
   if (!Conn.connected) await Conn.connect();
   return Conn.request();
 }
+export async function SantralRequest() {
+  const Conn = await get("SNT", `${process.env.SANTRALDATABASE}`);
+  if (!Conn.connected) await Conn.connect();
+  return Conn.request();
+}
 
 const firma = "020";
 const donem = "01";
